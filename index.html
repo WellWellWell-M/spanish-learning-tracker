@@ -896,6 +896,10 @@
 
   <footer class="footer">
     西语学习12周计划 · B1+ → B2− · SIELE 2026年9月
+    <br>
+    <button class="btn" onclick="exportAllData()" style="font-size:0.7rem;padding:3px 10px;margin-top:6px;">💾 导出数据</button>
+    <button class="btn" onclick="document.getElementById('importFile').click()" style="font-size:0.7rem;padding:3px 10px;margin-top:6px;">📥 导入数据</button>
+    <input type="file" id="importFile" accept=".json" onchange="importAllData(this)" style="display:none;">
   </footer>
 </div>
 
@@ -2461,6 +2465,70 @@ function renderSummary() {
       <div class="summary-text">${escapeHtml(entry.text)}</div>
     </div>`;
   }).join("");
+}
+
+// ========== 数据导出导入 ==========
+const ALL_DATA_KEYS = [
+  "spanish_checkins",
+  "spanish_journal_v2",
+  "spanish_summaries",
+  "spanish_conj_errors"
+];
+
+function exportAllData() {
+  const bundle = {};
+  ALL_DATA_KEYS.forEach(key => {
+    const raw = localStorage.getItem(key);
+    bundle[key] = raw ? JSON.parse(raw) : {};
+  });
+  bundle._exportDate = todayKey();
+  bundle._version = "1.0";
+
+  const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `西语学习数据_${todayKey()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importAllData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const bundle = JSON.parse(e.target.result);
+      if (!bundle._exportDate || !bundle._version) {
+        alert("文件格式不正确，请选择通过「导出数据」生成的文件");
+        return;
+      }
+      let imported = 0;
+      ALL_DATA_KEYS.forEach(key => {
+        if (bundle[key] && Object.keys(bundle[key]).length > 0) {
+          const existing = localStorage.getItem(key);
+          if (existing && Object.keys(JSON.parse(existing)).length > 0) {
+            if (!confirm(`${key} 已有数据，是否覆盖？\n选择「取消」将合并新旧数据`)) {
+              // 合并模式
+              const existingData = JSON.parse(existing);
+              const merged = { ...bundle[key], ...existingData }; // 新数据优先
+              localStorage.setItem(key, JSON.stringify(merged));
+              imported += Object.keys(bundle[key]).length;
+              return;
+            }
+          }
+          localStorage.setItem(key, JSON.stringify(bundle[key]));
+          imported += Object.keys(bundle[key]).length;
+        }
+      });
+      alert(`已导入 ${bundle._exportDate} 的数据！（共 ${imported} 条记录）\n页面即将刷新...`);
+      location.reload();
+    } catch (err) {
+      alert("导入失败，文件可能已损坏\n" + err.message);
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ========== 键盘快捷键 ==========
