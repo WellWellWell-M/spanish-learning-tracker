@@ -1,0 +1,2489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>西语学习打卡 · 12周计划</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --card: #fff;
+    --text: #2c2416;
+    --text-secondary: #6b5e4a;
+    --border: #e8e0d3;
+    --accent: #e8734a;
+    --accent-hover: #d16038;
+    --success: #5a9e6f;
+    --success-bg: #e8f5e9;
+    --danger: #c94a4a;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1612;
+      --card: #25201a;
+      --text: #e8e0d3;
+      --text-secondary: #a09080;
+      --border: #3a3028;
+      --accent: #f08c60;
+      --accent-hover: #f0a080;
+      --success: #6dbd80;
+      --success-bg: #1a2e1f;
+      --shadow: 0 1px 3px rgba(0,0,0,0.2);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.3);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 24px 0 16px;
+  }
+  .header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .header .subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+  }
+  .header .subtitle span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .streak-badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  /* Layout */
+  .main-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 120px;
+    flex-shrink: 0;
+  }
+  .sidebar .phase-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    padding: 8px 4px 4px;
+    font-weight: 600;
+  }
+  .sidebar .phase-title:first-child { padding-top: 0; }
+  .week-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .week-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font);
+    text-align: left;
+    width: 100%;
+  }
+  .week-btn:hover {
+    background: var(--card);
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .week-btn.active {
+    background: var(--card);
+    border-color: var(--accent);
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: var(--shadow);
+  }
+  .week-btn.today {
+    border-color: var(--accent);
+    border-style: dashed;
+  }
+  .week-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .week-dot.done {
+    background: var(--success);
+  }
+  .week-dot.partial {
+    background: var(--accent);
+  }
+
+  /* Main content */
+  .content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Check-in cards */
+  .section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .checkin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .checkin-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    box-shadow: var(--shadow);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .checkin-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+  .checkin-card:active {
+    transform: translateY(0);
+  }
+  .checkin-card.done {
+    border-color: var(--success);
+    background: var(--success-bg);
+  }
+  .checkin-card .checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .checkin-card.done .checkbox {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .checkin-card.done .checkbox::after {
+    content: "✓";
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .checkin-card .info { flex: 1; }
+  .checkin-card .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .checkin-card.done .name {
+    color: var(--success);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+  .checkin-card .meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font);
+    color: var(--text);
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  .btn.primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+  .btn.danger {
+    background: transparent;
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  .btn.danger:hover {
+    background: var(--danger);
+    color: #fff;
+  }
+
+  /* Task detail section */
+  .task-section {
+    margin-bottom: 20px;
+  }
+  .task-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .task-category {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow);
+  }
+  .task-category h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .task-category ul {
+    list-style: none;
+    padding: 0;
+  }
+  .task-category li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 2px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .task-category li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--border);
+  }
+
+  /* Progress bars */
+  .progress-section {
+    margin-top: 20px;
+  }
+  .progress-item {
+    margin-bottom: 12px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .progress-fill.week {
+    background: var(--success);
+  }
+
+  /* Mini calendar */
+  .mini-cal {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .mini-day {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    cursor: default;
+    position: relative;
+  }
+  .mini-day.has-data { background: var(--accent); color: #fff; }
+  .mini-day.all-done { background: var(--success); color: #fff; }
+  .mini-day.today { box-shadow: 0 0 0 2px var(--text); }
+
+  .view-toggle {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .view-toggle .btn {
+    font-size: 0.8rem;
+    padding: 6px 14px;
+  }
+  .view-toggle .btn.active-view {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  /* Conjugation quiz */
+  .quiz-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .tense-selector {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .tense-selector .tense-btn {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-family: var(--font);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+  .tense-selector .tense-btn:hover { border-color: var(--accent); color: var(--text); }
+  .tense-selector .tense-btn.active-tense {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .quiz-prompt {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .quiz-prompt .verb-word {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .quiz-prompt .verb-meaning {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .quiz-prompt .quiz-person {
+    font-size: 1rem;
+    color: var(--text);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+  .quiz-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .quiz-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 1.1rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .quiz-input-row input:focus { border-color: var(--accent); }
+  .quiz-input-row input.correct { border-color: var(--success); background: var(--success-bg); }
+  .quiz-input-row input.incorrect { border-color: var(--danger); background: #fff0f0; }
+  .quiz-submit {
+    padding: 10px 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: var(--font);
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .quiz-submit:hover { background: var(--accent-hover); }
+  .quiz-feedback {
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-ans {
+    background: var(--success-bg);
+    border: 1px solid var(--success);
+    color: #2e7d32;
+  }
+  .quiz-feedback.wrong-ans {
+    background: #fff5f5;
+    border: 1px solid var(--danger);
+    color: #b71c1c;
+  }
+  .quiz-feedback .correct-form {
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .quiz-feedback .explanation {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+  .quiz-score-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+  }
+  .quiz-next-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: var(--font);
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .quiz-next-btn:hover { opacity: 0.85; }
+
+  /* Journal */
+  .journal-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .journal-topbar .date-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .journal-topbar .date-nav button {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--card);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .journal-topbar .date-nav button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .journal-entry-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+  .journal-entry-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .journal-entry-card .entry-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .journal-entry-card .entry-time {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .journal-tag {
+    font-size: 0.68rem;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .tag-ganho { background: #fff3e0; color: #e65100; }
+  .tag-xinde { background: #e8f5e9; color: #2e7d32; }
+  .tag-jiucuo { background: #fce4ec; color: #c62828; }
+  .tag-qita { background: #f3e5f5; color: #6a1b9a; }
+  @media (prefers-color-scheme: dark) {
+    .tag-ganho { background: #3e2723; color: #ffb74d; }
+    .tag-xinde { background: #1b3a1b; color: #81c784; }
+    .tag-jiucuo { background: #3e1a1a; color: #ef9a9a; }
+    .tag-qita { background: #2a1a3a; color: #ce93d8; }
+  }
+  .journal-entry-card .entry-text {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+  .journal-entry-card .entry-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .journal-entry-card .entry-actions button {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+  .journal-entry-card .entry-actions button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .journal-entry-card .entry-actions button.del:hover { background: var(--danger); border-color: var(--danger); }
+  .journal-add-form {
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .journal-add-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 8px;
+  }
+  .journal-add-form textarea:focus { border-color: var(--accent); }
+  .journal-add-form .add-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .journal-add-form select {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.82rem;
+  }
+  .journal-export-preview {
+    margin-top: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    display: none;
+    box-shadow: var(--shadow);
+  }
+  .journal-export-preview.show { display: block; }
+  .journal-export-preview h2 { font-size: 1.1rem; margin-bottom: 8px; }
+  .journal-export-preview h3 { font-size: 1rem; margin: 16px 0 6px; color: var(--accent); }
+  .journal-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 700px) {
+    .journal-entry-list { max-height: none; }
+  }
+
+  /* Summary */
+  .summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .summary-card .summary-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .summary-card .summary-date {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .summary-card .summary-week {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    background: var(--bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .summary-card .summary-text {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+  .summary-topbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .summary-editor {
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .summary-editor textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 8px;
+  }
+  .summary-editor textarea:focus { border-color: var(--accent); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    .main-layout {
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+    }
+    .week-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .week-btn {
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      gap: 4px;
+    }
+    .week-btn .week-dot {
+      display: none;
+    }
+    .checkin-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>🎯 西语学习打卡</h1>
+    <div class="subtitle">
+      <span id="dateDisplay"></span>
+      <span id="weekDisplay"></span>
+      <span class="streak-badge" id="streakDisplay">🔥 0 天</span>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="content">
+      <div class="view-toggle">
+        <button class="btn active-view" data-view="today" onclick="switchView('today')">📅 今日打卡</button>
+        <button class="btn" data-view="week" onclick="switchView('week')">📋 本周任务</button>
+        <button class="btn" data-view="progress" onclick="switchView('progress')">📊 总览</button>
+        <button class="btn" data-view="conjugation" onclick="switchView('conjugation')">🔤 变位练习</button>
+        <button class="btn" data-view="journal" onclick="switchView('journal')">📓 学习笔记</button>
+        <button class="btn" data-view="summary" onclick="switchView('summary')">📊 学习汇总</button>
+      </div>
+
+      <div id="viewToday">
+        <div class="section-title">今日任务</div>
+        <div id="focusHint" style="background:var(--card);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:0.85rem;box-shadow:var(--shadow);display:none;"></div>
+        <div class="checkin-grid" id="checkinGrid"></div>
+        <div class="btn-row">
+          <button class="btn primary" onclick="checkAll()">✅ 一键全打卡</button>
+          <button class="btn" onclick="dailyReport()" style="background:var(--text);color:var(--bg);border-color:var(--text);">📋 每日报告</button>
+          <button class="btn danger" onclick="clearToday()">↩ 取消今日全部</button>
+        </div>
+      </div>
+
+      <div id="viewWeek" style="display:none;">
+        <div class="task-section" id="taskDetail"></div>
+      </div>
+
+      <div id="viewProgress" style="display:none;">
+        <div class="progress-section" id="progressDetail"></div>
+      </div>
+
+      <div id="viewConjugation" style="display:none;">
+        <div class="quiz-container" id="quizContainer"></div>
+      </div>
+
+      <div id="viewJournal" style="display:none;">
+        <div class="journal-topbar">
+          <div class="date-nav">
+            <button onclick="journalShiftDay(-1)" title="前一天">◀</button>
+            <span id="journalDateLabel">2026-05-09</span>
+            <button onclick="journalShiftDay(1)" title="后一天">▶</button>
+            <button onclick="journalGoToday()" style="font-size:0.7rem;border-radius:4px;padding:3px 8px;">今天</button>
+          </div>
+          <button class="btn" onclick="journalShowAddForm()" style="font-size:0.8rem;padding:5px 12px;">＋ 添加记录</button>
+          <button class="btn" onclick="journalAIExport()" style="font-size:0.8rem;padding:5px 12px;">🤖 AI 汇总</button>
+        </div>
+        <div class="journal-add-form" id="journalAddForm" style="display:none;">
+          <textarea id="journalNewText" placeholder="写你的收获、心得或纠错..."></textarea>
+          <div class="add-row">
+            <select id="journalNewTag">
+              <option value="ganho">🌟 收获</option>
+              <option value="xinde">💡 心得</option>
+              <option value="jiucuo" selected>🔧 纠错</option>
+              <option value="qita">📌 其他</option>
+            </select>
+            <button class="btn primary" onclick="journalAddEntry()" style="font-size:0.8rem;">保存</button>
+            <button class="btn" onclick="journalHideAddForm()" style="font-size:0.8rem;">取消</button>
+          </div>
+        </div>
+        <div class="journal-entry-list" id="journalEntryList"></div>
+        <div class="journal-export-preview" id="journalExport"></div>
+      </div>
+
+      <div id="viewSummary" style="display:none;">
+        <div class="summary-topbar">
+          <button class="btn primary" onclick="summaryShowEditor()" style="font-size:0.8rem;">＋ 添加汇总</button>
+          <span style="font-size:0.8rem;color:var(--text-secondary);">AI 汇总结果贴在这里，与随手记分开</span>
+        </div>
+        <div class="summary-editor" id="summaryEditor">
+          <textarea id="summaryText" placeholder="粘贴AI生成的汇总内容..."></textarea>
+          <input type="text" id="summaryDate" style="padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-family:var(--font);font-size:0.85rem;background:var(--bg);color:var(--text);" placeholder="日期 如 2026-05-09">
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button class="btn primary" onclick="summarySave()">💾 保存汇总</button>
+            <button class="btn" onclick="summaryHideEditor()">取消</button>
+          </div>
+        </div>
+        <div class="summary-list" id="summaryList"></div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="footer">
+    西语学习12周计划 · B1+ → B2− · SIELE 2026年9月
+  </footer>
+</div>
+
+<script>
+// ========== 12周任务数据 ==========
+const WEEK_DATA = [
+  {
+    week: 1, phase: "一：B1巩固", dateRange: "5月8–14日", title: "虚拟式现在时入门 + 建立习惯",
+    focus: "虚拟式现在时变位，会用 Quiero que / Es importante que",
+    categories: {
+      grammar: [
+        "虚拟式现在时变位：规则 -ar/-er/-ir + 六大不规则 (ser/ir/haber/estar/saber/dar)",
+        "用法1：意愿/情感 (Quiero que vengas / Me alegra que estés)",
+        "每天手写5个带虚拟式的句子，不只看例句"
+      ],
+      vocab: [
+        "安装 Anki，导入 Spanish Frequency 5000 词包",
+        "每天新增 15 张卡，复习上限 60 张",
+        "把多邻国里不确定的词手动加入 Anki"
+      ],
+      speaking: [
+        "Shadowing：选 DS 视频文字稿跟读 10′，注意语调和节奏",
+        "录音：西语自我介绍 2′，存好留作日后对比",
+        "注册 iTalki / Tandem，约好第一次语伴"
+      ],
+      readingWriting: [
+        "阅读：DS 文字稿或 practicaespanol.com A2 短文，每天 1 篇",
+        "写作：每天 5 个虚拟式句子，成段后随意发挥"
+      ]
+    }
+  },
+  {
+    week: 2, phase: "一：B1巩固", dateRange: "5月15–21日", title: "虚拟式扩展 + 语伴启动",
+    focus: "虚拟式评价句/否定认知 + 本周完成 3 次语言交换",
+    categories: {
+      grammar: [
+        "用法2：评价句 (Es importante/normal/una lástima que + subj)",
+        "用法3：否定认知 (No creo que / No pienso que + subj)",
+        "LT 第二遍配合：遇条件句/虚拟式章节，主动预判后再听"
+      ],
+      vocab: [
+        "专题：情感动词 50 个 (temer, esperar, alegrarse, lamentar…)",
+        "阅读遇生词先猜语境，读完再查，不超过 10 个/篇"
+      ],
+      speaking: [
+        "语伴 3 次（本周重点！）：只聊日常，先求敢开口，不追求准确",
+        "录音 5′/天：描述今天做了什么 (indefinido + imperfecto 混用)",
+        "Shadowing：换新题材 DS 视频，避免只听熟悉话题"
+      ],
+      readingWriting: [
+        "阅读：Lecturas de Español B1 系列，每天 1–2 页",
+        "写作：每天一小段 (5–8句)，用虚拟式表达一个意见或愿望",
+        "用 LanguageTool 检查，把重复出现的错误类型记到 📓 笔记"
+      ]
+    }
+  },
+  {
+    week: 3, phase: "一：B1巩固", dateRange: "5月22–28日", title: "时间从句 + 限时说入门",
+    focus: "cuando/hasta que/antes de que + subj + 开始练不准备的开口",
+    categories: {
+      grammar: [
+        "虚拟式时间从句：cuando / hasta que / antes de que + subj（用于未来）",
+        "对比：sé cuándo viene (陈述) vs te llamo cuando llegue (虚拟)",
+        "Aunque + 虚拟式 vs 陈述式的语义差别"
+      ],
+      vocab: [
+        "Anki 目标：本周累计 ~300 张熟悉卡片",
+        "从 DS 卡壳词优先加入 Anki"
+      ],
+      speaking: [
+        "语伴 3 次：聊「计划和愿望」，自然触发虚拟式",
+        "🆕 限时说 3′/天：给话题 → 准备 1′ → 说 2′，不停顿，录音",
+        "Shadowing：挑 DS 语速稍快的视频，挑战舒适区"
+      ],
+      readingWriting: [
+        "阅读：News in Slow Spanish (B1)，每周 2 集，边听边读文字稿",
+        "写作：每天 8–10 句，谈一个话题的正反两面 (aunque / sin embargo / pero)",
+        "回顾三周写作，找出最常犯的 3 种错误，下周重点改"
+      ]
+    }
+  },
+  {
+    week: 4, phase: "二：B1+核心", dateRange: "5月29日–6月4日", title: "过去虚拟式 + Si Tipo 2",
+    focus: "⚠️ 最关键语法关：Imperfecto Subj + 反事实条件句 + 🆕 本周必须试1次真人语伴",
+    categories: {
+      grammar: [
+        "Imperfecto de Subjuntivo：-ra 形式优先，-se 理解即可",
+        "Si Tipo 2：Si + Imp Subj + Condicional (Si tuviera más tiempo, estudiaría…)",
+        "每天写 3 个 Si Tipo 2 真实愿望句，手写，不要只默读"
+      ],
+      vocab: [
+        "专题：连接词和过渡词 (sin embargo, además, por lo tanto, a pesar de, no obstante)",
+        "Anki 新卡降到 10 张/天，重点攻克反复忘记的词"
+      ],
+      speaking: [
+        "🆕 真人语伴至少 1 次：Tandem 首次实战，感受 AI vs 真人差距",
+        "AI 语伴 2–3 次：聊「如果能改变一件事」(自然练 Si Tipo 2)",
+        "限时说 3′/天：讲一个反事实假设，准备 1′ → 说 2′",
+        "Shadowing：DS Upper Intermediate 试听，跟 50% 即算良好"
+      ],
+      readingWriting: [
+        "阅读：elpais.com「Cultura」板块，每天 1 篇，查词 ≤10 个",
+        "写作：每天 100 字，谈社会话题，用 Si Tipo 2 表达观点",
+        "写好后发给语伴请对方给语法反馈"
+      ]
+    }
+  },
+  {
+    week: 5, phase: "二：B1+核心", dateRange: "6月5–11日", title: "Ser/Estar + Por/Para 精熟",
+    focus: "两个最常见的混淆点彻底理清，不再犯错",
+    categories: {
+      grammar: [
+        "Ser vs Estar：系统整理所有用法 (情感/状态→estar，本质/特征→ser)",
+        "Por vs Para：目的/原因/交换/期限/受益对象全部对比",
+        "🚫 不用教材例句，全部用自己生活的真实情境造句"
+      ],
+      vocab: [
+        "Anki 只复习不加新，把反复错的老卡清掉"
+      ],
+      speaking: [
+        "语伴 3 次：请语伴实时纠正 Ser/Estar 和 Por/Para 错误",
+        "限时说 4′/天：描述一个你认识的人（性格+状态），准备 1′ → 说 3′",
+        "DS Intermediate 目标 80%+ 理解率，准备升级 Upper Intermediate"
+      ],
+      readingWriting: [
+        "阅读：西语维基百科轻松条目，感受书面语 vs 口语差异",
+        "写作：每天 120 字，描述一个人，Ser/Estar 各至少用 3 次",
+        "LanguageTool 重点检查 Ser/Estar 和介词错误"
+      ]
+    }
+  },
+  {
+    week: 6, phase: "二：B1+核心", dateRange: "6月12–18日", title: "被动 + 间接引语 + 听写整合",
+    focus: "学会转述（SIELE 口语和写作都会考间接引语）",
+    categories: {
+      grammar: [
+        "Voz pasiva: ser + participio + Pasiva refleja: Se vende/Se habla (优先掌握)",
+        "间接引语：时态变化规则 (dijo que vendría / que había llegado)",
+        "把 Week 1–5 的结构混合使用，写作中有意识检查"
+      ],
+      vocab: [
+        "专题：新闻/时事词汇 50 个 (acuerdo, conflicto, propuesta, medida, impacto…)"
+      ],
+      speaking: [
+        "语伴 3 次：话题换成「新闻转述」(自然练间接引语)",
+        "限时说 4′/天：转述今天看到的新闻，准备 1′ → 说 3′",
+        "🆕 SIELE 口语感知：语伴随机给图，描述 2′ + 发表观点 3′ (*本周尝试1次)"
+      ],
+      readingWriting: [
+        "阅读：BBC Mundo / DW Español 短文，计时 10′ 读完",
+        "🆕 听写整合：听 RTVE 短新闻 2–3′ → 写 100 字回应（SIELE 写作原型）",
+        "写作：每天 120–150 字转述一篇新闻，用间接引语 + 被动"
+      ]
+    }
+  },
+  {
+    week: 7, phase: "二：B1+核心", dateRange: "6月19–25日", title: "B1+ 综合输出 + 限时说强化",
+    focus: "不学新语法，把所有结构变成能脱口而出的本能",
+    categories: {
+      grammar: [
+        "本周不学新语法，只把前 6 周所有结构混合使用",
+        "写作中检查：虚拟式/条件句/被动/间接引语是否用对",
+        "LT 第二遍收官，之后换成西语播客做日常输入"
+      ],
+      vocab: [
+        "词汇量目标：Anki ~500 张熟悉卡片",
+        "从真实内容 (新闻/播客) 提取生词，每天 ≤10 个"
+      ],
+      speaking: [
+        "语伴 3 次：辩论格式 (赞成/反对)，各说 2′，全程不说母语",
+        "限时说 5′/天：准备 1′ → 说 4′，不停顿，练流利度",
+        "播客替代部分 DS：Español con Juan / Notes in Spanish (B1–B2)"
+      ],
+      readingWriting: [
+        "阅读：西语短篇小说或文化杂志，每天 15′",
+        "写作：每天 150 字意见文，论点→论据→让步→结论",
+        "存档，月底自我批改，找结构性问题"
+      ]
+    }
+  },
+  {
+    week: 8, phase: "三：B2冲刺", dateRange: "6月26日–7月2日", title: "全面切换真实内容",
+    focus: "DS→Upper Intermediate，新闻/播客/TED 替代教材",
+    categories: {
+      grammar: [
+        "DS 稳定 Upper Intermediate，45′/天，先无字幕再西语字幕",
+        "🆕 TED en Español：每周 1 个演讲，看完写 100 字概要",
+        "西语剧替代部分娱乐（Élite / La Casa de Papel，开西语字幕）"
+      ],
+      vocab: [
+        "Anki 进入维护模式：新卡从真实内容提取，每天 ≤10 张"
+      ],
+      speaking: [
+        "语伴 3 次：文化/社会话题 (教育、科技、环保)",
+        "限时说 5′/天：准备 1′ → 说 4′，必须有结论句",
+        "SIELE 口语模拟：语伴帮练「描述图片 + 发表观点」(*本周2次)"
+      ],
+      readingWriting: [
+        "阅读：每天 1 篇真实文章 (BBC/El País/CNN en Español)，计时 15′",
+        "写作：每天 150 字，计时 20′ 内完成",
+        "题型练习：正式邮件 (correo formal) 每周 1 封"
+      ]
+    }
+  },
+  {
+    week: 9, phase: "三：B2冲刺", dateRange: "7月3–9日", title: "论点结构 + 正式写作 + B2连接词",
+    focus: "每段话都有结构，开始用 B2 级连接词",
+    categories: {
+      grammar: [
+        "B2 连接词主动使用：no obstante / puesto que / dado que / a fin de que / en cuanto a",
+        "让步从句精练：aunque + subj vs indicativo 语义差别",
+        "每段写完后检查：是否至少有 1 个从属复杂句"
+      ],
+      vocab: [
+        "专题：正式/学术词汇 100 个 (proponer, destacar, cabe señalar, en cuanto a, a raíz de…)",
+        "这些词当周必须用进写作，不用不算学会"
+      ],
+      speaking: [
+        "语伴 3 次：辩论模式，陈述→反驳→总结，全程西语",
+        "限时说 5′/天：随机话题，准备 1′ → 说 4′，必须收尾有结论",
+        "SIELE 口语模拟：描述图片 + 表达观点，每周 2 次"
+      ],
+      readingWriting: [
+        "阅读：计时读 1 篇 → 用 2–3 句话复述主要观点（练概括能力）",
+        "写作：每天 150–200 字意见文，结构清晰（引入/展开/让步/结论）",
+        "每周 1 封正式邮件 (Estimado/a Sr./Sra. … Le saluda atentamente)"
+      ]
+    }
+  },
+  {
+    week: 10, phase: "三：B2冲刺", dateRange: "7月10–16日", title: "B2 综合验证 + SIELE 样题初探",
+    focus: "⚠️ 做 1 套 SIELE 样题，定位弱点，调整最后两周方向",
+    categories: {
+      grammar: [
+        "做 1 套 SIELE 官网样题 (阅读+写作)，不追求分数，只为定位",
+        "记录每题错误原因：词汇不够 / 语法误判 / 读题太慢 / 写作结构乱",
+        "根据结果决定 Week 11 侧重方向"
+      ],
+      vocab: [
+        "DS 试听 Advanced 级别，能懂 50% 即 B2 门槛确认"
+      ],
+      speaking: [
+        "语伴 3 次：全 SIELE 口语格式 (描述图片 / 表达观点 / 情景对话)",
+        "限时说 5′/天：准备 1′ → 说 4′，有引入→论述→结论结构",
+        "🆕 回听 Week 1 录音，写下 3 个明显进步的地方"
+      ],
+      readingWriting: [
+        "阅读：每天 1 篇 + 理解确认 (主旨？作者观点？你的看法？)",
+        "写作：每天 200 字，计时 20′，写完自己批改一遍",
+        "本周写 1 篇论坛帖 (foro) 格式意见文"
+      ]
+    }
+  },
+  {
+    week: 11, phase: "四：弱点补救", dateRange: "7月17–23日", title: "弱点专项 + SIELE 格式强化",
+    focus: "根据 Week 10 样题结果，哪里弱补哪里，不做无用功",
+    categories: {
+      grammar: [
+        "词汇弱 → 专攻高频 B2 词汇，每天 20 个当天用进写作",
+        "语法弱 → 回到 LT 对应章节主动预判，再造 10 个句",
+        "阅读慢 → 每天计时练，目标 100–120 词/分钟",
+        "写作结构乱 → 用模板 (引入/展开/让步/结论) 练到自动化"
+      ],
+      vocab: [
+        "根据 Week 10 结果选方向，不强求均匀分配"
+      ],
+      speaking: [
+        "语伴 3 次：全 SIELE 格式模拟，感受考试节奏",
+        "限时说 5′/天：主题随机，结尾要干净，不要说到没话说就停",
+        "重点练「准备时间短 + 说的内容有结构」"
+      ],
+      readingWriting: [
+        "阅读：每天 1 篇计时 15′，读完默写 3 个关键句（练记忆提取）",
+        "写作：每天 200 字，意见文/正式邮件/非正式评论交替",
+        "LanguageTool 检查虚拟式和连接词"
+      ]
+    }
+  },
+  {
+    week: 12, phase: "四：弱点补救", dateRange: "7月24–31日", title: "收尾 + 8月备考交棒",
+    focus: "不学新内容，稳固已有技能，为 8 月 SIELE 备考铺路",
+    categories: {
+      grammar: [
+        "做 1 套 SIELE 完整样题 (全科)，熟悉格式和时间感",
+        "记录哪个 section 压力最大 → 写进 8 月备考计划",
+        "回听 Week 1 录音 vs 现在录音，感受 3 个月变化"
+      ],
+      vocab: [
+        "Anki 只复习不加新",
+        "DS Advanced 轻松视频，能懂多少懂多少，享受进步感",
+        "停止系统性输入，改随机喜欢的西语内容 (音乐/剧/YouTube)"
+      ],
+      speaking: [
+        "语伴 3 次：自由聊，放松，庆祝进步",
+        "最后一次录音：用西语讲「我这三个月学西语的经历」，5′",
+        "存档，9 月考完后再听"
+      ],
+      readingWriting: [
+        "整理三个月顽固错误清单 → 写进 8 月备考计划",
+        "写下 8 月备考计划大纲：SIELE 各题型时间分配",
+        "告诉语伴 8 月可能减频但不停，保持语感"
+      ]
+    }
+  }
+];
+// ========== 常量 ==========
+const STORAGE_KEY = "spanish_checkins";
+const START_DATE = new Date(2026, 4, 8); // May 8, 2026
+const END_DATE = new Date(2026, 6, 31);  // Jul 31, 2026
+const CATEGORIES = [
+  { key: "input", name: "听力输入", icon: "🎧", time: "75min", desc: "LT + Dreaming Spanish" },
+  { key: "read",  name: "阅读 + Anki", icon: "📖", time: "30min", desc: "阅读短文 + 词汇复习" },
+  { key: "speak", name: "口语输出", icon: "🗣️", time: "40min", desc: "Shadowing + 限时说 + 语伴" },
+  { key: "write", name: "写作练习", icon: "✍️", time: "20min", desc: "每日写作 + 纠错整理" }
+];
+
+// 迁移旧版打卡数据（6键 → 4键）
+(function migrateCheckins() {
+  const data = loadCheckins();
+  let changed = false;
+  const keyMap = {
+    lt: "input", ds: "input",
+    anki: "read", read: "read",
+    speak: "speak", write: "write"
+  };
+  Object.keys(data).forEach(date => {
+    const day = data[date];
+    const newDay = {};
+    // 检查是否已经是新格式（有 input 键）
+    if (day.input !== undefined && day.lt === undefined) return;
+    Object.entries(day).forEach(([oldKey, val]) => {
+      const newKey = keyMap[oldKey] || oldKey;
+      if (val === true) newDay[newKey] = true;
+    });
+    if (Object.keys(newDay).length > 0) {
+      data[date] = newDay;
+      changed = true;
+    }
+  });
+  if (changed) saveCheckins(data);
+})();
+
+// ========== 工具函数 ==========
+function dateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function today() {
+  const d = new Date();
+  if (d.getHours() < 5) d.setDate(d.getDate() - 1); // 凌晨5点前算前一天
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+function getWeekInfo(date) {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const start = new Date(START_DATE);
+  const diffDays = Math.floor((d - start) / (1000 * 60 * 60 * 24));
+  if (diffDays < 0) return { week: 0, dayOfWeek: 0, inRange: false };
+  const weekNum = Math.floor(diffDays / 7) + 1;
+  if (weekNum > 12) return { week: 13, dayOfWeek: diffDays % 7, inRange: false };
+  return { week: weekNum, dayOfWeek: diffDays % 7, inRange: weekNum >= 1 && weekNum <= 12 };
+}
+
+function getWeekDates(weekNum) {
+  const start = new Date(START_DATE);
+  start.setDate(start.getDate() + (weekNum - 1) * 7);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 6);
+  return { start: new Date(start), end };
+}
+
+// ========== localStorage ==========
+function loadCheckins() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveCheckins(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    alert("存储空间不足，请清理浏览器数据");
+  }
+}
+
+function getDayCheckins(date) {
+  const data = loadCheckins();
+  return data[dateKey(date)] || {};
+}
+
+function setDayCheckin(date, categoryKey, value) {
+  const data = loadCheckins();
+  const key = dateKey(date);
+  if (!data[key]) data[key] = {};
+  data[key][categoryKey] = value;
+  // 清理空对象
+  if (Object.keys(data[key]).length === 0) delete data[key];
+  saveCheckins(data);
+}
+
+function isDayAllDone(date) {
+  const day = getDayCheckins(date);
+  return CATEGORIES.every(c => day[c.key] === true);
+}
+
+// ========== 计算 ==========
+function calcStreak() {
+  const t = today();
+  let streak = 0;
+  for (let i = 0; i < 90; i++) {
+    const d = new Date(t);
+    d.setDate(d.getDate() - i);
+    if (isDayAllDone(d)) {
+      streak++;
+    } else if (i === 0) {
+      // 今天还没完成，继续往前看
+      continue;
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function calcWeekProgress(weekNum) {
+  const { start, end } = getWeekDates(weekNum);
+  const t = today();
+  let totalSlots = 0;
+  let doneSlots = 0;
+
+  for (let d = new Date(start); d <= end && d <= t; d.setDate(d.getDate() + 1)) {
+    const day = getDayCheckins(d);
+    CATEGORIES.forEach(c => {
+      totalSlots++;
+      if (day[c.key] === true) doneSlots++;
+    });
+  }
+  return { done: doneSlots, total: totalSlots, pct: totalSlots > 0 ? Math.round(doneSlots / totalSlots * 100) : 0 };
+}
+
+function calcTotalProgress() {
+  const t = today();
+  const end = new Date(END_DATE);
+  const effectiveEnd = t > end ? end : t;
+  let totalSlots = 0;
+  let doneSlots = 0;
+
+  for (let d = new Date(START_DATE); d <= effectiveEnd; d.setDate(d.getDate() + 1)) {
+    const day = getDayCheckins(d);
+    CATEGORIES.forEach(c => {
+      totalSlots++;
+      if (day[c.key] === true) doneSlots++;
+    });
+  }
+  return { done: doneSlots, total: totalSlots, pct: totalSlots > 0 ? Math.round(doneSlots / totalSlots * 100) : 0 };
+}
+
+function getWeekDayStatus(weekNum) {
+  const { start, end } = getWeekDates(weekNum);
+  const t = today();
+  const days = [];
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const dk = dateKey(d);
+    const isToday = dk === dateKey(t);
+    const isPast = d < t;
+    const allDone = isDayAllDone(d);
+    const hasData = Object.keys(getDayCheckins(d)).length > 0;
+    days.push({
+      date: new Date(d),
+      key: dk,
+      isToday,
+      isPast,
+      allDone,
+      hasData: hasData && !allDone
+    });
+  }
+  return days;
+}
+
+// ========== 渲染 ==========
+let currentView = "today";
+let selectedWeek = null; // null = auto (today's week)
+
+function getActiveWeek() {
+  return selectedWeek || getWeekInfo(today()).week || 1;
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const activeWeek = getActiveWeek();
+  const t = today();
+  const currentWeekInfo = getWeekInfo(t);
+  let html = "";
+
+  const phases = [
+    { name: "一：激活B1", weeks: [1,2,3] },
+    { name: "二：B1+核心", weeks: [4,5,6,7] },
+    { name: "三：B2冲刺", weeks: [8,9,10] },
+    { name: "四：B2收尾", weeks: [11,12] }
+  ];
+
+  phases.forEach(phase => {
+    html += `<div class="phase-title">第${phase.name}</div><div class="week-nav">`;
+    phase.weeks.forEach(w => {
+      const cls = [];
+      if (w === activeWeek) cls.push("active");
+      if (w === currentWeekInfo.week) cls.push("today");
+      const { done, total } = calcWeekProgress(w);
+      let dotCls = "week-dot";
+      if (total > 0 && done === total && total >= 6) dotCls += " done";
+      else if (done > 0) dotCls += " partial";
+      html += `<button class="week-btn ${cls.join(" ")}" onclick="selectWeek(${w})">
+        <span class="${dotCls}"></span> W${w}
+      </button>`;
+    });
+    html += "</div>";
+  });
+
+  sidebar.innerHTML = html;
+}
+
+function renderCheckinGrid() {
+  const grid = document.getElementById("checkinGrid");
+  const t = today();
+  const day = getDayCheckins(t);
+  const info = getWeekInfo(t);
+
+  if (!info.inRange) {
+    const msg = info.week <= 0 ? "计划尚未开始（5月8日起）" : "12周计划已结束，恭喜！";
+    grid.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-secondary);font-size:1.1rem;">${msg}</div>`;
+    return;
+  }
+
+  // 本周焦点提示（放在 grid 外面，不和卡片并排）
+  const focusDiv = document.getElementById("focusHint");
+  const weekData = WEEK_DATA[info.week - 1];
+  if (weekData && weekData.focus) {
+    focusDiv.innerHTML = `<span style="color:var(--accent);font-weight:700;">🎯 本周焦点：</span>${weekData.focus}`;
+    focusDiv.style.display = "block";
+  } else {
+    focusDiv.style.display = "none";
+  }
+
+  let html = "";
+  CATEGORIES.forEach(c => {
+    const isDone = day[c.key] === true;
+    html += `
+      <div class="checkin-card ${isDone ? "done" : ""}" onclick="toggleCheckin('${c.key}')" title="点击切换完成状态">
+        <div class="checkbox"></div>
+        <div class="info">
+          <div class="name">${c.icon} ${c.name}</div>
+          <div class="meta">${c.desc} · ⏱ ${c.time}</div>
+        </div>
+      </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function renderTaskDetail() {
+  const container = document.getElementById("taskDetail");
+  const weekNum = getActiveWeek();
+  const weekData = WEEK_DATA[weekNum - 1];
+
+  if (!weekData) {
+    container.innerHTML = "<p>暂无数据</p>";
+    return;
+  }
+
+  let html = `<h3>📋 第${weekNum}周 · ${weekData.phase}</h3>`;
+  html += `<p style="color:var(--text-secondary);margin-bottom:4px;">📅 ${weekData.dateRange} · ${weekData.title}</p>`;
+  if (weekData.focus) {
+    html += `<p style="color:var(--accent);margin-bottom:12px;font-weight:600;font-size:0.9rem;">🎯 本周焦点：${weekData.focus}</p>`;
+  }
+
+  const catLabels = {
+    grammar: "📐 语法重点",
+    vocab: "📝 词汇 & Anki",
+    speaking: "🗣️ 口语输出",
+    readingWriting: "📖 阅读 & 写作"
+  };
+
+  Object.entries(catLabels).forEach(([key, label]) => {
+    const items = weekData.categories[key];
+    if (!items || items.length === 0) return;
+    html += `<div class="task-category"><h4>${label}</h4><ul>`;
+    items.forEach(item => { html += `<li>${item}</li>`; });
+    html += "</ul></div>";
+  });
+
+  // 周进度
+  const prog = calcWeekProgress(weekNum);
+  html += `<div class="progress-item" style="margin-top:16px;">
+    <div class="progress-label"><span>本周完成度</span><span>${prog.done}/${prog.total} (${prog.pct}%)</span></div>
+    <div class="progress-bar"><div class="progress-fill week" style="width:${prog.pct}%"></div></div>
+  </div>`;
+
+  // 迷你日历
+  const days = getWeekDayStatus(weekNum);
+  html += `<div class="mini-cal">`;
+  const dayLabels = ["一","二","三","四","五","六","日"];
+  days.forEach(d => {
+    const dayOfWeek = d.date.getDay();
+    const lbl = dayLabels[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
+    let cls = "mini-day";
+    if (d.allDone) cls += " all-done";
+    else if (d.hasData) cls += " has-data";
+    if (d.isToday) cls += " today";
+    html += `<div class="${cls}" title="${d.key}">${lbl}</div>`;
+  });
+  html += "</div>";
+
+  container.innerHTML = html;
+}
+
+function renderProgress() {
+  const container = document.getElementById("progressDetail");
+  const t = today();
+  const info = getWeekInfo(t);
+  let html = "";
+
+  // 总进度
+  const total = calcTotalProgress();
+  html += `<div class="progress-item">
+    <div class="progress-label"><span>📊 12周总进度</span><span>${total.done}/${total.total} (${total.pct}%)</span></div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${total.pct}%"></div></div>
+  </div>`;
+
+  // 连续天数
+  const streak = calcStreak();
+  html += `<p style="margin:16px 0 8px;">🔥 连续全勤：<strong>${streak}</strong> 天</p>`;
+
+  // 各周进度
+  html += `<h4 style="margin:20px 0 10px;">各周完成情况</h4>`;
+  for (let w = 1; w <= 12; w++) {
+    const prog = calcWeekProgress(w);
+    const weekData = WEEK_DATA[w - 1];
+    const isCurrentWeek = w === info.week;
+    html += `<div class="progress-item" style="cursor:pointer;" onclick="selectWeek(${w});switchView('week');">
+      <div class="progress-label">
+        <span>${isCurrentWeek ? "📍 " : ""}W${w} · ${weekData.title}</span>
+        <span>${prog.pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill week" style="width:${prog.pct}%"></div></div>
+    </div>`;
+  }
+
+  // 各板块完成统计
+  html += `<h4 style="margin:20px 0 10px;">各板块完成统计</h4>`;
+  const allData = loadCheckins();
+  const catStats = {};
+  CATEGORIES.forEach(c => { catStats[c.key] = { done: 0, total: 0 }; });
+
+  for (let d = new Date(START_DATE); d <= t; d.setDate(d.getDate() + 1)) {
+    const day = allData[dateKey(d)] || {};
+    CATEGORIES.forEach(c => {
+      catStats[c.key].total++;
+      if (day[c.key] === true) catStats[c.key].done++;
+    });
+  }
+
+  CATEGORIES.forEach(c => {
+    const s = catStats[c.key];
+    const pct = s.total > 0 ? Math.round(s.done / s.total * 100) : 0;
+    html += `<div class="progress-item">
+      <div class="progress-label"><span>${c.icon} ${c.name}</span><span>${s.done}/${s.total} (${pct}%)</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--accent);"></div></div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderAll() {
+  const t = today();
+  const info = getWeekInfo(t);
+
+  // Header
+  const weekLabel = info.inRange ? `第${info.week}周` : (info.week <= 0 ? "未开始" : "已结束");
+  document.getElementById("dateDisplay").textContent = `📅 ${dateKey(t)}`;
+  document.getElementById("weekDisplay").textContent = weekLabel;
+  document.getElementById("streakDisplay").textContent = `🔥 ${calcStreak()} 天`;
+
+  renderSidebar();
+  renderCheckinGrid();
+  renderTaskDetail();
+  renderProgress();
+  renderConjugation();
+  renderJournal();
+  renderSummary();
+  updateView();
+}
+
+function updateView() {
+  document.getElementById("viewToday").style.display = currentView === "today" ? "block" : "none";
+  document.getElementById("viewWeek").style.display = currentView === "week" ? "block" : "none";
+  document.getElementById("viewProgress").style.display = currentView === "progress" ? "block" : "none";
+  document.getElementById("viewConjugation").style.display = currentView === "conjugation" ? "block" : "none";
+  document.getElementById("viewJournal").style.display = currentView === "journal" ? "block" : "none";
+  document.getElementById("viewSummary").style.display = currentView === "summary" ? "block" : "none";
+
+  document.querySelectorAll(".view-toggle .btn").forEach(btn => {
+    btn.classList.toggle("active-view", btn.dataset.view === currentView);
+  });
+}
+
+// ========== 交互 ==========
+function toggleCheckin(key) {
+  const t = today();
+  const day = getDayCheckins(t);
+  const newVal = !(day[key] === true);
+  setDayCheckin(t, key, newVal);
+  renderAll();
+}
+
+function checkAll() {
+  const t = today();
+  const info = getWeekInfo(t);
+  if (!info.inRange) return;
+  CATEGORIES.forEach(c => setDayCheckin(t, c.key, true));
+  renderAll();
+}
+
+function clearToday() {
+  if (!confirm("确定要取消今日所有打卡吗？")) return;
+  const t = today();
+  const data = loadCheckins();
+  delete data[dateKey(t)];
+  saveCheckins(data);
+  renderAll();
+}
+
+function dailyReport() {
+  const t = today();
+  const dk = dateKey(t);
+  const day = getDayCheckins(t);
+  const info = getWeekInfo(t);
+  const weekData = WEEK_DATA[info.week - 1];
+
+  // 今日打卡状态
+  const doneList = CATEGORIES.filter(c => day[c.key] === true);
+  const todoList = CATEGORIES.filter(c => day[c.key] !== true);
+  const allDone = doneList.length === CATEGORIES.length;
+
+  // 今日笔记
+  const journalEntries = journalGetEntries(dk);
+  const summaryData = loadSummaries();
+  const hasSummary = !!summaryData[dk];
+
+  let report = `📋 每日报告 · ${dk} · 第${info.week}周\n\n`;
+
+  report += `## ✅ 今日打卡 (${doneList.length}/${CATEGORIES.length})\n`;
+  if (allDone) {
+    report += `🏆 全勤！\n`;
+  }
+  doneList.forEach(c => { report += `- [x] ${c.icon} ${c.name}\n`; });
+  todoList.forEach(c => { report += `- [ ] ${c.icon} ${c.name}\n`; });
+  report += `\n`;
+
+  // 今日笔记
+  if (journalEntries.length > 0) {
+    report += `## 📓 今日随手记 (${journalEntries.length}条)\n`;
+    journalEntries.forEach(e => {
+      report += `- [${e.time}] ${TAG_LABELS[e.tag] || e.tag}: ${e.text}\n`;
+    });
+  } else {
+    report += `## 📓 今日随手记\n（今天还没有写笔记）\n`;
+  }
+  report += `\n`;
+
+  // 变位错题
+  const conjErrors = getTodayConjErrors();
+  if (conjErrors.length > 0) {
+    report += `## 🔤 今日变位错题 (${conjErrors.length}题)\n`;
+    const tenseNames = {};
+    TENSES.forEach(t => { tenseNames[t.id] = t.name; });
+    conjErrors.forEach(e => {
+      const personLabel = PERSONS.find(p => p.id === e.person);
+      report += `- ${e.verb} (${e.meaning}) · ${personLabel ? personLabel.short : e.person} · ${tenseNames[e.tense] || e.tense}\n`;
+      report += `  你写：${e.userAnswer} → 正确：${e.correct}\n`;
+    });
+  } else {
+    report += `## 🔤 今日变位错题\n（无错题 🎉）\n`;
+  }
+  report += `\n`;
+
+  // 上周的汇总（如果有）
+  if (hasSummary) {
+    report += `## 📊 今日已有汇总\n`;
+  }
+
+  report += `---\n`;
+  report += `请帮我：1）反馈今天的学习；2）汇总随手记内容；3）整理纠错清单；4）更新到 📊 学习汇总\n`;
+  report += `（回复后我会粘贴到汇总模块）`;
+
+  // 复制到剪贴板
+  navigator.clipboard.writeText(report).then(() => {
+    alert("已复制！粘贴到 Claude 对话中即可。\n\n" + report.split("\n").slice(0, 5).join("\n") + "...");
+  });
+}
+
+function selectWeek(weekNum) {
+  selectedWeek = weekNum;
+  currentView = "week";
+  renderAll();
+}
+
+function switchView(view) {
+  currentView = view;
+  if (view === "today") selectedWeek = null;
+  renderAll();
+}
+
+// ========== 变位练习引擎 ==========
+const PERSONS = [
+  { id: 1, label: "yo (我)", short: "yo" },
+  { id: 2, label: "tú (你)", short: "tú" },
+  { id: 3, label: "él/ella/usted (他/她/您)", short: "él/ella" },
+  { id: 4, label: "nosotros (我们)", short: "nos." },
+  { id: 5, label: "vosotros (你们)", short: "vos." },
+  { id: 6, label: "ellos/ellas/ustedes (他们/诸位)", short: "ellos" }
+];
+
+const TENSES = [
+  { id: "presente_ind", name: "陈述式现在时", short: "Presente", week: 1,
+    example: "Todos los días, {person} ___." },
+  { id: "indefinido", name: "简单过去时", short: "Indefinido", week: 2,
+    example: "Ayer, {person} ___." },
+  { id: "imperfecto", name: "过去未完成时", short: "Imperfecto", week: 2,
+    example: "Antes, {person} ___ todos los días." },
+  { id: "futuro", name: "将来时", short: "Futuro", week: 4,
+    example: "El próximo mes, {person} ___." },
+  { id: "condicional", name: "条件式", short: "Condicional", week: 4,
+    example: "Si pudiera, {person} ___ más." },
+  { id: "presente_subj", name: "虚拟式现在时", short: "Subj. Presente", week: 1,
+    example: "Es importante que {person} ___." },
+  { id: "imperfecto_subj", name: "虚拟式过去时(-ra)", short: "Subj. Imperfecto", week: 4,
+    example: "Si {person} ___, todo sería mejor." }
+];
+
+// 规则变位词尾
+const REGULAR_ENDINGS = {
+  presente_ind: {
+    ar: ["o","as","a","amos","áis","an"],
+    er: ["o","es","e","emos","éis","en"],
+    ir: ["o","es","e","imos","ís","en"]
+  },
+  indefinido: {
+    ar: ["é","aste","ó","amos","asteis","aron"],
+    er: ["í","iste","ió","imos","isteis","ieron"],
+    ir: ["í","iste","ió","imos","isteis","ieron"]
+  },
+  imperfecto: {
+    ar: ["aba","abas","aba","ábamos","abais","aban"],
+    er: ["ía","ías","ía","íamos","íais","ían"],
+    ir: ["ía","ías","ía","íamos","íais","ían"]
+  },
+  futuro: {
+    ar: ["é","ás","á","emos","éis","án"],
+    er: ["é","ás","á","emos","éis","án"],
+    ir: ["é","ás","á","emos","éis","án"]
+  },
+  condicional: {
+    ar: ["ía","ías","ía","íamos","íais","ían"],
+    er: ["ía","ías","ía","íamos","íais","ían"],
+    ir: ["ía","ías","ía","íamos","íais","ían"]
+  },
+  presente_subj: {
+    ar: ["e","es","e","emos","éis","en"],
+    er: ["a","as","a","amos","áis","an"],
+    ir: ["a","as","a","amos","áis","an"]
+  },
+  imperfecto_subj: {
+    ar: ["ara","aras","ara","áramos","arais","aran"],
+    er: ["iera","ieras","iera","iéramos","ierais","ieran"],
+    ir: ["iera","ieras","iera","iéramos","ierais","ieran"]
+  }
+};
+
+// 动词数据库：{ verb, meaning, model, [overrides], [notes] }
+// model: "ar" | "er" | "ir" | 特定不规则模型名
+// overrides: { tense: { person: "form" } } 或 { tense: { stem: "xxx", endings: "ar"|"er"|"ir"|[...] } }
+const VERB_DB = [
+  // === 规则动词 ===
+  { verb: "hablar", meaning: "说，讲话", model: "ar" },
+  { verb: "trabajar", meaning: "工作", model: "ar" },
+  { verb: "estudiar", meaning: "学习", model: "ar" },
+  { verb: "necesitar", meaning: "需要", model: "ar" },
+  { verb: "llegar", meaning: "到达", model: "ar" },
+  { verb: "pasar", meaning: "度过；经过", model: "ar" },
+  { verb: "llevar", meaning: "携带；穿戴", model: "ar" },
+  { verb: "dejar", meaning: "留下；让", model: "ar" },
+  { verb: "tomar", meaning: "拿；喝", model: "ar" },
+  { verb: "comprar", meaning: "买", model: "ar" },
+  { verb: "preguntar", meaning: "问", model: "ar" },
+  { verb: "explicar", meaning: "解释", model: "ar" },
+  { verb: "buscar", meaning: "寻找", model: "ar" },
+  { verb: "sacar", meaning: "取出", model: "ar" },
+  { verb: "pagar", meaning: "付款", model: "ar" },
+  { verb: "almorzar", meaning: "吃午饭", model: "ar" },
+
+  { verb: "comer", meaning: "吃", model: "er" },
+  { verb: "beber", meaning: "喝", model: "er" },
+  { verb: "aprender", meaning: "学习；学会", model: "er" },
+  { verb: "comprender", meaning: "理解", model: "er" },
+  { verb: "vender", meaning: "卖", model: "er" },
+  { verb: "deber", meaning: "应该；欠", model: "er" },
+  { verb: "leer", meaning: "阅读", model: "er", overrides: { indefinido: { 3: "leyó", 6: "leyeron" } }, notes: { indefinido: "i 在元音间变 y：leyó, leyeron" } },
+
+  { verb: "vivir", meaning: "居住；生活", model: "ir" },
+  { verb: "escribir", meaning: "写", model: "ir" },
+  { verb: "abrir", meaning: "打开", model: "ir" },
+  { verb: "recibir", meaning: "收到", model: "ir" },
+  { verb: "subir", meaning: "上升；上传", model: "ir" },
+  { verb: "decidir", meaning: "决定", model: "ir" },
+  { verb: "asistir", meaning: "参加", model: "ir" },
+
+  // === 词干变化 (e→ie) ===
+  { verb: "pensar", meaning: "想；认为", model: "ar", overrides: { presente_ind: { 1: "pienso", 2: "piensas", 3: "piensa", 6: "piensan" }, presente_subj: { 1: "piense", 2: "pienses", 3: "piense", 6: "piensen" } }, notes: { presente_ind: "词干 e→ie：pienso, piensas, piensa, piensan（nosotros/vosotros 不变）", presente_subj: "虚拟式继承陈述式词干变化：piense, pienses, piense, piensen" } },
+  { verb: "entender", meaning: "理解；明白", model: "er", overrides: { presente_ind: { 1: "entiendo", 2: "entiendes", 3: "entiende", 6: "entienden" }, presente_subj: { 1: "entienda", 2: "entiendas", 3: "entienda", 6: "entiendan" } }, notes: { presente_ind: "词干 e→ie：entiendo, entiendes, entiende, entienden（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 e→ie：entienda, entiendas, entienda, entiendan（nosotros/vosotros 不变）" } },
+  { verb: "empezar", meaning: "开始", model: "ar", overrides: { presente_ind: { 1: "empiezo", 2: "empiezas", 3: "empieza", 6: "empiezan" }, presente_subj: { 1: "empiece", 2: "empieces", 3: "empiece", 6: "empiecen" } }, notes: { presente_ind: "词干 e→ie + 正字法 z→c：empiezo", presente_subj: "虚拟式正字法 z→c + 词干变化：empiece" } },
+
+  // === 词干变化 (o→ue) ===
+  { verb: "poder", meaning: "能够", model: "er", overrides: { presente_ind: { 1: "puedo", 2: "puedes", 3: "puede", 6: "pueden" }, presente_subj: { 1: "pueda", 2: "puedas", 3: "pueda", 6: "puedan" }, indefinido: { 1: "pude", 2: "pudiste", 3: "pudo", 6: "pudieron" }, futuro: { stem: "podr-" }, condicional: { stem: "podr-" }, imperfecto_subj: { stem: "pudier-" } }, notes: { presente_ind: "词干 o→ue：puedo, puedes, puede, pueden（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：pueda, puedas, pueda, puedan（nosotros/vosotros 不变）", indefinido: "不规则词根 pud- + 特殊词尾 (-e, -iste, -o, -imos, -isteis, -ieron)", futuro: "不规则词根 podr-（d 替代 e/é），注意与规则动词不同", condicional: "不规则词根 podr-（d 替代 e/é），词尾加在 podr- 后", imperfecto_subj: "词根 pudier- 来自 indefinido 词根 pud-" } },
+  { verb: "dormir", meaning: "睡觉", model: "ir", overrides: { presente_ind: { 1: "duermo", 2: "duermes", 3: "duerme", 6: "duermen" }, presente_subj: { 1: "duerma", 2: "duermas", 3: "duerma", 6: "duerman" } }, notes: { presente_ind: "词干 o→ue：duermo, duermes, duerme, duermen（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：duerma, duermas, duerma, duerman（nosotros/vosotros 不变）" } },
+  { verb: "volver", meaning: "返回；再次", model: "er", overrides: { presente_ind: { 1: "vuelvo", 2: "vuelves", 3: "vuelve", 6: "vuelven" }, presente_subj: { 1: "vuelva", 2: "vuelvas", 3: "vuelva", 6: "vuelvan" } }, notes: { presente_ind: "词干 o→ue：vuelvo, vuelves, vuelve, vuelven（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：vuelva, vuelvas, vuelva, vuelvan（nosotros/vosotros 不变）" } },
+  { verb: "encontrar", meaning: "找到；遇见", model: "ar", overrides: { presente_ind: { 1: "encuentro", 2: "encuentras", 3: "encuentra", 6: "encuentran" }, presente_subj: { 1: "encuentre", 2: "encuentres", 3: "encuentre", 6: "encuentren" } }, notes: { presente_ind: "词干 o→ue：encuentro, encuentras, encuentra, encuentran", presente_subj: "虚拟式继承 o→ue：encuentre, encuentres, encuentre, encuentren" } },
+
+  // === 词干变化 (e→i) ===
+  { verb: "pedir", meaning: "请求；点餐", model: "ir", overrides: { presente_ind: { 1: "pido", 2: "pides", 3: "pide", 6: "piden" }, presente_subj: { 1: "pida", 2: "pidas", 3: "pida", 6: "pidan" }, indefinido: { 3: "pidió", 6: "pidieron" } }, notes: { presente_ind: "词干 e→i：pido, pides, pide, piden", indefinido: "第三人称 e→i：pidió, pidieron" } },
+  { verb: "seguir", meaning: "继续；跟随", model: "ir", overrides: { presente_ind: { 1: "sigo", 2: "sigues", 3: "sigue", 6: "siguen" }, presente_subj: { 1: "siga", 2: "sigas", 3: "siga", 6: "sigan" }, indefinido: { 3: "siguió", 6: "siguieron" } }, notes: { presente_ind: "e→i + yo 不规则 sigo（第一人称不遵循 e→i 规律，直接加 -go）", presente_subj: "虚拟式继承 e→i：siga, sigas, siga, sigan（nosotros/vosotros 不变）", indefinido: "第三人称 e→i + 正字法 gu→g：siguió, siguieron（注意 i 上有重音）" } },
+
+  // === 第一人称不规则 (yo -go) ===
+  { verb: "tener", meaning: "有", model: "er", overrides: { presente_ind: { 1: "tengo" }, presente_subj: { stem: "teng-" }, indefinido: { stem: "tuv-", endings: "tener_indef" }, futuro: { stem: "tendr-" }, condicional: { stem: "tendr-" }, imperfecto_subj: { stem: "tuvier-" } }, notes: { presente_ind: "yo 不规则 tengo", presente_subj: "词根来自 tengo 去掉 -o：tenga, tengas, tenga, tengamos, tengáis, tengan", indefinido: "不规则词根 tuv- + 特殊词尾 (-e, -iste, -o, -imos, -isteis, -ieron)", futuro: "不规则词根 tendr-（d 替代 e）" } },
+  { verb: "hacer", meaning: "做", model: "er", overrides: { presente_ind: { 1: "hago" }, presente_subj: { stem: "hag-" }, indefinido: { stem: "hic-", endings: "hacer_indef" }, futuro: { stem: "har-" }, condicional: { stem: "har-" }, imperfecto_subj: { stem: "hicier-" } }, notes: { presente_ind: "yo 不规则 hago", presente_subj: "词根来自 hago 去掉 -o：haga, hagas, haga...", indefinido: "不规则词根 hic- + 第三人称 i→z(hizo)：hice, hiciste, hizo, hicimos, hicisteis, hicieron", futuro: "不规则词根 har-" } },
+  { verb: "decir", meaning: "说", model: "ir", overrides: { presente_ind: { 1: "digo" }, presente_subj: { stem: "dig-" }, indefinido: { stem: "dij-", endings: "decir_indef" }, futuro: { stem: "dir-" }, condicional: { stem: "dir-" }, imperfecto_subj: { stem: "dijer-" } }, notes: { presente_ind: "yo 不规则 digo", presente_subj: "词根来自 digo：diga, digas, diga...", indefinido: "不规则词根 dij- + -eron（无 i）：dije, dijiste, dijo, dijimos, dijisteis, dijeron", futuro: "不规则词根 dir-" } },
+  { verb: "venir", meaning: "来", model: "ir", overrides: { presente_ind: { 1: "vengo" }, presente_subj: { stem: "veng-" }, indefinido: { stem: "vin-", endings: "tener_indef" }, futuro: { stem: "vendr-" }, condicional: { stem: "vendr-" }, imperfecto_subj: { stem: "vinier-" } }, notes: { presente_ind: "yo 不规则 vengo", presente_subj: "词根来自 vengo：venga, vengas, venga...", indefinido: "不规则词根 vin- + 特殊词尾：vine, viniste, vino, vinimos, vinisteis, vinieron", futuro: "不规则词根 vendr-" } },
+  { verb: "salir", meaning: "出去", model: "ir", overrides: { presente_ind: { 1: "salgo" }, presente_subj: { stem: "salg-" }, futuro: { stem: "saldr-" }, condicional: { stem: "saldr-" } }, notes: { presente_ind: "yo 不规则 salgo", presente_subj: "词根来自 salgo：salga, salgas, salga...", futuro: "不规则词根 saldr-" } },
+  { verb: "poner", meaning: "放置", model: "er", overrides: { presente_ind: { 1: "pongo" }, presente_subj: { stem: "pong-" }, indefinido: { stem: "pus-", endings: "tener_indef" }, futuro: { stem: "pondr-" }, condicional: { stem: "pondr-" }, imperfecto_subj: { stem: "pusier-" } }, notes: { presente_ind: "yo 不规则 pongo", presente_subj: "词根来自 pongo：ponga, pongas, ponga...", indefinido: "不规则词根 pus-：puse, pusiste, puso, pusimos, pusisteis, pusieron", futuro: "不规则词根 pondr-" } },
+  { verb: "traer", meaning: "带来", model: "er", overrides: { presente_ind: { 1: "traigo" }, presente_subj: { stem: "traig-" }, indefinido: { stem: "traj-", endings: "decir_indef" }, imperfecto_subj: { stem: "trajer-" } }, notes: { presente_ind: "yo 不规则 traigo", presente_subj: "词根来自 traigo：traiga, traigas, traiga...", indefinido: "不规则词根 traj-：traje, trajiste, trajo, trajimos, trajisteis, trajeron" } },
+  { verb: "oír", meaning: "听见", model: "ir", overrides: { presente_ind: { 1: "oigo", 2: "oyes", 3: "oye", 6: "oyen" }, presente_subj: { stem: "oig-", 1: "oiga", 2: "oigas", 3: "oiga", 6: "oigan" }, indefinido: { 3: "oyó", 6: "oyeron" } }, notes: { presente_ind: "yo 不规则 oigo，i→y：oyes, oye, oyen", presente_subj: "词根来自 oigo：oiga, oigas...", indefinido: "i 在元音间变 y：oyó, oyeron" } },
+
+  // === 完全不规则 ===
+  { verb: "ser", meaning: "是（本质）", model: "irregular", overrides: { presente_ind: { 1: "soy", 2: "eres", 3: "es", 4: "somos", 5: "sois", 6: "son" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "era", 2: "eras", 3: "era", 4: "éramos", 5: "erais", 6: "eran" }, futuro: { 1: "seré", 2: "serás", 3: "será", 4: "seremos", 5: "seréis", 6: "serán" }, condicional: { 1: "sería", 2: "serías", 3: "sería", 4: "seríamos", 5: "seríais", 6: "serían" }, presente_subj: { 1: "sea", 2: "seas", 3: "sea", 4: "seamos", 5: "seáis", 6: "sean" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" } }, notes: { presente_ind: "完全不规则，需逐个记忆", presente_subj: "虚拟式：sea, seas, sea, seamos, seáis, sean", indefinido: "与 ir 完全相同：fui, fuiste, fue..." } },
+  { verb: "estar", meaning: "在（状态/位置）", model: "ar", overrides: { presente_ind: { 1: "estoy", 2: "estás", 3: "está", 6: "están" }, presente_subj: { stem: "est-", 1: "esté", 2: "estés", 3: "esté", 6: "estén" }, indefinido: { stem: "estuv-", endings: "tener_indef" }, imperfecto_subj: { stem: "estuvier-" } }, notes: { presente_ind: "yo 不规则 estoy，tú/él 带重音", presente_subj: "虚拟式带重音：esté, estés, esté, estén", indefinido: "不规则词根 estuv-：estuve, estuviste, estuvo..." } },
+  { verb: "ir", meaning: "去", model: "irregular", overrides: { presente_ind: { 1: "voy", 2: "vas", 3: "va", 4: "vamos", 5: "vais", 6: "van" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "iba", 2: "ibas", 3: "iba", 4: "íbamos", 5: "ibais", 6: "iban" }, futuro: { 1: "iré", 2: "irás", 3: "irá", 4: "iremos", 5: "iréis", 6: "irán" }, condicional: { 1: "iría", 2: "irías", 3: "iría", 4: "iríamos", 5: "iríais", 6: "irían" }, presente_subj: { 1: "vaya", 2: "vayas", 3: "vaya", 4: "vayamos", 5: "vayáis", 6: "vayan" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" } }, notes: { presente_ind: "完全不规则：voy, vas, va, vamos, vais, van", presente_subj: "虚拟式完全不规则：vaya, vayas...", indefinido: "与 ser 完全相同：fui, fuiste, fue...", imperfecto: "iba, ibas, iba, íbamos, ibais, iban" } },
+  { verb: "haber", meaning: "有（助动词）", model: "irregular", overrides: { presente_ind: { 1: "he", 2: "has", 3: "ha", 4: "hemos", 5: "habéis", 6: "han" }, indefinido: { 1: "hube", 2: "hubiste", 3: "hubo", 4: "hubimos", 5: "hubisteis", 6: "hubieron" }, imperfecto: { 1: "había", 2: "habías", 3: "había", 4: "habíamos", 5: "habíais", 6: "habían" }, futuro: { stem: "habr-" }, condicional: { stem: "habr-" }, presente_subj: { 1: "haya", 2: "hayas", 3: "haya", 4: "hayamos", 5: "hayáis", 6: "hayan" }, imperfecto_subj: { 1: "hubiera", 2: "hubieras", 3: "hubiera", 4: "hubiéramos", 5: "hubierais", 6: "hubieran" } }, notes: { presente_ind: "he, has, ha, hemos, habéis, han（注意 ha 与 hay 不同）", presente_subj: "haya, hayas, haya, hayamos, hayáis, hayan", futuro: "不规则词根 habr-" } },
+  { verb: "saber", meaning: "知道", model: "er", overrides: { presente_ind: { 1: "sé" }, presente_subj: { stem: "sep-", 1: "sepa", 2: "sepas", 3: "sepa", 6: "sepan" }, indefinido: { stem: "sup-", endings: "tener_indef" }, futuro: { stem: "sabr-" }, condicional: { stem: "sabr-" }, imperfecto_subj: { stem: "supier-" } }, notes: { presente_ind: "yo 不规则 sé", presente_subj: "虚拟式不规则词根 sep-：sepa, sepas, sepa, sepamos, sepáis, sepan", indefinido: "不规则词根 sup-：supe, supiste, supo...", futuro: "不规则词根 sabr-" } },
+  { verb: "dar", meaning: "给", model: "ar", overrides: { presente_ind: { 1: "doy" }, presente_subj: { 1: "dé", 2: "des", 3: "dé", 6: "den" }, indefinido: { 1: "di", 2: "diste", 3: "dio", 4: "dimos", 5: "disteis", 6: "dieron" } }, notes: { presente_ind: "yo 不规则 doy", presente_subj: "虚拟式用 -er/-ir 词尾：dé, des, dé, demos, deis, den", indefinido: "用 -er/-ir 词尾：di, diste, dio..." } },
+  { verb: "ver", meaning: "看见", model: "er", overrides: { presente_ind: { 1: "veo" }, presente_subj: { 1: "vea", 2: "veas", 3: "vea", 6: "vean" }, imperfecto: { 1: "veía", 2: "veías", 3: "veía", 4: "veíamos", 5: "veíais", 6: "veían" } }, notes: { presente_ind: "yo 不规则 veo", presente_subj: "vea, veas, vea, veamos, veáis, vean", imperfecto: "保留 e：veía（不是 vía）" } },
+  { verb: "querer", meaning: "想要；爱", model: "er", overrides: { presente_ind: { 1: "quiero", 2: "quieres", 3: "quiere", 6: "quieren" }, presente_subj: { 1: "quiera", 2: "quieras", 3: "quiera", 6: "quieran" }, indefinido: { stem: "quis-", endings: "tener_indef" }, futuro: { stem: "querr-" }, condicional: { stem: "querr-" }, imperfecto_subj: { stem: "quisier-" } }, notes: { presente_ind: "词干 e→ie：quiero, quieres, quiere, quieren（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 e→ie：quiera, quieras, quiera, quieran（nosotros/vosotros 不变）", indefinido: "不规则词根 quis-：quise, quisiste, quiso, quisimos, quisisteis, quisieron", futuro: "不规则词根 querr-（双 r），回忆 poder→podr- 同模式" } },
+
+  // === 更多常用动词 ===
+  { verb: "conocer", meaning: "认识；了解", model: "er", overrides: { presente_ind: { 1: "conozco" }, presente_subj: { stem: "conozc-" } }, notes: { presente_ind: "yo 不规则 conozco（-cer 动词加 z）", presente_subj: "词根来自 conozco：conozca, conozcas..." } },
+  { verb: "conducir", meaning: "驾驶", model: "ir", overrides: { presente_ind: { 1: "conduzco" }, presente_subj: { stem: "conduzc-" }, indefinido: { stem: "conduj-", endings: "decir_indef" }, imperfecto_subj: { stem: "condujer-" } }, notes: { presente_ind: "yo 不规则 conduzco", presente_subj: "词根来自 conduzco：conduzca, conduzcas...", indefinido: "不规则词根 conduj-：conduje, condujiste..." } },
+  { verb: "traducir", meaning: "翻译", model: "ir", overrides: { presente_ind: { 1: "traduzco" }, presente_subj: { stem: "traduzc-" }, indefinido: { stem: "traduj-", endings: "decir_indef" }, imperfecto_subj: { stem: "tradujer-" } }, notes: { presente_ind: "类似 conducir：traduzco", presente_subj: "traduzca, traduzcas..." } },
+  { verb: "sentir", meaning: "感觉", model: "ir", overrides: { presente_ind: { 1: "siento", 2: "sientes", 3: "siente", 6: "sienten" }, presente_subj: { 1: "sienta", 2: "sientas", 3: "sienta", 6: "sientan" }, indefinido: { 3: "sintió", 6: "sintieron" } }, notes: { presente_ind: "词干 e→ie：siento, sientes, siente, sienten（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 e→ie：sienta, sientas, sienta, sientan（nosotros/vosotros 不变）", indefinido: "第三人称 e→i：sintió, sintieron（注意 -ir 动词的 e→ie 在 indefinido 中会进一步变 e→i）" } },
+  { verb: "contar", meaning: "讲述；数", model: "ar", overrides: { presente_ind: { 1: "cuento", 2: "cuentas", 3: "cuenta", 6: "cuentan" }, presente_subj: { 1: "cuente", 2: "cuentes", 3: "cuente", 6: "cuenten" } }, notes: { presente_ind: "词干 o→ue：cuento, cuentas, cuenta, cuentan（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：cuente, cuentes, cuente, cuenten（nosotros/vosotros 不变）" } },
+  { verb: "jugar", meaning: "玩", model: "ar", overrides: { presente_ind: { 1: "juego", 2: "juegas", 3: "juega", 6: "juegan" }, presente_subj: { 1: "juegue", 2: "juegues", 3: "juegue", 6: "jueguen" } }, notes: { presente_ind: "u→ue：juego（唯一 u→ue 动词）", presente_subj: "正字法 g→gu：juegue" } },
+  { verb: "morir", meaning: "死", model: "ir", overrides: { presente_ind: { 1: "muero", 2: "mueres", 3: "muere", 6: "mueren" }, presente_subj: { 1: "muera", 2: "mueras", 3: "muera", 6: "mueran" }, indefinido: { 3: "murió", 6: "murieron" } }, notes: { presente_ind: "词干 o→ue：muero, mueres, muere, mueren（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：muera, mueras, muera, mueran（nosotros/vosotros 不变）", indefinido: "第三人称 o→u：murió, murieron（-ir 动词的 o→ue 在 indefinido 中会进一步变 o→u）" } },
+  { verb: "creer", meaning: "相信；认为", model: "er", overrides: { presente_ind: { 3: "cree", 6: "creen" }, presente_subj: { 4: "creamos" }, indefinido: { 3: "creyó", 6: "creyeron" } }, notes: { indefinido: "i 在元音间变 y：creyó, creyeron" } },
+  { verb: "construir", meaning: "建造", model: "ir", overrides: { presente_ind: { 3: "construye", 6: "construyen" }, presente_subj: { stem: "construy-" }, indefinido: { 3: "construyó", 6: "construyeron" } }, notes: { presente_ind: "-uir 加 y：construye", presente_subj: "construya, construyas..." } },
+];
+
+// 特殊词尾集
+const SPECIAL_ENDINGS = {
+  tener_indef: ["e","iste","o","imos","isteis","ieron"],
+  hacer_indef: ["e","iste","o","imos","isteis","ieron"],
+  decir_indef: ["e","iste","o","imos","isteis","eron"]
+};
+
+function conjugate(verbObj, personId, tenseId) {
+  // personId: 1-6, tenseId: string
+  const idx = personId - 1;
+
+  // 检查是否有指定形式的覆盖
+  if (verbObj.overrides && verbObj.overrides[tenseId]) {
+    const ov = verbObj.overrides[tenseId];
+    // 直接指定形式
+    if (ov[personId]) return { form: ov[personId], explanation: null };
+    // 指定词根 + 词尾集
+    if (ov.stem) {
+      let endings;
+      if (typeof ov.endings === "string") {
+        endings = SPECIAL_ENDINGS[ov.endings] || REGULAR_ENDINGS[tenseId][verbObj.model] || REGULAR_ENDINGS[tenseId]["er"];
+      } else if (ov.endings) {
+        endings = ov.endings;
+      } else {
+        // 默认用原模型的词尾
+        endings = REGULAR_ENDINGS[tenseId][verbObj.model];
+      }
+      if (endings && endings[idx]) {
+        return { form: ov.stem.replace(/-+$/, "") + endings[idx], explanation: null };
+      }
+    }
+  }
+
+  // 对 futuro/condicional，检查是否有 stem override
+  if ((tenseId === "futuro" || tenseId === "condicional") && verbObj.overrides && verbObj.overrides[tenseId] && verbObj.overrides[tenseId].stem) {
+    const stem = verbObj.overrides[tenseId].stem;
+    const endings = REGULAR_ENDINGS[tenseId]["er"]; // 将来/条件式的词尾对所有动词相同
+    return { form: stem.replace(/-+$/, "") + endings[idx], explanation: null };
+  }
+
+  // 对不规则模型动词，返回 null（未覆盖到的形式）
+  if (verbObj.model === "irregular") return null;
+
+  // 规则变位
+  const endings = REGULAR_ENDINGS[tenseId];
+  if (!endings) return null;
+  const modelEndings = endings[verbObj.model];
+  if (!modelEndings) return null;
+
+  // 将来时和条件式的词尾加在动词原形后面，不是词干
+  const useInfinitive = (tenseId === "futuro" || tenseId === "condicional");
+  let stem = useInfinitive ? verbObj.verb : verbObj.verb.slice(0, -2);
+  const ending = modelEndings[idx];
+
+  // 正字法变化：-car/-gar/-zar/-guar 动词在 e/é 前需要拼写调整
+  // 仅当词干以 c/g/z/gu 结尾时才触发（将来/条件式用原形做词干，末尾是 r，不触发）
+  if (!useInfinitive && (ending.charAt(0) === "e" || ending.charAt(0) === "é")) {
+    const lastChar = stem.slice(-1);
+    const lastTwo = stem.slice(-2);
+    if (lastChar === "c") {
+      stem = stem.slice(0, -1) + "qu";
+    } else if (lastChar === "g" && lastTwo !== "gu") {
+      stem = stem.slice(0, -1) + "gu";
+    } else if (lastChar === "z") {
+      stem = stem.slice(0, -1) + "c";
+    } else if (lastTwo === "gu") {
+      stem = stem.slice(0, -2) + "gü";
+    }
+  }
+
+  return { form: stem + ending, explanation: null };
+}
+
+function getVerbExplanation(verbObj, tenseId) {
+  if (verbObj.notes && verbObj.notes[tenseId]) {
+    return verbObj.notes[tenseId];
+  }
+  // 正字法动词额外提示
+  let orthoNote = "";
+  if (verbObj.verb.endsWith("car")) orthoNote = "正字法：-car 动词在 e/é 前 c→qu。";
+  else if (verbObj.verb.endsWith("gar")) orthoNote = "正字法：-gar 动词在 e/é 前 g→gu。";
+  else if (verbObj.verb.endsWith("zar")) orthoNote = "正字法：-zar 动词在 e/é 前 z→c。";
+  else if (verbObj.verb.endsWith("guar")) orthoNote = "正字法：-guar 动词在 e/é 前 gu→gü。";
+  // 对规则动词给通用规则说明
+  const tenseNames = {
+    presente_ind: "陈述式现在时：" + (verbObj.model === "ar" ? "-ar 动词词尾 -o, -as, -a, -amos, -áis, -an" : verbObj.model === "er" ? "-er 动词词尾 -o, -es, -e, -emos, -éis, -en" : "-ir 动词词尾 -o, -es, -e, -imos, -ís, -en"),
+    presente_subj: "虚拟式现在时：" + (verbObj.model === "ar" ? "-ar 动词用 -er 词尾：-e, -es, -e, -emos, -éis, -en" : "-er/-ir 动词用 -ar 词尾：-a, -as, -a, -amos, -áis, -an"),
+    indefinido: "简单过去时：" + (verbObj.model === "ar" ? "-ar 动词词尾 -é, -aste, -ó, -amos, -asteis, -aron" : "-er/-ir 动词词尾 -í, -iste, -ió, -imos, -isteis, -ieron"),
+    imperfecto: "过去未完成时：" + (verbObj.model === "ar" ? "-ar 动词词尾 -aba, -abas, -aba, -ábamos, -abais, -aban" : "-er/-ir 动词词尾 -ía, -ías, -ía, -íamos, -íais, -ían"),
+    futuro: "将来时：动词原形 + -é, -ás, -á, -emos, -éis, -án（所有变位动词相同）",
+    condicional: "条件式：动词原形 + -ía, -ías, -ía, -íamos, -íais, -ían（所有变位动词相同）",
+    imperfecto_subj: "虚拟式过去时(-ra)：" + (verbObj.model === "ar" ? "-ar 动词词尾 -ara, -aras, -ara, -áramos, -arais, -aran" : "-er/-ir 动词词尾 -iera, -ieras, -iera, -iéramos, -ierais, -ieran")
+  };
+  return (orthoNote ? orthoNote + " " : "") + (tenseNames[tenseId] || "");
+}
+
+// ========== 变位练习状态 ==========
+let quizState = {
+  activeTenses: ["presente_subj", "presente_ind", "indefinido", "imperfecto", "futuro", "condicional", "imperfecto_subj"],
+  currentVerb: null,
+  currentPerson: null,
+  currentTense: null,
+  totalCorrect: 0,
+  totalAttempts: 0,
+  answered: false,
+  streak: 0
+};
+
+// 变位错题记录
+const CONJ_ERRORS_KEY = "spanish_conj_errors";
+function loadConjErrors() {
+  try { const raw = localStorage.getItem(CONJ_ERRORS_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch (e) { return {}; }
+}
+function saveConjError(dateKey, error) {
+  const data = loadConjErrors();
+  if (!data[dateKey]) data[dateKey] = [];
+  // 去重：同一动词+人称+时态今天只记一次
+  const dup = data[dateKey].find(e => e.verb === error.verb && e.person === error.person && e.tense === error.tense);
+  if (!dup) data[dateKey].push(error);
+  try { localStorage.setItem(CONJ_ERRORS_KEY, JSON.stringify(data)); }
+  catch (e) {}
+}
+function getTodayConjErrors() {
+  const data = loadConjErrors();
+  return data[todayKey()] || [];
+}
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function generateQuestion() {
+  const verb = pickRandom(VERB_DB);
+  const tenseId = pickRandom(quizState.activeTenses);
+  const person = pickRandom(PERSONS);
+
+  // 检查该动词+时态+人称是否有有效变位
+  const result = conjugate(verb, person.id, tenseId);
+  if (!result || !result.form) {
+    // 偶尔不规则动词的某些形式没覆盖到，重新生成
+    return generateQuestion();
+  }
+
+  quizState.currentVerb = verb;
+  quizState.currentPerson = person;
+  quizState.currentTense = tenseId;
+  quizState.answered = false;
+  quizState.correctForm = result.form;
+  quizState.explanation = getVerbExplanation(verb, tenseId);
+}
+
+function renderConjugation() {
+  const container = document.getElementById("quizContainer");
+  if (!quizState.currentVerb) generateQuestion();
+
+  const tense = TENSES.find(t => t.id === quizState.currentTense);
+  const v = quizState.currentVerb;
+  const p = quizState.currentPerson;
+
+  let html = "";
+
+  // 时态选择器
+  html += `<div class="tense-selector">`;
+  TENSES.forEach(t => {
+    const active = quizState.activeTenses.includes(t.id);
+    html += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="toggleTense('${t.id}')" title="${active ? "点击移除" : "点击加入"}">${t.short}</button>`;
+  });
+  html += `</div>`;
+
+  // 分数
+  const pct = quizState.totalAttempts > 0 ? Math.round(quizState.totalCorrect / quizState.totalAttempts * 100) : 0;
+  html += `<div class="quiz-score-bar">
+    <span>✅ ${quizState.totalCorrect} / ${quizState.totalAttempts} (${pct}%)</span>
+    <span>🔥 连续 ${quizState.streak} 题</span>
+    <span style="font-size:0.75rem;color:var(--danger);">❌ 今日错题 ${getTodayConjErrors().length}</span>
+  </div>`;
+
+  // 题目
+  const exampleHtml = tense && tense.example
+    ? `<div style="font-size:0.9rem;color:var(--text-secondary);margin-top:8px;font-style:italic;">"${tense.example.replace("{person}", p.short)}"</div>`
+    : "";
+  html += `<div class="quiz-prompt">
+    <div class="verb-word">${v.verb} <span style="font-size:0.6em;color:var(--text-secondary);">(${v.meaning})</span></div>
+    <div class="quiz-person">${p.label} · ${tense ? tense.name : ""}</div>
+    ${exampleHtml}
+  </div>`;
+
+  // 输入行
+  html += `<div class="quiz-input-row">
+    <input type="text" id="quizInput" class="${quizState.answered ? (quizState.lastCorrect ? "correct" : "incorrect") : ""}"
+           placeholder="输入变位..." autocomplete="off" ${quizState.answered ? "disabled" : ""}
+           onkeydown="if(event.key==='Enter'){event.preventDefault();${quizState.answered ? "nextQuestion()" : "checkAnswer()"};}">
+    ${quizState.answered
+      ? `<button class="quiz-next-btn" onclick="nextQuestion()">下一题 →</button>`
+      : `<button class="quiz-submit" onclick="checkAnswer()">检查</button>`}
+  </div>`;
+
+  // 反馈区
+  if (quizState.answered) {
+    if (quizState.lastCorrect) {
+      html += `<div class="quiz-feedback correct-ans show">
+        ✅ 正确！<span class="correct-form">${quizState.correctForm}</span>
+        <div class="explanation">${quizState.explanation}</div>
+      </div>`;
+    } else {
+      html += `<div class="quiz-feedback wrong-ans show">
+        ❌ 你写的是「<strong>${quizState.lastAnswer}</strong>」，正确答案是 <span class="correct-form">${quizState.correctForm}</span>
+        <div class="explanation">💡 ${quizState.explanation}</div>
+      </div>`;
+    }
+  } else {
+    html += `<div class="quiz-feedback"></div>`;
+  }
+
+  container.innerHTML = html;
+
+  // 自动聚焦输入框
+  if (!quizState.answered) {
+    setTimeout(() => {
+      const input = document.getElementById("quizInput");
+      if (input) input.focus();
+    }, 100);
+  }
+}
+
+function checkAnswer() {
+  if (quizState.answered) return;
+  const input = document.getElementById("quizInput");
+  const userAnswer = input.value.trim();
+  const correct = quizState.correctForm;
+
+  // 标准化比较：去掉重音、首尾空格、¿¡
+  const normalize = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const isCorrect = normalize(userAnswer) === normalize(correct);
+
+  quizState.answered = true;
+  quizState.lastCorrect = isCorrect;
+  quizState.lastAnswer = userAnswer;
+  quizState.totalAttempts++;
+  if (isCorrect) {
+    quizState.totalCorrect++;
+    quizState.streak++;
+  } else {
+    quizState.streak = 0;
+    // 记录错题
+    saveConjError(todayKey(), {
+      verb: quizState.currentVerb.verb,
+      meaning: quizState.currentVerb.meaning,
+      person: quizState.currentPerson.id,
+      tense: quizState.currentTense,
+      userAnswer: userAnswer,
+      correct: correct
+    });
+  }
+
+  renderConjugation();
+}
+
+function nextQuestion() {
+  generateQuestion();
+  renderConjugation();
+}
+
+function toggleTense(tenseId) {
+  const idx = quizState.activeTenses.indexOf(tenseId);
+  if (idx >= 0) {
+    if (quizState.activeTenses.length <= 1) return; // 至少保留一个时态
+    quizState.activeTenses.splice(idx, 1);
+  } else {
+    quizState.activeTenses.push(tenseId);
+  }
+  // 如果当前题目使用的时态被移除了，重新出题
+  if (!quizState.activeTenses.includes(quizState.currentTense)) {
+    generateQuestion();
+  }
+  renderConjugation();
+}
+
+// ========== 学习笔记（多条目版）==========
+const JOURNAL_KEY = "spanish_journal_v2";
+const TAG_LABELS = { ganho: "🌟 收获", xinde: "💡 心得", jiucuo: "🔧 纠错", qita: "📌 其他" };
+
+function todayKey() { return dateKey(today()); }
+
+// 迁移旧版笔记（单文本 → 多条目数组）
+(function migrateJournal() {
+  const oldKey = "spanish_journal";
+  const oldRaw = localStorage.getItem(oldKey);
+  if (!oldRaw) return;
+  try {
+    const oldData = JSON.parse(oldRaw);
+    const newData = loadJournal();
+    let migrated = 0;
+    Object.entries(oldData).forEach(([date, text]) => {
+      if (typeof text === "string" && text.trim() && !newData[date]) {
+        newData[date] = [{ time: "00:00", text: text.trim(), tag: "qita" }];
+        migrated++;
+      }
+    });
+    if (migrated > 0) {
+      saveJournalData(newData);
+      localStorage.removeItem(oldKey);
+      console.log(`已迁移 ${migrated} 条旧笔记`);
+    }
+  } catch (e) {}
+})();
+
+function loadJournal() {
+  try { const raw = localStorage.getItem(JOURNAL_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch (e) { return {}; }
+}
+function saveJournalData(data) {
+  try { localStorage.setItem(JOURNAL_KEY, JSON.stringify(data)); }
+  catch (e) { alert("存储空间不足"); }
+}
+
+let journalCurrentDate = todayKey();
+
+function journalShiftDay(delta) {
+  const d = new Date(journalCurrentDate + "T00:00:00");
+  d.setDate(d.getDate() + delta);
+  journalCurrentDate = dateKey(d);
+  renderJournal();
+}
+
+function journalGoToday() {
+  journalCurrentDate = todayKey();
+  renderJournal();
+}
+
+function journalGetEntries(dateKey) {
+  const data = loadJournal();
+  return data[dateKey] || [];
+}
+
+function journalSetEntries(dateKey, entries) {
+  const data = loadJournal();
+  if (entries.length === 0) {
+    delete data[dateKey];
+  } else {
+    data[dateKey] = entries;
+  }
+  saveJournalData(data);
+}
+
+function journalAddEntry() {
+  const text = document.getElementById("journalNewText").value.trim();
+  if (!text) { alert("请写点内容"); return; }
+  const tag = document.getElementById("journalNewTag").value;
+  const entries = journalGetEntries(journalCurrentDate);
+  const now = new Date();
+  const time = String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0");
+  entries.push({ time, text, tag });
+  journalSetEntries(journalCurrentDate, entries);
+  document.getElementById("journalNewText").value = "";
+  document.getElementById("journalAddForm").style.display = "none";
+  renderJournal();
+}
+
+function journalEditEntry(idx) {
+  const entries = journalGetEntries(journalCurrentDate);
+  const entry = entries[idx];
+  if (!entry) return;
+  const newText = prompt("编辑记录：", entry.text);
+  if (newText !== null && newText.trim()) {
+    entries[idx].text = newText.trim();
+    journalSetEntries(journalCurrentDate, entries);
+    renderJournal();
+  }
+}
+
+function journalDeleteEntry(idx) {
+  if (!confirm("确定删除这条记录吗？")) return;
+  const entries = journalGetEntries(journalCurrentDate);
+  entries.splice(idx, 1);
+  journalSetEntries(journalCurrentDate, entries);
+  renderJournal();
+}
+
+function journalShowAddForm() {
+  document.getElementById("journalAddForm").style.display = "block";
+  document.getElementById("journalNewText").focus();
+}
+
+function journalHideAddForm() {
+  document.getElementById("journalAddForm").style.display = "none";
+  document.getElementById("journalNewText").value = "";
+}
+
+function journalAIExport() {
+  const data = loadJournal();
+  const keys = Object.keys(data).sort();
+  if (keys.length === 0) {
+    document.getElementById("journalExport").innerHTML = '<div class="journal-empty">还没有任何笔记</div>';
+    document.getElementById("journalExport").classList.add("show");
+    return;
+  }
+
+  // 构建给AI的提示词
+  let prompt = "请帮我分析以下西语学习笔记，并给出：\n";
+  prompt += "1. 📊 总体评价：本周/本阶段的学习状态和进步\n";
+  prompt += "2. 🔁 常见错误模式：哪些语法点/词汇反复出错\n";
+  prompt += "3. 💊 针对性建议：接下来应重点加强什么\n";
+  prompt += "4. 📝 提取出所有「纠错」类型的记录，整理成纠错清单\n\n";
+  prompt += "---\n\n";
+
+  keys.forEach(key => {
+    const entries = data[key];
+    if (!entries || entries.length === 0) return;
+    const d = new Date(key + "T00:00:00");
+    const info = getWeekInfo(d);
+    const weekLabel = info.inRange ? `第${info.week}周` : "";
+    prompt += `## ${key} ${weekLabel}\n\n`;
+    entries.forEach(e => {
+      const tagLabel = TAG_LABELS[e.tag] || e.tag;
+      prompt += `- [${e.time}] ${tagLabel}: ${e.text}\n`;
+    });
+    prompt += "\n";
+  });
+
+  // 加入每日汇总
+  const summaryData = loadSummaries();
+  const summaryKeys = Object.keys(summaryData).sort();
+  if (summaryKeys.length > 0) {
+    prompt += `\n---\n`;
+    prompt += `## 📊 历史学习汇总\n\n`;
+    summaryKeys.forEach(key => {
+      const d = new Date(key + "T00:00:00");
+      const info = getWeekInfo(d);
+      const weekLabel = info.inRange ? `第${info.week}周` : "";
+      prompt += `### ${key} ${weekLabel}\n\n${summaryData[key].text}\n\n`;
+    });
+  }
+
+  // 统计
+  let totalEntries = 0;
+  keys.forEach(k => { totalEntries += (data[k] || []).length; });
+  prompt += `\n---\n`;
+  prompt += `共 ${keys.length} 天 ${totalEntries} 条记录`;
+
+  const container = document.getElementById("journalExport");
+  container.innerHTML = `<h2>🤖 AI 汇总提示词</h2>
+    <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;">复制下面内容，粘贴到 Claude 对话中即可获得AI汇总</p>
+    <div style="margin-bottom:12px;">
+      <button class="btn primary" onclick="copyExport()">📋 复制提示词</button>
+      <button class="btn" onclick="journalFullExport()">📄 完整导出 .md</button>
+    </div>
+    <div style="white-space:pre-wrap;font-family:var(--font);line-height:1.8;background:var(--bg);padding:14px;border-radius:8px;max-height:300px;overflow-y:auto;font-size:0.82rem;" id="exportContent">${escapeHtml(prompt)}</div>`;
+  container.classList.add("show");
+  container._exportText = prompt;
+  container.scrollIntoView({ behavior: "smooth" });
+}
+
+function journalFullExport() {
+  const data = loadJournal();
+  const keys = Object.keys(data).sort();
+  let md = "# 西语学习笔记汇总\n\n";
+  let currentWeek = 0;
+  keys.forEach(key => {
+    const entries = data[key];
+    if (!entries || entries.length === 0) return;
+    const d = new Date(key + "T00:00:00");
+    const info = getWeekInfo(d);
+    const week = info.inRange ? info.week : 0;
+    if (week !== currentWeek) {
+      currentWeek = week;
+      const weekData = WEEK_DATA[week - 1];
+      const weekTitle = weekData ? ` · ${weekData.title}` : "";
+      md += `## 第${week}周${weekTitle}\n\n`;
+    }
+    md += `### ${key}\n\n`;
+    entries.forEach(e => {
+      const tagLabel = TAG_LABELS[e.tag] || e.tag;
+      md += `- [${e.time}] ${tagLabel}: ${e.text}\n`;
+    });
+    md += "\n";
+  });
+  const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `西语学习笔记_${todayKey()}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function copyExport() {
+  const text = document.getElementById("journalExport")._exportText || "";
+  navigator.clipboard.writeText(text).then(() => alert("已复制！粘贴到 Claude 对话中即可"));
+}
+
+function renderJournal() {
+  const entries = journalGetEntries(journalCurrentDate);
+  const isToday = journalCurrentDate === todayKey();
+
+  // 日期标签
+  document.getElementById("journalDateLabel").textContent =
+    `${journalCurrentDate} ${isToday ? "📍 今天" : ""}`;
+
+  // 条目列表
+  const list = document.getElementById("journalEntryList");
+  if (entries.length === 0) {
+    list.innerHTML = `<div class="journal-empty">${isToday ? "今天还没有记录，点击「＋ 添加记录」开始写吧" : "这一天没有记录"}</div>`;
+  } else {
+    list.innerHTML = entries.map((e, i) => {
+      const tagLabel = TAG_LABELS[e.tag] || e.tag;
+      return `<div class="journal-entry-card">
+        <div class="entry-header">
+          <span class="entry-time">🕐 ${e.time}</span>
+          <span class="journal-tag tag-${e.tag}">${tagLabel}</span>
+        </div>
+        <div class="entry-text">${escapeHtml(e.text)}</div>
+        <div class="entry-actions">
+          <button onclick="journalEditEntry(${i})">✏️ 编辑</button>
+          <button class="del" onclick="journalDeleteEntry(${i})">🗑 删除</button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  document.getElementById("journalExport").classList.remove("show");
+  document.getElementById("journalAddForm").style.display = "none";
+}
+
+// ========== 学习汇总 ==========
+const SUMMARY_KEY = "spanish_summaries";
+
+function loadSummaries() {
+  try { const raw = localStorage.getItem(SUMMARY_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch (e) { return {}; }
+}
+function saveSummaries(data) {
+  try { localStorage.setItem(SUMMARY_KEY, JSON.stringify(data)); }
+  catch (e) { alert("存储空间不足"); }
+}
+
+function summaryShowEditor() {
+  const editor = document.getElementById("summaryEditor");
+  editor.style.display = "block";
+  document.getElementById("summaryDate").value = todayKey();
+  document.getElementById("summaryText").focus();
+}
+
+function summaryHideEditor() {
+  document.getElementById("summaryEditor").style.display = "none";
+  document.getElementById("summaryText").value = "";
+}
+
+function summarySave() {
+  const text = document.getElementById("summaryText").value.trim();
+  const date = document.getElementById("summaryDate").value.trim() || todayKey();
+  if (!text) { alert("请粘贴汇总内容"); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { alert("日期格式不正确，请用 YYYY-MM-DD"); return; }
+  const data = loadSummaries();
+  data[date] = { text, createdAt: new Date().toISOString() };
+  saveSummaries(data);
+  summaryHideEditor();
+  renderSummary();
+}
+
+function summaryDelete(date) {
+  if (!confirm(`删除 ${date} 的汇总？`)) return;
+  const data = loadSummaries();
+  delete data[date];
+  saveSummaries(data);
+  renderSummary();
+}
+
+function renderSummary() {
+  const data = loadSummaries();
+  const keys = Object.keys(data).sort().reverse();
+  const container = document.getElementById("summaryList");
+
+  if (keys.length === 0) {
+    container.innerHTML = `<div class="journal-empty">还没有汇总记录。<br>每天学完后，用「📓 学习笔记」→「🤖 AI 汇总」导出笔记贴给我，<br>我会生成汇总，你再粘贴到这里。</div>`;
+    return;
+  }
+
+  container.innerHTML = keys.map(date => {
+    const entry = data[date];
+    const d = new Date(date + "T00:00:00");
+    const info = getWeekInfo(d);
+    const weekLabel = info.inRange ? `第${info.week}周` : "";
+    return `<div class="summary-card">
+      <div class="summary-header">
+        <span class="summary-date">📅 ${date}</span>
+        <span class="summary-week">${weekLabel}</span>
+        <button class="btn" onclick="summaryDelete('${date}')" style="font-size:0.7rem;padding:2px 8px;margin-left:auto;">🗑</button>
+      </div>
+      <div class="summary-text">${escapeHtml(entry.text)}</div>
+    </div>`;
+  }).join("");
+}
+
+// ========== 键盘快捷键 ==========
+document.addEventListener("keydown", e => {
+  // 焦点在输入框/文本框时，不触发快捷键
+  const tag = document.activeElement?.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || document.activeElement?.isContentEditable) return;
+
+  if (e.key === "1") toggleCheckin("input");
+  if (e.key === "2") toggleCheckin("read");
+  if (e.key === "3") toggleCheckin("speak");
+  if (e.key === "4") toggleCheckin("write");
+  if (e.key === "a" && !e.metaKey && !e.ctrlKey) { e.preventDefault(); checkAll(); }
+  if (e.key === "t") switchView("today");
+  if (e.key === "w") switchView("week");
+  if (e.key === "p") switchView("progress");
+  if (e.key === "c") switchView("conjugation");
+  if (e.key === "j") switchView("journal");
+  if (e.key === "s") switchView("summary");
+});
+
+// ========== 初始化 ==========
+renderAll();
+</script>
+</body>
+</html>
