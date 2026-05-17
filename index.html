@@ -1925,17 +1925,17 @@ function conjugate(verbObj, personId, tenseId) {
   const ending = modelEndings[idx];
 
   // 正字法变化：-car/-gar/-zar/-guar 动词在 e/é 前需要拼写调整
-  // 仅当词干以 c/g/z/gu 结尾时才触发（将来/条件式用原形做词干，末尾是 r，不触发）
+  // 必须同时满足：动词原形以 car/gar/zar/guar 结尾 + 词干末尾是对应字母
   if (!useInfinitive && (ending.charAt(0) === "e" || ending.charAt(0) === "é")) {
     const lastChar = stem.slice(-1);
     const lastTwo = stem.slice(-2);
-    if (lastChar === "c") {
+    if (verbObj.verb.endsWith("car") && lastChar === "c") {
       stem = stem.slice(0, -1) + "qu";
-    } else if (lastChar === "g" && lastTwo !== "gu") {
+    } else if (verbObj.verb.endsWith("gar") && lastChar === "g") {
       stem = stem.slice(0, -1) + "gu";
-    } else if (lastChar === "z") {
+    } else if (verbObj.verb.endsWith("zar") && lastChar === "z") {
       stem = stem.slice(0, -1) + "c";
-    } else if (lastTwo === "gu") {
+    } else if (verbObj.verb.endsWith("guar") && lastTwo === "gu") {
       stem = stem.slice(0, -2) + "gü";
     }
   }
