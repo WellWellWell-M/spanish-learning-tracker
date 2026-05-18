@@ -1213,7 +1213,7 @@ const CATEGORIES = [
   { key: "input", name: "听力输入", icon: "🎧", time: "75min", desc: "LT + Dreaming Spanish" },
   { key: "read",  name: "阅读 + Anki", icon: "📖", time: "30min", desc: "阅读短文 + 词汇复习" },
   { key: "speak", name: "口语输出", icon: "🗣️", time: "40min", desc: "Shadowing + 限时说 + 语伴" },
-  { key: "write", name: "写作练习", icon: "✍️", time: "20min", desc: "每日写作 + 纠错整理" }
+  { key: "write", name: "写作 + 变位", icon: "✍️", time: "30min", desc: "每日写作 + 变位练习10题" }
 ];
 
 // 迁移旧版打卡数据（6键 → 4键）
@@ -1968,7 +1968,7 @@ function getVerbExplanation(verbObj, tenseId) {
 
 // ========== 变位练习状态 ==========
 let quizState = {
-  activeTenses: ["presente_subj", "presente_ind", "indefinido", "imperfecto", "futuro", "condicional", "imperfecto_subj"],
+  activeTenses: ["presente_ind", "indefinido"], // W1-2: 陈述式现在时 + 简单过去时  W3-4: +imperfecto  W5-6: +futuro  W7-8: +condicional  W9-10: +pres_subj  W11-12: +imp_subj
   currentVerb: null,
   currentPerson: null,
   currentTense: null,
