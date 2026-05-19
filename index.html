@@ -1788,88 +1788,407 @@ const REGULAR_ENDINGS = {
 // 动词数据库：{ verb, meaning, model, [overrides], [notes] }
 // model: "ar" | "er" | "ir" | 特定不规则模型名
 // overrides: { tense: { person: "form" } } 或 { tense: { stem: "xxx", endings: "ar"|"er"|"ir"|[...] } }
-const VERB_DB = [
-  // === 规则动词 ===
-  { verb: "hablar", meaning: "说，讲话", model: "ar" },
-  { verb: "trabajar", meaning: "工作", model: "ar" },
-  { verb: "estudiar", meaning: "学习", model: "ar" },
-  { verb: "necesitar", meaning: "需要", model: "ar" },
-  { verb: "llegar", meaning: "到达", model: "ar" },
-  { verb: "pasar", meaning: "度过；经过", model: "ar" },
-  { verb: "llevar", meaning: "携带；穿戴", model: "ar" },
-  { verb: "dejar", meaning: "留下；让", model: "ar" },
-  { verb: "tomar", meaning: "拿；喝", model: "ar" },
-  { verb: "comprar", meaning: "买", model: "ar" },
-  { verb: "preguntar", meaning: "问", model: "ar" },
-  { verb: "explicar", meaning: "解释", model: "ar" },
-  { verb: "buscar", meaning: "寻找", model: "ar" },
-  { verb: "sacar", meaning: "取出", model: "ar" },
-  { verb: "pagar", meaning: "付款", model: "ar" },
-  { verb: "almorzar", meaning: "吃午饭", model: "ar" },
+// 模式引擎 v2 — 从模式标签自动推导所有变位 overrides
 
-  { verb: "comer", meaning: "吃", model: "er" },
-  { verb: "beber", meaning: "喝", model: "er" },
-  { verb: "aprender", meaning: "学习；学会", model: "er" },
-  { verb: "comprender", meaning: "理解", model: "er" },
-  { verb: "vender", meaning: "卖", model: "er" },
-  { verb: "deber", meaning: "应该；欠", model: "er" },
-  { verb: "leer", meaning: "阅读", model: "er", overrides: { indefinido: { 3: "leyó", 6: "leyeron" } }, notes: { indefinido: "i 在元音间变 y：leyó, leyeron" } },
+/*
+  西语变位引擎 v2 — 模式驱动，生成 300+ 动词的完整 overrides
+  用法：在 HTML 文件中 const VERB_DB = VERB_PATTERN_LIST.map(x => buildVerbEntry(x[0],x[1],x[2]));
+*/
 
-  { verb: "vivir", meaning: "居住；生活", model: "ir" },
-  { verb: "escribir", meaning: "写", model: "ir" },
-  { verb: "abrir", meaning: "打开", model: "ir" },
-  { verb: "recibir", meaning: "收到", model: "ir" },
-  { verb: "subir", meaning: "上升；上传", model: "ir" },
-  { verb: "decidir", meaning: "决定", model: "ir" },
-  { verb: "asistir", meaning: "参加", model: "ir" },
+function buildVerbEntry(infinitive, meaning, pattern) {
+  const model = infinitive.slice(-2);
+  const stem = infinitive.slice(0, -2);
+  const overrides = {};
+  const parts = (pattern || "").split("+").filter(Boolean);
 
-  // === 词干变化 (e→ie) ===
-  { verb: "pensar", meaning: "想；认为", model: "ar", overrides: { presente_ind: { 1: "pienso", 2: "piensas", 3: "piensa", 6: "piensan" }, presente_subj: { 1: "piense", 2: "pienses", 3: "piense", 6: "piensen" } }, notes: { presente_ind: "词干 e→ie：pienso, piensas, piensa, piensan（nosotros/vosotros 不变）", presente_subj: "虚拟式继承陈述式词干变化：piense, pienses, piense, piensen" } },
-  { verb: "entender", meaning: "理解；明白", model: "er", overrides: { presente_ind: { 1: "entiendo", 2: "entiendes", 3: "entiende", 6: "entienden" }, presente_subj: { 1: "entienda", 2: "entiendas", 3: "entienda", 6: "entiendan" } }, notes: { presente_ind: "词干 e→ie：entiendo, entiendes, entiende, entienden（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 e→ie：entienda, entiendas, entienda, entiendan（nosotros/vosotros 不变）" } },
-  { verb: "empezar", meaning: "开始", model: "ar", overrides: { presente_ind: { 1: "empiezo", 2: "empiezas", 3: "empieza", 6: "empiezan" }, presente_subj: { 1: "empiece", 2: "empieces", 3: "empiece", 6: "empiecen" } }, notes: { presente_ind: "词干 e→ie + 正字法 z→c：empiezo", presente_subj: "虚拟式正字法 z→c + 词干变化：empiece" } },
+  let stemChange = null, yoIrreg = null, subjIrreg = null;
+  let pretIrreg = null, futIrreg = null, impSubjIrreg = null;
+  let isGo = false, isZco = false, isJo = false;
 
-  // === 词干变化 (o→ue) ===
-  { verb: "poder", meaning: "能够", model: "er", overrides: { presente_ind: { 1: "puedo", 2: "puedes", 3: "puede", 6: "pueden" }, presente_subj: { 1: "pueda", 2: "puedas", 3: "pueda", 6: "puedan" }, indefinido: { 1: "pude", 2: "pudiste", 3: "pudo", 6: "pudieron" }, futuro: { stem: "podr-" }, condicional: { stem: "podr-" }, imperfecto_subj: { stem: "pudier-" } }, notes: { presente_ind: "词干 o→ue：puedo, puedes, puede, pueden（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：pueda, puedas, pueda, puedan（nosotros/vosotros 不变）", indefinido: "不规则词根 pud- + 特殊词尾 (-e, -iste, -o, -imos, -isteis, -ieron)", futuro: "不规则词根 podr-（d 替代 e/é），注意与规则动词不同", condicional: "不规则词根 podr-（d 替代 e/é），词尾加在 podr- 后", imperfecto_subj: "词根 pudier- 来自 indefinido 词根 pud-" } },
-  { verb: "dormir", meaning: "睡觉", model: "ir", overrides: { presente_ind: { 1: "duermo", 2: "duermes", 3: "duerme", 6: "duermen" }, presente_subj: { 1: "duerma", 2: "duermas", 3: "duerma", 6: "duerman" } }, notes: { presente_ind: "词干 o→ue：duermo, duermes, duerme, duermen（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：duerma, duermas, duerma, duerman（nosotros/vosotros 不变）" } },
-  { verb: "volver", meaning: "返回；再次", model: "er", overrides: { presente_ind: { 1: "vuelvo", 2: "vuelves", 3: "vuelve", 6: "vuelven" }, presente_subj: { 1: "vuelva", 2: "vuelvas", 3: "vuelva", 6: "vuelvan" } }, notes: { presente_ind: "词干 o→ue：vuelvo, vuelves, vuelve, vuelven（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：vuelva, vuelvas, vuelva, vuelvan（nosotros/vosotros 不变）" } },
-  { verb: "encontrar", meaning: "找到；遇见", model: "ar", overrides: { presente_ind: { 1: "encuentro", 2: "encuentras", 3: "encuentra", 6: "encuentran" }, presente_subj: { 1: "encuentre", 2: "encuentres", 3: "encuentre", 6: "encuentren" } }, notes: { presente_ind: "词干 o→ue：encuentro, encuentras, encuentra, encuentran", presente_subj: "虚拟式继承 o→ue：encuentre, encuentres, encuentre, encuentren" } },
+  // 辅助：计算词干变化后的词干（用于 seguir 型，去掉末尾元音）
+  function getSCStem(inf, change) {
+    const st = inf.slice(0, -2);
+    const [from, to] = change.split(">");
+    for (let i = st.length - 1; i >= 0; i--) {
+      if (st[i] === from) {
+        const changed = st.slice(0, i) + to + st.slice(i + 1);
+        return changed.slice(0, -1); // sigu → sig / consigu → consig
+      }
+    }
+    return st;
+  }
 
-  // === 词干变化 (e→i) ===
-  { verb: "pedir", meaning: "请求；点餐", model: "ir", overrides: { presente_ind: { 1: "pido", 2: "pides", 3: "pide", 6: "piden" }, presente_subj: { 1: "pida", 2: "pidas", 3: "pida", 6: "pidan" }, indefinido: { 3: "pidió", 6: "pidieron" } }, notes: { presente_ind: "词干 e→i：pido, pides, pide, piden", indefinido: "第三人称 e→i：pidió, pidieron" } },
-  { verb: "seguir", meaning: "继续；跟随", model: "ir", overrides: { presente_ind: { 1: "sigo", 2: "sigues", 3: "sigue", 6: "siguen" }, presente_subj: { 1: "siga", 2: "sigas", 3: "siga", 6: "sigan" }, indefinido: { 3: "siguió", 6: "siguieron" } }, notes: { presente_ind: "e→i + yo 不规则 sigo（第一人称不遵循 e→i 规律，直接加 -go）", presente_subj: "虚拟式继承 e→i：siga, sigas, siga, sigan（nosotros/vosotros 不变）", indefinido: "第三人称 e→i + 正字法 gu→g：siguió, siguieron（注意 i 上有重音）" } },
+  for (const part of parts) {
+    if      (["e>ie","o>ue","e>i","u>ue"].includes(part)) { stemChange = part; }
+    else if (part === "zco") { isZco = true; }
+    else if (part === "go")  { isGo = true; }
+    else if (part === "jo")  { isJo = true; }
+    else if (part === "y")   { /* -uir */ }
+    else if (part === "tener") {
+      yoIrreg = "tengo"; subjIrreg = "teng-"; stemChange = "e>ie";
+      pretIrreg = { stem: "tuv", ends: "tener_indef" };
+      futIrreg = "tendr"; impSubjIrreg = "tuvier";
+    }
+    else if (part === "hacer") {
+      yoIrreg = "hago"; subjIrreg = "hag-";
+      pretIrreg = { stem: "hic", ends: "hacer_indef" };
+      futIrreg = "har"; impSubjIrreg = "hicier";
+    }
+    else if (part === "decir") {
+      yoIrreg = "digo"; subjIrreg = "dig-"; stemChange = "e>i";
+      pretIrreg = { stem: "dij", ends: "decir_indef" };
+      futIrreg = "dir"; impSubjIrreg = "dijer";
+    }
+    else if (part === "venir") {
+      yoIrreg = "vengo"; subjIrreg = "veng-"; stemChange = "e>ie";
+      pretIrreg = { stem: "vin", ends: "tener_indef" };
+      futIrreg = "vendr"; impSubjIrreg = "vinier";
+    }
+    else if (part === "seguir") {
+      const scStem = getSCStem(infinitive, "e>i"); // sig/consig
+      yoIrreg = scStem + "o";
+      subjIrreg = scStem + "-";
+      stemChange = "e>i";
+    }
+    else if (part === "poder") {
+      pretIrreg = { stem: "pud", ends: "tener_indef" };
+      futIrreg = "podr"; impSubjIrreg = "pudier";
+      stemChange = "o>ue";
+    }
+    else if (part === "poner") {
+      isGo = true; subjIrreg = "pong-";
+      pretIrreg = { stem: "pus", ends: "tener_indef" };
+      futIrreg = "pondr"; impSubjIrreg = "pusier";
+    }
+    else if (part === "querer") {
+      pretIrreg = { stem: "quis", ends: "tener_indef" };
+      futIrreg = "querr"; impSubjIrreg = "quisier";
+      stemChange = "e>ie";
+    }
+    else if (part === "saber") {
+      yoIrreg = "sé"; subjIrreg = "sep-";
+      pretIrreg = { stem: "sup", ends: "tener_indef" };
+      futIrreg = "sabr"; impSubjIrreg = "supier";
+    }
+    else if (part === "estar") {
+      yoIrreg = "estoy";
+      pretIrreg = { stem: "estuv", ends: "tener_indef" };
+      impSubjIrreg = "estuvier";
+    }
+    else if (part === "dar")   { yoIrreg = "doy"; }
+    else if (part === "ver")   { yoIrreg = "veo"; }
+    else if (part === "haber") { futIrreg = "habr"; }
+    else if (part === "caber") {
+      yoIrreg = "quepo"; subjIrreg = "quep-";
+      pretIrreg = { stem: "cup", ends: "tener_indef" };
+      futIrreg = "cabr"; impSubjIrreg = "cupier";
+    }
+    else if (part === "oir") { yoIrreg = "oigo"; subjIrreg = "oig-"; }
+    else if (part === "traer") { yoIrreg = "traigo"; subjIrreg = "traig-"; }
+    else if (part === "caer")  { yoIrreg = "caigo"; subjIrreg = "caig-"; }
+  }
 
-  // === 第一人称不规则 (yo -go) ===
-  { verb: "tener", meaning: "有", model: "er", overrides: { presente_ind: { 1: "tengo" }, presente_subj: { stem: "teng-" }, indefinido: { stem: "tuv-", endings: "tener_indef" }, futuro: { stem: "tendr-" }, condicional: { stem: "tendr-" }, imperfecto_subj: { stem: "tuvier-" } }, notes: { presente_ind: "yo 不规则 tengo", presente_subj: "词根来自 tengo 去掉 -o：tenga, tengas, tenga, tengamos, tengáis, tengan", indefinido: "不规则词根 tuv- + 特殊词尾 (-e, -iste, -o, -imos, -isteis, -ieron)", futuro: "不规则词根 tendr-（d 替代 e）" } },
-  { verb: "hacer", meaning: "做", model: "er", overrides: { presente_ind: { 1: "hago" }, presente_subj: { stem: "hag-" }, indefinido: { stem: "hic-", endings: "hacer_indef" }, futuro: { stem: "har-" }, condicional: { stem: "har-" }, imperfecto_subj: { stem: "hicier-" } }, notes: { presente_ind: "yo 不规则 hago", presente_subj: "词根来自 hago 去掉 -o：haga, hagas, haga...", indefinido: "不规则词根 hic- + 第三人称 i→z(hizo)：hice, hiciste, hizo, hicimos, hicisteis, hicieron", futuro: "不规则词根 har-" } },
-  { verb: "decir", meaning: "说", model: "ir", overrides: { presente_ind: { 1: "digo" }, presente_subj: { stem: "dig-" }, indefinido: { stem: "dij-", endings: "decir_indef" }, futuro: { stem: "dir-" }, condicional: { stem: "dir-" }, imperfecto_subj: { stem: "dijer-" } }, notes: { presente_ind: "yo 不规则 digo", presente_subj: "词根来自 digo：diga, digas, diga...", indefinido: "不规则词根 dij- + -eron（无 i）：dije, dijiste, dijo, dijimos, dijisteis, dijeron", futuro: "不规则词根 dir-" } },
-  { verb: "venir", meaning: "来", model: "ir", overrides: { presente_ind: { 1: "vengo", 2: "vienes", 3: "viene", 6: "vienen" }, presente_subj: { stem: "veng-" }, indefinido: { stem: "vin-", endings: "tener_indef" }, futuro: { stem: "vendr-" }, condicional: { stem: "vendr-" }, imperfecto_subj: { stem: "vinier-" } }, notes: { presente_ind: "e→ie：vengo, vienes, viene, venimos, venís, vienen（yo 不规则 vengo + 词干 e→ie）", presente_subj: "词根来自 vengo：venga, vengas, venga...", indefinido: "不规则词根 vin- + 特殊词尾：vine, viniste, vino, vinimos, vinisteis, vinieron", futuro: "不规则词根 vendr-" } },
-  { verb: "salir", meaning: "出去", model: "ir", overrides: { presente_ind: { 1: "salgo" }, presente_subj: { stem: "salg-" }, futuro: { stem: "saldr-" }, condicional: { stem: "saldr-" } }, notes: { presente_ind: "yo 不规则 salgo", presente_subj: "词根来自 salgo：salga, salgas, salga...", futuro: "不规则词根 saldr-" } },
-  { verb: "poner", meaning: "放置", model: "er", overrides: { presente_ind: { 1: "pongo" }, presente_subj: { stem: "pong-" }, indefinido: { stem: "pus-", endings: "tener_indef" }, futuro: { stem: "pondr-" }, condicional: { stem: "pondr-" }, imperfecto_subj: { stem: "pusier-" } }, notes: { presente_ind: "yo 不规则 pongo", presente_subj: "词根来自 pongo：ponga, pongas, ponga...", indefinido: "不规则词根 pus-：puse, pusiste, puso, pusimos, pusisteis, pusieron", futuro: "不规则词根 pondr-" } },
-  { verb: "traer", meaning: "带来", model: "er", overrides: { presente_ind: { 1: "traigo" }, presente_subj: { stem: "traig-" }, indefinido: { stem: "traj-", endings: "decir_indef" }, imperfecto_subj: { stem: "trajer-" } }, notes: { presente_ind: "yo 不规则 traigo", presente_subj: "词根来自 traigo：traiga, traigas, traiga...", indefinido: "不规则词根 traj-：traje, trajiste, trajo, trajimos, trajisteis, trajeron" } },
-  { verb: "oír", meaning: "听见", model: "ir", overrides: { presente_ind: { 1: "oigo", 2: "oyes", 3: "oye", 6: "oyen" }, presente_subj: { stem: "oig-", 1: "oiga", 2: "oigas", 3: "oiga", 6: "oigan" }, indefinido: { 3: "oyó", 6: "oyeron" } }, notes: { presente_ind: "yo 不规则 oigo，i→y：oyes, oye, oyen", presente_subj: "词根来自 oigo：oiga, oigas...", indefinido: "i 在元音间变 y：oyó, oyeron" } },
+  // Compute changed stem (for both stem changes and yo irregulars)
+  let changedStem = stem;
+  if (stemChange) {
+    const [from, to] = stemChange.split(">");
+    for (let i = stem.length - 1; i >= 0; i--) {
+      if (stem[i] === from) { changedStem = stem.slice(0, i) + to + stem.slice(i + 1); break; }
+    }
+  }
 
-  // === 完全不规则 ===
-  { verb: "ser", meaning: "是（本质）", model: "irregular", overrides: { presente_ind: { 1: "soy", 2: "eres", 3: "es", 4: "somos", 5: "sois", 6: "son" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "era", 2: "eras", 3: "era", 4: "éramos", 5: "erais", 6: "eran" }, futuro: { 1: "seré", 2: "serás", 3: "será", 4: "seremos", 5: "seréis", 6: "serán" }, condicional: { 1: "sería", 2: "serías", 3: "sería", 4: "seríamos", 5: "seríais", 6: "serían" }, presente_subj: { 1: "sea", 2: "seas", 3: "sea", 4: "seamos", 5: "seáis", 6: "sean" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" } }, notes: { presente_ind: "完全不规则，需逐个记忆", presente_subj: "虚拟式：sea, seas, sea, seamos, seáis, sean", indefinido: "与 ir 完全相同：fui, fuiste, fue..." } },
-  { verb: "estar", meaning: "在（状态/位置）", model: "ar", overrides: { presente_ind: { 1: "estoy", 2: "estás", 3: "está", 6: "están" }, presente_subj: { stem: "est-", 1: "esté", 2: "estés", 3: "esté", 6: "estén" }, indefinido: { stem: "estuv-", endings: "tener_indef" }, imperfecto_subj: { stem: "estuvier-" } }, notes: { presente_ind: "yo 不规则 estoy，tú/él 带重音", presente_subj: "虚拟式带重音：esté, estés, esté, estén", indefinido: "不规则词根 estuv-：estuve, estuviste, estuvo..." } },
-  { verb: "ir", meaning: "去", model: "irregular", overrides: { presente_ind: { 1: "voy", 2: "vas", 3: "va", 4: "vamos", 5: "vais", 6: "van" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "iba", 2: "ibas", 3: "iba", 4: "íbamos", 5: "ibais", 6: "iban" }, futuro: { 1: "iré", 2: "irás", 3: "irá", 4: "iremos", 5: "iréis", 6: "irán" }, condicional: { 1: "iría", 2: "irías", 3: "iría", 4: "iríamos", 5: "iríais", 6: "irían" }, presente_subj: { 1: "vaya", 2: "vayas", 3: "vaya", 4: "vayamos", 5: "vayáis", 6: "vayan" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" } }, notes: { presente_ind: "完全不规则：voy, vas, va, vamos, vais, van", presente_subj: "虚拟式完全不规则：vaya, vayas...", indefinido: "与 ser 完全相同：fui, fuiste, fue...", imperfecto: "iba, ibas, iba, íbamos, ibais, iban" } },
-  { verb: "haber", meaning: "有（助动词）", model: "irregular", overrides: { presente_ind: { 1: "he", 2: "has", 3: "ha", 4: "hemos", 5: "habéis", 6: "han" }, indefinido: { 1: "hube", 2: "hubiste", 3: "hubo", 4: "hubimos", 5: "hubisteis", 6: "hubieron" }, imperfecto: { 1: "había", 2: "habías", 3: "había", 4: "habíamos", 5: "habíais", 6: "habían" }, futuro: { stem: "habr-" }, condicional: { stem: "habr-" }, presente_subj: { 1: "haya", 2: "hayas", 3: "haya", 4: "hayamos", 5: "hayáis", 6: "hayan" }, imperfecto_subj: { 1: "hubiera", 2: "hubieras", 3: "hubiera", 4: "hubiéramos", 5: "hubierais", 6: "hubieran" } }, notes: { presente_ind: "he, has, ha, hemos, habéis, han（注意 ha 与 hay 不同）", presente_subj: "haya, hayas, haya, hayamos, hayáis, hayan", futuro: "不规则词根 habr-" } },
-  { verb: "saber", meaning: "知道", model: "er", overrides: { presente_ind: { 1: "sé" }, presente_subj: { stem: "sep-", 1: "sepa", 2: "sepas", 3: "sepa", 6: "sepan" }, indefinido: { stem: "sup-", endings: "tener_indef" }, futuro: { stem: "sabr-" }, condicional: { stem: "sabr-" }, imperfecto_subj: { stem: "supier-" } }, notes: { presente_ind: "yo 不规则 sé", presente_subj: "虚拟式不规则词根 sep-：sepa, sepas, sepa, sepamos, sepáis, sepan", indefinido: "不规则词根 sup-：supe, supiste, supo...", futuro: "不规则词根 sabr-" } },
-  { verb: "dar", meaning: "给", model: "ar", overrides: { presente_ind: { 1: "doy" }, presente_subj: { 1: "dé", 2: "des", 3: "dé", 6: "den" }, indefinido: { 1: "di", 2: "diste", 3: "dio", 4: "dimos", 5: "disteis", 6: "dieron" } }, notes: { presente_ind: "yo 不规则 doy", presente_subj: "虚拟式用 -er/-ir 词尾：dé, des, dé, demos, deis, den", indefinido: "用 -er/-ir 词尾：di, diste, dio..." } },
-  { verb: "ver", meaning: "看见", model: "er", overrides: { presente_ind: { 1: "veo" }, presente_subj: { 1: "vea", 2: "veas", 3: "vea", 6: "vean" }, imperfecto: { 1: "veía", 2: "veías", 3: "veía", 4: "veíamos", 5: "veíais", 6: "veían" } }, notes: { presente_ind: "yo 不规则 veo", presente_subj: "vea, veas, vea, veamos, veáis, vean", imperfecto: "保留 e：veía（不是 vía）" } },
-  { verb: "querer", meaning: "想要；爱", model: "er", overrides: { presente_ind: { 1: "quiero", 2: "quieres", 3: "quiere", 6: "quieren" }, presente_subj: { 1: "quiera", 2: "quieras", 3: "quiera", 6: "quieran" }, indefinido: { stem: "quis-", endings: "tener_indef" }, futuro: { stem: "querr-" }, condicional: { stem: "querr-" }, imperfecto_subj: { stem: "quisier-" } }, notes: { presente_ind: "词干 e→ie：quiero, quieres, quiere, quieren（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 e→ie：quiera, quieras, quiera, quieran（nosotros/vosotros 不变）", indefinido: "不规则词根 quis-：quise, quisiste, quiso, quisimos, quisisteis, quisieron", futuro: "不规则词根 querr-（双 r），回忆 poder→podr- 同模式" } },
+  // Derive yoIrreg from changedStem (now that stem change is computed)
+  if (isGo)  { yoIrreg = changedStem + "go"; subjIrreg = subjIrreg || (changedStem + "g-"); }
+  if (isZco) { yoIrreg = changedStem.slice(0, -1) + "zco"; subjIrreg = subjIrreg || (changedStem.slice(0, -1) + "zc-"); }
+  if (isJo)  { yoIrreg = changedStem.slice(0, -1) + "jo"; subjIrreg = subjIrreg || (changedStem.slice(0, -1) + "j-"); }
+
+  // Apply stem change to presente_ind (1,2,3,6)
+  if (stemChange) {
+    const indEnd = model === "ar" ? ["o","as","a","an"] : ["o","es","e","en"];
+    overrides.presente_ind = {
+      1: changedStem + indEnd[0], 2: changedStem + indEnd[1],
+      3: changedStem + indEnd[2], 6: changedStem + indEnd[3]
+    };
+    // presente_subj inherits stem change (unless subjIrreg overrides)
+    if (!subjIrreg) {
+      const subjEnd = model === "ar" ? ["e","es","e","en"] : ["a","as","a","an"];
+      let s = changedStem;
+      if (infinitive.match(/(gar|car|zar)$/)) {
+        if      (infinitive.endsWith("gar")) s = changedStem.slice(0, -1) + "gu";
+        else if (infinitive.endsWith("car")) s = changedStem.slice(0, -1) + "qu";
+        else if (infinitive.endsWith("zar")) s = changedStem.slice(0, -1) + "c";
+      }
+      overrides.presente_subj = {
+        1: s + subjEnd[0], 2: s + subjEnd[1],
+        3: s + subjEnd[2], 6: s + subjEnd[3]
+      };
+    }
+    // -ir verbs: indefinido 3rd person also changes
+    if (model === "ir" && ["e>i","e>ie","o>ue"].includes(stemChange)) {
+      const indefChange = stemChange === "o>ue" ? "o>u" : "e>i";
+      const [f2, t2] = indefChange.split(">");
+      let is2 = stem;
+      for (let i = stem.length - 1; i >= 0; i--) {
+        if (stem[i] === f2) { is2 = stem.slice(0, i) + t2 + stem.slice(i + 1); break; }
+      }
+      if (!overrides.indefinido) overrides.indefinido = {};
+      overrides.indefinido[3] = is2 + "ió";
+      overrides.indefinido[6] = is2 + "ieron";
+    }
+  }
+
+  // Apply yo irregular (overrides stem change for person 1)
+  if (yoIrreg) {
+    if (!overrides.presente_ind) overrides.presente_ind = {};
+    overrides.presente_ind[1] = yoIrreg;
+  }
+
+  // Apply subjunctive irregular stem (clears stem-change person forms)
+  if (subjIrreg) {
+    if (!overrides.presente_subj) overrides.presente_subj = {};
+    delete overrides.presente_subj[1]; delete overrides.presente_subj[2];
+    delete overrides.presente_subj[3]; delete overrides.presente_subj[6];
+    overrides.presente_subj.stem = subjIrreg;
+  }
+
+  // Apply indefinido irregular stem (clears stem-change person forms)
+  if (pretIrreg) {
+    if (!overrides.indefinido) overrides.indefinido = {};
+    delete overrides.indefinido[1]; delete overrides.indefinido[2];
+    delete overrides.indefinido[3]; delete overrides.indefinido[6];
+    overrides.indefinido.stem = pretIrreg.stem;
+    if (pretIrreg.ends) overrides.indefinido.endings = pretIrreg.ends;
+  }
+
+  // Apply futuro/condicional irregular
+  if (futIrreg) {
+    overrides.futuro = { stem: futIrreg };
+    overrides.condicional = { stem: futIrreg };
+  }
+
+  // Apply imperfecto subjunctive irregular
+  if (impSubjIrreg) {
+    overrides.imperfecto_subj = { stem: impSubjIrreg };
+  }
+
+  // -uir verbs: i→y
+  if (parts.includes("y")) {
+    const yst = stem;
+    if (!overrides.presente_ind) overrides.presente_ind = {};
+    overrides.presente_ind[3] = yst + "ye";
+    overrides.presente_ind[6] = yst + "yen";
+    if (!overrides.presente_subj) overrides.presente_subj = {};
+    overrides.presente_subj.stem = yst + "y-";
+    if (!overrides.indefinido) overrides.indefinido = {};
+    overrides.indefinido[3] = yst + "yó";
+    overrides.indefinido[6] = yst + "yeron";
+  }
+
+  // dar: uses -er/-ir endings in indefinido
+  if (parts.includes("dar")) {
+    if (!overrides.indefinido) overrides.indefinido = {};
+    overrides.indefinido.stem = "d";
+    overrides.indefinido.endings = "er";
+  }
+
+  // estar: presente_subj has accents
+  if (parts.includes("estar")) {
+    if (!overrides.presente_subj) overrides.presente_subj = {};
+    overrides.presente_subj.stem = "est";
+    overrides.presente_subj[1] = "esté";
+    overrides.presente_subj[2] = "estés";
+    overrides.presente_subj[3] = "esté";
+    overrides.presente_subj[6] = "estén";
+  }
+
+  // ser/ir are handled as full overrides elsewhere — here we only process pattern-list verbs
+  // leer: indefinido 3rd person i→y
+  if (infinitive === "leer") {
+    if (!overrides.indefinido) overrides.indefinido = {};
+    overrides.indefinido[3] = "leyó";
+    overrides.indefinido[6] = "leyeron";
+  }
+
+  return {
+    verb: infinitive, meaning, model,
+    overrides: Object.keys(overrides).length > 0 ? overrides : undefined
+  };
+}
+
+// ========== 动词清单（287个常用动词）==========
+const VERB_PATTERN_LIST = [
+  // === 规则 -ar ===
+  ["hablar", "说，讲话", ""], ["trabajar", "工作", ""], ["estudiar", "学习", ""],
+  ["necesitar", "需要", ""], ["pasar", "度过；经过", ""], ["llevar", "携带；穿戴", ""],
+  ["dejar", "留下；让", ""], ["tomar", "拿；喝", ""], ["comprar", "买", ""],
+  ["preguntar", "问", ""], ["ayudar", "帮助", ""], ["cocinar", "烹饪", ""],
+  ["esperar", "等待；希望", ""], ["ganar", "赚；赢", ""], ["gastar", "花费", ""],
+  ["llamar", "打电话；叫", ""], ["mirar", "看；注视", ""], ["usar", "使用", ""],
+  ["viajar", "旅行", ""], ["caminar", "走路", ""], ["cambiar", "改变", ""],
+  ["descansar", "休息", ""], ["entrar", "进入", ""], ["escuchar", "听", ""],
+  ["limpiar", "清洁", ""], ["manejar", "驾驶；管理", ""], ["nadar", "游泳", ""],
+  ["terminar", "结束", ""], ["visitar", "参观", ""], ["crear", "创造", ""],
+  ["cuidar", "照顾", ""], ["desear", "希望", ""], ["disfrutar", "享受", ""],
+  ["enseñar", "教", ""], ["enviar", "发送", ""], ["evitar", "避免", ""],
+  ["firmar", "签名", ""], ["invitar", "邀请", ""], ["lograr", "实现", ""],
+  ["mejorar", "改善", ""], ["olvidar", "忘记", ""], ["preparar", "准备", ""],
+  ["quedar", "留下；位于", ""], ["regresar", "返回", ""], ["saludar", "问候", ""],
+  ["tardar", "花时间", ""], ["tratar", "对待；试图", ""],
+
+  // === 规则 -er ===
+  ["comer", "吃", ""], ["beber", "喝", ""], ["aprender", "学习；学会", ""],
+  ["comprender", "理解", ""], ["vender", "卖", ""], ["deber", "应该；欠", ""],
+  ["correr", "跑", ""], ["romper", "打破", ""], ["temer", "害怕", ""],
+  ["responder", "回答", ""], ["prometer", "承诺", ""], ["sorprender", "使惊讶", ""],
+
+  // === 规则 -ir ===
+  ["vivir", "居住；生活", ""], ["escribir", "写", ""], ["abrir", "打开", ""],
+  ["recibir", "收到", ""], ["subir", "上升；上传", ""], ["decidir", "决定", ""],
+  ["asistir", "参加", ""], ["existir", "存在", ""], ["ocurrir", "发生", ""],
+  ["permitir", "允许", ""], ["sufrir", "受苦", ""], ["cumplir", "完成", ""],
+  ["describir", "描述", ""], ["descubrir", "发现", ""], ["discutir", "讨论", ""],
+  ["insistir", "坚持", ""], ["compartir", "分享", ""], ["definir", "定义", ""],
+
+  // === -car ===
+  ["explicar", "解释", ""], ["buscar", "寻找", ""], ["sacar", "取出", ""],
+  ["tocar", "触摸；演奏", ""], ["practicar", "练习", ""], ["indicar", "指示", ""],
+  ["colocar", "放置", ""], ["publicar", "发布", ""], ["significar", "意味着", ""],
+  ["comunicar", "沟通", ""], ["aplicar", "应用", ""], ["educar", "教育", ""],
+
+  // === -gar ===
+  ["llegar", "到达", ""], ["pagar", "付款", ""], ["entregar", "交付", ""],
+  ["apagar", "关掉", ""], ["obligar", "强迫", ""], ["investigar", "调查", ""],
+
+  // === -zar ===
+  ["almorzar", "吃午饭", ""], ["cruzar", "穿越", ""], ["realizar", "实现", ""],
+  ["utilizar", "利用", ""], ["organizar", "组织", ""], ["rechazar", "拒绝", ""],
+
+  // === e→ie ===
+  ["pensar", "想；认为", "e>ie"], ["entender", "理解；明白", "e>ie"],
+  ["cerrar", "关闭", "e>ie"], ["despertar", "醒来", "e>ie"],
+  ["recomendar", "推荐", "e>ie"], ["negar", "否认", "e>ie"],
+  ["sentar", "坐下", "e>ie"], ["gobernar", "统治", "e>ie"],
+  ["perder", "丢失", "e>ie"], ["defender", "保卫", "e>ie"],
+  ["encender", "点燃", "e>ie"], ["preferir", "偏爱", "e>ie"],
+  ["sentir", "感觉", "e>ie"], ["mentir", "撒谎", "e>ie"],
+  ["sugerir", "建议", "e>ie"], ["convertir", "转换", "e>ie"],
+  ["adquirir", "获得", "e>ie"],
+
+  // === o→ue ===
+  ["contar", "讲述；数", "o>ue"], ["encontrar", "找到；遇见", "o>ue"],
+  ["mostrar", "展示", "o>ue"], ["recordar", "记住", "o>ue"],
+  ["volar", "飞行", "o>ue"], ["costar", "花费", "o>ue"],
+  ["probar", "尝试；证明", "o>ue"], ["volver", "返回；再次", "o>ue"],
+  ["devolver", "归还", "o>ue"], ["mover", "移动", "o>ue"],
+  ["resolver", "解决", "o>ue"], ["dormir", "睡觉", "o>ue"],
+  ["morir", "死", "o>ue"], ["soler", "习惯", "o>ue"],
+  ["oler", "闻", "o>ue"], ["demostrar", "证明", "o>ue"],
+  ["acordar", "同意", "o>ue"], ["soltar", "释放", "o>ue"],
+
+  // === e→i ===
+  ["pedir", "请求；点餐", "e>i"], ["repetir", "重复", "e>i"],
+  ["servir", "服务", "e>i"], ["vestir", "穿衣", "e>i"],
+  ["despedir", "告别", "e>i"], ["medir", "测量", "e>i"],
+  ["competir", "竞争", "e>i"], ["impedir", "阻止", "e>i"],
+  ["reir", "笑", "e>i"], ["sonreir", "微笑", "e>i"],
+
+  // === u→ue（仅 jugar）===
+  ["jugar", "玩", "u>ue"],
+
+  // === e→i + yo 特殊 ===
+  ["seguir", "继续；跟随", "seguir"],
+  ["conseguir", "获得", "seguir"],
+  ["perseguir", "追", "seguir"],
+
+  // === e→i + yo -jo ===
+  ["elegir", "选择", "e>i+jo"],
+  ["corregir", "纠正", "e>i+jo"],
+
+  // === -cer / -cir (yo -zco) ===
+  ["conocer", "认识；了解", "zco"], ["parecer", "似乎", "zco"],
+  ["ofrecer", "提供", "zco"], ["crecer", "成长", "zco"],
+  ["merecer", "值得", "zco"], ["pertenecer", "属于", "zco"],
+  ["reconocer", "认出", "zco"], ["conducir", "驾驶", "zco"],
+  ["producir", "生产", "zco"], ["traducir", "翻译", "zco"],
+  ["introducir", "引入", "zco"], ["reducir", "减少", "zco"],
+  ["aparecer", "出现", "zco"], ["amanecer", "天亮", "zco"],
+
+  // === -ger / -gir (yo -jo) ===
+  ["coger", "拿取", "jo"], ["escoger", "挑选", "jo"],
+  ["proteger", "保护", "jo"], ["recoger", "收集", "jo"],
+  ["exigir", "要求", "jo"], ["dirigir", "指导", "jo"],
+
+  // === -uir (i→y) ===
+  ["construir", "建造", "y"], ["destruir", "破坏", "y"],
+  ["incluir", "包括", "y"], ["concluir", "总结", "y"],
+  ["huir", "逃跑", "y"], ["sustituir", "替代", "y"],
+  ["influir", "影响", "y"],
+
+  // === 复合不规则 ===
+  ["tener", "有", "tener"], ["hacer", "做", "hacer"],
+  ["decir", "说", "decir"], ["venir", "来", "venir"],
+  ["poder", "能够", "poder"], ["querer", "想要；爱", "querer"],
+  ["salir", "出去", "go"], ["poner", "放置", "poner"],
+  ["traer", "带来", "traer"], ["caer", "落下", "caer"],
+  ["valer", "值得", "go"], ["saber", "知道", "saber"],
+  ["estar", "在（状态/位置）", "estar"], ["dar", "给", "dar"],
+  ["ver", "看见", "ver"], ["haber", "有（助动词）", "haber"],
+  ["caber", "容纳", "caber"], ["oir", "听见", "oir"],
+
+  // === e→ie + 正字法 ===
+  ["empezar", "开始", "e>ie"], ["comenzar", "开始", "e>ie"],
 
   // === 更多常用动词 ===
-  { verb: "conocer", meaning: "认识；了解", model: "er", overrides: { presente_ind: { 1: "conozco" }, presente_subj: { stem: "conozc-" } }, notes: { presente_ind: "yo 不规则 conozco（-cer 动词加 z）", presente_subj: "词根来自 conozco：conozca, conozcas..." } },
-  { verb: "conducir", meaning: "驾驶", model: "ir", overrides: { presente_ind: { 1: "conduzco" }, presente_subj: { stem: "conduzc-" }, indefinido: { stem: "conduj-", endings: "decir_indef" }, imperfecto_subj: { stem: "condujer-" } }, notes: { presente_ind: "yo 不规则 conduzco", presente_subj: "词根来自 conduzco：conduzca, conduzcas...", indefinido: "不规则词根 conduj-：conduje, condujiste..." } },
-  { verb: "traducir", meaning: "翻译", model: "ir", overrides: { presente_ind: { 1: "traduzco" }, presente_subj: { stem: "traduzc-" }, indefinido: { stem: "traduj-", endings: "decir_indef" }, imperfecto_subj: { stem: "tradujer-" } }, notes: { presente_ind: "类似 conducir：traduzco", presente_subj: "traduzca, traduzcas..." } },
-  { verb: "sentir", meaning: "感觉", model: "ir", overrides: { presente_ind: { 1: "siento", 2: "sientes", 3: "siente", 6: "sienten" }, presente_subj: { 1: "sienta", 2: "sientas", 3: "sienta", 6: "sientan" }, indefinido: { 3: "sintió", 6: "sintieron" } }, notes: { presente_ind: "词干 e→ie：siento, sientes, siente, sienten（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 e→ie：sienta, sientas, sienta, sientan（nosotros/vosotros 不变）", indefinido: "第三人称 e→i：sintió, sintieron（注意 -ir 动词的 e→ie 在 indefinido 中会进一步变 e→i）" } },
-  { verb: "contar", meaning: "讲述；数", model: "ar", overrides: { presente_ind: { 1: "cuento", 2: "cuentas", 3: "cuenta", 6: "cuentan" }, presente_subj: { 1: "cuente", 2: "cuentes", 3: "cuente", 6: "cuenten" } }, notes: { presente_ind: "词干 o→ue：cuento, cuentas, cuenta, cuentan（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：cuente, cuentes, cuente, cuenten（nosotros/vosotros 不变）" } },
-  { verb: "jugar", meaning: "玩", model: "ar", overrides: { presente_ind: { 1: "juego", 2: "juegas", 3: "juega", 6: "juegan" }, presente_subj: { 1: "juegue", 2: "juegues", 3: "juegue", 6: "jueguen" } }, notes: { presente_ind: "u→ue：juego（唯一 u→ue 动词）", presente_subj: "正字法 g→gu：juegue" } },
-  { verb: "morir", meaning: "死", model: "ir", overrides: { presente_ind: { 1: "muero", 2: "mueres", 3: "muere", 6: "mueren" }, presente_subj: { 1: "muera", 2: "mueras", 3: "muera", 6: "mueran" }, indefinido: { 3: "murió", 6: "murieron" } }, notes: { presente_ind: "词干 o→ue：muero, mueres, muere, mueren（nosotros/vosotros 不变）", presente_subj: "虚拟式继承 o→ue：muera, mueras, muera, mueran（nosotros/vosotros 不变）", indefinido: "第三人称 o→u：murió, murieron（-ir 动词的 o→ue 在 indefinido 中会进一步变 o→u）" } },
-  { verb: "creer", meaning: "相信；认为", model: "er", overrides: { presente_ind: { 3: "cree", 6: "creen" }, presente_subj: { 4: "creamos" }, indefinido: { 3: "creyó", 6: "creyeron" } }, notes: { indefinido: "i 在元音间变 y：creyó, creyeron" } },
-  { verb: "construir", meaning: "建造", model: "ir", overrides: { presente_ind: { 3: "construye", 6: "construyen" }, presente_subj: { stem: "construy-" }, indefinido: { 3: "construyó", 6: "construyeron" } }, notes: { presente_ind: "-uir 加 y：construye", presente_subj: "construya, construyas..." } },
+  ["aceptar", "接受", ""], ["añadir", "添加", ""], ["apoyar", "支持", ""],
+  ["asegurar", "确保", ""], ["aumentar", "增加", ""], ["bajar", "下降", ""],
+  ["cantar", "唱歌", ""], ["causar", "造成", ""], ["cenar", "吃晚餐", ""],
+  ["charlar", "聊天", ""], ["confiar", "信任", ""], ["controlar", "控制", ""],
+  ["durar", "持续", ""], ["eliminar", "消除", ""], ["enfrentar", "面对", ""],
+  ["expresar", "表达", ""], ["faltar", "缺少", ""], ["formar", "形成", ""],
+  ["funcionar", "运作", ""], ["guardar", "保存", ""], ["imaginar", "想象", ""],
+  ["importar", "进口；重要", ""], ["informar", "通知", ""], ["instalar", "安装", ""],
+  ["interesar", "使感兴趣", ""], ["jurar", "发誓", ""], ["luchar", "战斗", ""],
+  ["marcar", "标记", ""], ["matar", "杀", ""], ["mencionar", "提及", ""],
+  ["mezclar", "混合", ""], ["molestar", "打扰", ""], ["notar", "注意到", ""],
+  ["observar", "观察", ""], ["ocupar", "占据", ""], ["odiar", "恨", ""],
+  ["ordenar", "命令；整理", ""], ["parar", "停止", ""], ["participar", "参与", ""],
+  ["preocupar", "使担心", ""], ["presentar", "介绍", ""], ["prestar", "借出", ""],
+  ["pronunciar", "发音", ""], ["quejar", "抱怨", ""], ["quitar", "拿走", ""],
+  ["regalar", "赠送", ""], ["reparar", "修理", ""], ["respetar", "尊重", ""],
+  ["resultar", "结果是", ""], ["robar", "偷", ""], ["separar", "分开", ""],
+  ["superar", "超越", ""], ["tirar", "扔", ""], ["violar", "侵犯", ""],
+  ["consistir", "由…组成", ""], ["distinguir", "区分", ""],
+  ["contribuir", "贡献", "y"], ["distribuir", "分配", "y"],
+  ["poseer", "拥有", ""], ["sonar", "发声；做梦", "o>ue"],
+  ["colgar", "挂", "o>ue"], ["aprobar", "批准", "o>ue"],
+  ["absolver", "赦免", "o>ue"], ["renovar", "更新", "o>ue"],
+  ["conmover", "感动", "o>ue"], ["fomentar", "促进", ""],
+  ["desempeñar", "扮演；履行", ""], ["preservar", "保护", ""],
+  ["deslizar", "滑", ""], ["destacar", "突出", ""],
+  ["someter", "使屈服", ""], ["emprender", "着手", ""],
+  ["nacer", "出生", "zco"], ["obedecer", "服从", "zco"],
+  ["establecer", "建立", "zco"], ["favorecer", "有利于", "zco"],
+  ["desaparecer", "消失", "zco"], ["agradecer", "感谢", "zco"],
+  // 反身动词
+  ["levantarse", "起床", ""], ["sentarse", "坐下", "e>ie"],
+  ["despertarse", "醒", "e>ie"], ["acostarse", "上床", "o>ue"],
+  ["ducharse", "淋浴", ""], ["vestirse", "穿衣", "e>i"],
+  ["llamarse", "名叫", ""], ["quedarse", "留下", ""],
+  ["irse", "离开", ""], ["ponerse", "穿上；变得", "poner"],
 ];
 
+
+// 完全不规则动词（手工维护）
+const IRREG_VERBS = [
+  { verb: "ser", meaning: "是（本质）", model: "irregular", overrides: { presente_ind: { 1: "soy", 2: "eres", 3: "es", 4: "somos", 5: "sois", 6: "son" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "era", 2: "eras", 3: "era", 4: "éramos", 5: "erais", 6: "eran" }, presente_subj: { 1: "sea", 2: "seas", 3: "sea", 4: "seamos", 5: "seáis", 6: "sean" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "seré", 2: "serás", 3: "será", 4: "seremos", 5: "seréis", 6: "serán" }, condicional: { 1: "sería", 2: "serías", 3: "sería", 4: "seríamos", 5: "seríais", 6: "serían" } } },
+  { verb: "ir", meaning: "去", model: "irregular", overrides: { presente_ind: { 1: "voy", 2: "vas", 3: "va", 4: "vamos", 5: "vais", 6: "van" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "iba", 2: "ibas", 3: "iba", 4: "íbamos", 5: "ibais", 6: "iban" }, presente_subj: { 1: "vaya", 2: "vayas", 3: "vaya", 4: "vayamos", 5: "vayáis", 6: "vayan" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "iré", 2: "irás", 3: "irá", 4: "iremos", 5: "iréis", 6: "irán" }, condicional: { 1: "iría", 2: "irías", 3: "iría", 4: "iríamos", 5: "iríais", 6: "irían" } } },
+];
+
+// 生成最终 VERB_DB
+const VERB_DB = [
+  ...VERB_PATTERN_LIST.map(function(x) { return buildVerbEntry(x[0], x[1], x[2]); }),
+  ...IRREG_VERBS
+];
 // 特殊词尾集
 const SPECIAL_ENDINGS = {
   tener_indef: ["e","iste","o","imos","isteis","ieron"],
