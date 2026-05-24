@@ -1839,6 +1839,11 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       pretIrreg = { stem: "dij", ends: "decir_indef" };
       futIrreg = "dir"; impSubjIrreg = "dijer";
     }
+    else if (part === "ducir") {
+      const jStem = infinitive.slice(0, -3) + "j";
+      pretIrreg = { stem: jStem, ends: "decir_indef" };
+      impSubjIrreg = jStem + "er";
+    }
     else if (part === "venir") {
       yoIrreg = "vengo"; subjIrreg = "veng-"; stemChange = "e>ie";
       pretIrreg = { stem: "vin", ends: "tener_indef" };
@@ -2108,9 +2113,9 @@ const VERB_PATTERN_LIST = [
   ["conocer", "认识；了解", "zco"], ["parecer", "似乎", "zco"],
   ["ofrecer", "提供", "zco"], ["crecer", "成长", "zco"],
   ["merecer", "值得", "zco"], ["pertenecer", "属于", "zco"],
-  ["reconocer", "认出", "zco"], ["conducir", "驾驶", "zco"],
-  ["producir", "生产", "zco"], ["traducir", "翻译", "zco"],
-  ["introducir", "引入", "zco"], ["reducir", "减少", "zco"],
+  ["reconocer", "认出", "zco"], ["conducir", "驾驶", "zco+ducir"],
+  ["producir", "生产", "zco+ducir"], ["traducir", "翻译", "zco+ducir"],
+  ["introducir", "引入", "zco+ducir"], ["reducir", "减少", "zco+ducir"],
   ["aparecer", "出现", "zco"], ["amanecer", "天亮", "zco"],
 
   // === -ger / -gir (yo -jo) ===
