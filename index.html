@@ -178,15 +178,15 @@
   }
   .checkin-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
     margin-bottom: 12px;
   }
   .checkin-card {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 10px;
+    padding: 12px 14px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -208,8 +208,8 @@
     background: var(--success-bg);
   }
   .checkin-card .checkbox {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     border: 2px solid var(--border);
     display: flex;
@@ -225,13 +225,13 @@
   .checkin-card.done .checkbox::after {
     content: "✓";
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 700;
   }
-  .checkin-card .info { flex: 1; }
+  .checkin-card .info { flex: 1; min-width: 0; }
   .checkin-card .name {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   .checkin-card.done .name {
     color: var(--success);
@@ -239,8 +239,11 @@
     text-decoration-thickness: 2px;
   }
   .checkin-card .meta {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .btn-row {
@@ -826,7 +829,14 @@
       </div>
 
       <div id="viewToday">
-        <div class="section-title">今日任务</div>
+        <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span id="checkinDateLabel">今日任务</span>
+          <span style="display:flex;align-items:center;gap:4px;">
+            <button onclick="checkinShiftDay(-1)" title="前一天" style="padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text);cursor:pointer;font-size:0.85rem;">◀</button>
+            <button id="checkinTodayBtn" onclick="checkinGoToday()" style="display:none;padding:2px 8px;border:1px solid var(--accent);border-radius:4px;background:var(--card);color:var(--accent);cursor:pointer;font-size:0.75rem;">回今天</button>
+            <button onclick="checkinShiftDay(1)" title="后一天" style="padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text);cursor:pointer;font-size:0.85rem;">▶</button>
+          </span>
+        </div>
         <div id="focusHint" style="background:var(--card);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:0.85rem;box-shadow:var(--shadow);display:none;"></div>
         <div class="checkin-grid" id="checkinGrid"></div>
         <div class="btn-row">
@@ -1210,29 +1220,35 @@ const STORAGE_KEY = "spanish_checkins";
 const START_DATE = new Date(2026, 4, 8); // May 8, 2026
 const END_DATE = new Date(2026, 6, 31);  // Jul 31, 2026
 const CATEGORIES = [
-  { key: "input", name: "听力输入", icon: "🎧", time: "75min", desc: "LT + Dreaming Spanish" },
-  { key: "read",  name: "阅读 + Anki", icon: "📖", time: "30min", desc: "阅读短文 + 词汇复习" },
-  { key: "speak", name: "口语输出", icon: "🗣️", time: "40min", desc: "Shadowing + 限时说 + 语伴" },
-  { key: "write", name: "写作 + 变位", icon: "✍️", time: "30min", desc: "每日写作 + 变位练习10题" }
+  { key: "lt", name: "LT 听课", icon: "🎧", time: "30min", desc: "Language Transfer" },
+  { key: "ds", name: "Dreaming Spanish", icon: "📺", time: "45min", desc: "视频输入" },
+  { key: "anki", name: "Anki 词汇", icon: "📝", time: "35min", desc: "背单词 + 复习旧卡" },
+  { key: "leer", name: "阅读", icon: "📖", time: "20min", desc: "分级读物 / 真实文章" },
+  { key: "escribir", name: "写作 + 变位", icon: "✍️", time: "30min", desc: "每日写作 + 变位练习" },
+  { key: "hablar", name: "口语输出", icon: "🗣️", time: "30min", desc: "Shadowing + 录音 + 语伴" }
 ];
 
-// 迁移旧版打卡数据（6键 → 4键）
+// 迁移旧版打卡数据（4键 → 6键）
 (function migrateCheckins() {
   const data = loadCheckins();
   let changed = false;
-  const keyMap = {
-    lt: "input", ds: "input",
-    anki: "read", read: "read",
-    speak: "speak", write: "write"
+  const expandMap = {
+    input: ["lt", "ds"],
+    read: ["anki", "leer"],
+    speak: ["hablar"],
+    write: ["escribir"]
   };
   Object.keys(data).forEach(date => {
     const day = data[date];
+    // 已经是6键格式，跳过
+    if (day.lt !== undefined || day.ds !== undefined) return;
     const newDay = {};
-    // 检查是否已经是新格式（有 input 键）
-    if (day.input !== undefined && day.lt === undefined) return;
     Object.entries(day).forEach(([oldKey, val]) => {
-      const newKey = keyMap[oldKey] || oldKey;
-      if (val === true) newDay[newKey] = true;
+      if (val !== true) return;
+      const newKeys = expandMap[oldKey];
+      if (newKeys) {
+        newKeys.forEach(k => { newDay[k] = true; });
+      }
     });
     if (Object.keys(newDay).length > 0) {
       data[date] = newDay;
@@ -1389,6 +1405,7 @@ function getWeekDayStatus(weekNum) {
 // ========== 渲染 ==========
 let currentView = "today";
 let selectedWeek = null; // null = auto (today's week)
+let checkinDate = today();
 
 function getActiveWeek() {
   return selectedWeek || getWeekInfo(today()).week || 1;
@@ -1430,7 +1447,9 @@ function renderSidebar() {
 
 function renderCheckinGrid() {
   const grid = document.getElementById("checkinGrid");
-  const t = today();
+  const t = checkinDate;
+  const dk = dateKey(t);
+  const isToday = dk === dateKey(today());
   const day = getDayCheckins(t);
   const info = getWeekInfo(t);
 
@@ -1440,7 +1459,17 @@ function renderCheckinGrid() {
     return;
   }
 
-  // 本周焦点提示（放在 grid 外面，不和卡片并排）
+  // Date label
+  const dateLabelEl = document.getElementById("checkinDateLabel");
+  if (dateLabelEl) {
+    dateLabelEl.textContent = isToday ? `📅 今日 ${dk}` : `📅 ${dk}`;
+    dateLabelEl.style.color = isToday ? "var(--text)" : "var(--accent)";
+  }
+  // Show/hide "back to today" button
+  const todayBtn = document.getElementById("checkinTodayBtn");
+  if (todayBtn) todayBtn.style.display = isToday ? "none" : "inline-block";
+
+  // 本周焦点提示
   const focusDiv = document.getElementById("focusHint");
   const weekData = WEEK_DATA[info.week - 1];
   if (weekData && weekData.focus) {
@@ -1614,7 +1643,7 @@ function updateView() {
 
 // ========== 交互 ==========
 function toggleCheckin(key) {
-  const t = today();
+  const t = checkinDate;
   const day = getDayCheckins(t);
   const newVal = !(day[key] === true);
   setDayCheckin(t, key, newVal);
@@ -1622,7 +1651,7 @@ function toggleCheckin(key) {
 }
 
 function checkAll() {
-  const t = today();
+  const t = checkinDate;
   const info = getWeekInfo(t);
   if (!info.inRange) return;
   CATEGORIES.forEach(c => setDayCheckin(t, c.key, true));
@@ -1630,8 +1659,8 @@ function checkAll() {
 }
 
 function clearToday() {
-  if (!confirm("确定要取消今日所有打卡吗？")) return;
-  const t = today();
+  const t = checkinDate;
+  if (!confirm(`确定要取消 ${dateKey(t)} 所有打卡吗？`)) return;
   const data = loadCheckins();
   delete data[dateKey(t)];
   saveCheckins(data);
@@ -1639,7 +1668,7 @@ function clearToday() {
 }
 
 function dailyReport() {
-  const t = today();
+  const t = checkinDate;
   const dk = dateKey(t);
   const day = getDayCheckins(t);
   const info = getWeekInfo(t);
@@ -1677,7 +1706,7 @@ function dailyReport() {
   report += `\n`;
 
   // 变位错题
-  const conjErrors = getTodayConjErrors();
+  const conjErrors = getTodayConjErrors(dk);
   if (conjErrors.length > 0) {
     report += `## 🔤 今日变位错题 (${conjErrors.length}题)\n`;
     const tenseNames = {};
@@ -1715,7 +1744,19 @@ function selectWeek(weekNum) {
 
 function switchView(view) {
   currentView = view;
-  if (view === "today") selectedWeek = null;
+  if (view === "today") { selectedWeek = null; checkinDate = today(); }
+  renderAll();
+}
+
+function checkinShiftDay(delta) {
+  const d = new Date(checkinDate);
+  d.setDate(d.getDate() + delta);
+  checkinDate = d;
+  renderAll();
+}
+
+function checkinGoToday() {
+  checkinDate = today();
   renderAll();
 }
 
@@ -1796,8 +1837,10 @@ const REGULAR_ENDINGS = {
 */
 
 function buildVerbEntry(infinitive, meaning, pattern) {
-  const model = infinitive.slice(-2);
-  const stem = infinitive.slice(0, -2);
+  // -se 代动词：取 se 前面的两个字母作为真实模型（ar/er/ir）
+  const isPronominal = infinitive.endsWith("se") && infinitive.length > 4;
+  const model = isPronominal ? infinitive.slice(-4, -2) : infinitive.slice(-2);
+  const stem = isPronominal ? infinitive.slice(0, -4) : infinitive.slice(0, -2);
   const overrides = {};
   const parts = (pattern || "").split("+").filter(Boolean);
 
@@ -2016,7 +2059,8 @@ function buildVerbEntry(infinitive, meaning, pattern) {
 
   return {
     verb: infinitive, meaning, model,
-    overrides: Object.keys(overrides).length > 0 ? overrides : undefined
+    overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
+    stemChange: stemChange || undefined
   };
 }
 
@@ -2244,8 +2288,11 @@ function conjugate(verbObj, personId, tenseId) {
   if (!modelEndings) return null;
 
   // 将来时和条件式的词尾加在动词原形后面，不是词干
+  // 代动词（-se）需要去掉 se 再处理
+  const isPronominal = verbObj.verb.endsWith("se") && verbObj.verb.length > 4;
+  const infinitive = isPronominal ? verbObj.verb.slice(0, -2) : verbObj.verb;
   const useInfinitive = (tenseId === "futuro" || tenseId === "condicional");
-  let stem = useInfinitive ? verbObj.verb : verbObj.verb.slice(0, -2);
+  let stem = useInfinitive ? infinitive : infinitive.slice(0, -2);
   const ending = modelEndings[idx];
 
   // 正字法变化：-car/-gar/-zar/-guar 动词在 e/é 前需要拼写调整
@@ -2293,6 +2340,7 @@ function getVerbExplanation(verbObj, tenseId) {
 // ========== 变位练习状态 ==========
 let quizState = {
   activeTenses: ["presente_ind", "indefinido"], // W1-2: 陈述式现在时 + 简单过去时  W3-4: +imperfecto  W5-6: +futuro  W7-8: +condicional  W9-10: +pres_subj  W11-12: +imp_subj
+  stemFilter: null, // null=all, "e>ie", "o>ue", "e>i", "regular"
   currentVerb: null,
   currentPerson: null,
   currentTense: null,
@@ -2317,15 +2365,25 @@ function saveConjError(dateKey, error) {
   try { localStorage.setItem(CONJ_ERRORS_KEY, JSON.stringify(data)); }
   catch (e) {}
 }
-function getTodayConjErrors() {
+function getTodayConjErrors(dk) {
   const data = loadConjErrors();
-  return data[todayKey()] || [];
+  return data[dk || todayKey()] || [];
 }
 
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 function generateQuestion() {
-  const verb = pickRandom(VERB_DB);
+  // 按词干变化类型筛选动词池
+  let pool = VERB_DB;
+  const f = quizState.stemFilter;
+  if (f === "regular") {
+    pool = VERB_DB.filter(v => !v.stemChange && v.model !== "irregular");
+  } else if (f) {
+    pool = VERB_DB.filter(v => v.stemChange === f);
+  }
+  if (pool.length === 0) pool = VERB_DB; // fallback
+
+  const verb = pickRandom(pool);
   const tenseId = pickRandom(quizState.activeTenses);
   const person = pickRandom(PERSONS);
 
@@ -2359,6 +2417,21 @@ function renderConjugation() {
   TENSES.forEach(t => {
     const active = quizState.activeTenses.includes(t.id);
     html += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="toggleTense('${t.id}')" title="${active ? "点击移除" : "点击加入"}">${t.short}</button>`;
+  });
+  html += `</div>`;
+
+  // 词干变化过滤器
+  const stemTypes = [
+    { id: "e>ie", label: "e→ie" },
+    { id: "o>ue", label: "o→ue" },
+    { id: "e>i", label: "e→i" },
+    { id: "regular", label: "规则" }
+  ];
+  html += `<div class="tense-selector" style="margin-top:6px;">`;
+  html += `<span style="font-size:0.7rem;color:var(--text-secondary);margin-right:4px;">词干</span>`;
+  stemTypes.forEach(st => {
+    const active = quizState.stemFilter === st.id;
+    html += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="setStemFilter('${st.id}')" style="font-size:0.72rem;padding:2px 8px;">${st.label}</button>`;
   });
   html += `</div>`;
 
@@ -2468,6 +2541,12 @@ function toggleTense(tenseId) {
   if (!quizState.activeTenses.includes(quizState.currentTense)) {
     generateQuestion();
   }
+  renderConjugation();
+}
+
+function setStemFilter(type) {
+  quizState.stemFilter = quizState.stemFilter === type ? null : type;
+  generateQuestion();
   renderConjugation();
 }
 
@@ -2861,10 +2940,12 @@ document.addEventListener("keydown", e => {
   const tag = document.activeElement?.tagName;
   if (tag === "INPUT" || tag === "TEXTAREA" || document.activeElement?.isContentEditable) return;
 
-  if (e.key === "1") toggleCheckin("input");
-  if (e.key === "2") toggleCheckin("read");
-  if (e.key === "3") toggleCheckin("speak");
-  if (e.key === "4") toggleCheckin("write");
+  if (e.key === "1") toggleCheckin("lt");
+  if (e.key === "2") toggleCheckin("ds");
+  if (e.key === "3") toggleCheckin("anki");
+  if (e.key === "4") toggleCheckin("leer");
+  if (e.key === "5") toggleCheckin("escribir");
+  if (e.key === "6") toggleCheckin("hablar");
   if (e.key === "a" && !e.metaKey && !e.ctrlKey) { e.preventDefault(); checkAll(); }
   if (e.key === "t") switchView("today");
   if (e.key === "w") switchView("week");
