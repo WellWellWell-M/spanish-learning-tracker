@@ -779,21 +779,31 @@
 
   /* Mobile */
   @media (max-width: 700px) {
+    #sidebarToggle {
+      display: block !important;
+    }
     .main-layout {
       flex-direction: column;
     }
     .sidebar {
       width: 100%;
     }
+    .sidebar .phase-title {
+      display: none;
+    }
     .week-nav {
       flex-direction: row;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 4px;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
     }
     .week-btn {
       font-size: 0.75rem;
-      padding: 6px 10px;
+      padding: 5px 8px;
       gap: 4px;
+      flex-shrink: 0;
     }
     .week-btn .week-dot {
       display: none;
@@ -816,6 +826,7 @@
   </header>
 
   <div class="main-layout">
+    <button id="sidebarToggle" onclick="toggleSidebar()" style="display:none;width:100%;padding:4px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text-secondary);font-size:0.75rem;cursor:pointer;margin-bottom:4px;">📅 周导航 ▾</button>
     <aside class="sidebar" id="sidebar"></aside>
 
     <main class="content">
@@ -1740,6 +1751,15 @@ function selectWeek(weekNum) {
   selectedWeek = weekNum;
   currentView = "week";
   renderAll();
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const toggle = document.getElementById("sidebarToggle");
+  const hidden = sidebar.style.display === "none";
+  sidebar.style.display = hidden ? "block" : "none";
+  toggle.textContent = hidden ? "📅 周导航 ▾" : "📅 周导航 ▸";
+  toggle.style.marginBottom = hidden ? "4px" : "0";
 }
 
 function switchView(view) {
