@@ -769,6 +769,199 @@
   }
   .summary-editor textarea:focus { border-color: var(--accent); }
 
+  /* 遗忘词练 */
+  .vocab-topbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .vocab-topbar .btn { font-size: 0.82rem; padding: 5px 14px; }
+  .vocab-subtab-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .vocab-subtab {
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+  .vocab-subtab:hover { color: var(--text); }
+  .vocab-subtab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* 当前练习 */
+  .practice-article {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+    line-height: 1.85;
+    max-height: 500px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+  .practice-article h3 { font-size: 1rem; margin-bottom: 10px; color: var(--accent); }
+  .practice-words-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .practice-word-chip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.8rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .practice-word-chip .pw-word { font-weight: 600; color: var(--accent); }
+  .practice-word-chip .pw-meaning { color: var(--text-secondary); margin-left: 2px; }
+
+  /* 造句区 */
+  .practice-sentence-area textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .practice-sentence-area textarea:focus { border-color: var(--accent); }
+  .practice-sentence-area .psa-hint {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  /* 批改结果 */
+  .correction-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .correction-item .ci-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .correction-item .ci-word { color: var(--accent); }
+  .correction-item .ci-status { font-size: 0.75rem; padding: 1px 8px; border-radius: 10px; }
+  .correction-item .ci-status.ok { background: var(--success-bg); color: var(--success); }
+  .correction-item .ci-status.err { background: #fef0f0; color: var(--danger); }
+  .correction-item .ci-orig, .correction-item .ci-corr { font-size: 0.85rem; line-height: 1.5; margin-bottom: 4px; }
+  .correction-item .ci-orig .label { color: var(--text-secondary); font-size: 0.75rem; }
+  .correction-item .ci-corr .label { color: var(--success); font-size: 0.75rem; }
+  .correction-item .ci-note { font-size: 0.78rem; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 6px; }
+
+  /* 历史 */
+  .practice-history-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.15s;
+  }
+  .practice-history-item:hover { box-shadow: var(--shadow-lg); }
+  .practice-history-item .phi-title { font-weight: 600; }
+  .practice-history-item .phi-meta { font-size: 0.78rem; color: var(--text-secondary); }
+  .practice-history-item .phi-status { font-size: 0.72rem; padding: 2px 10px; border-radius: 10px; }
+
+  /* 词库 */
+  .vocab-add-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .vocab-add-form textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 8px;
+  }
+  .vocab-add-form textarea:focus { border-color: var(--accent); }
+  .vocab-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+  }
+  .vocab-stats strong { color: var(--text); }
+  .vocab-word-list { display: flex; flex-direction: column; gap: 4px; }
+  .vocab-word-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+  }
+  .vocab-word-card .vw-word { font-weight: 600; font-size: 0.95rem; color: var(--accent); min-width: 70px; }
+  .vocab-word-card .vw-meaning { font-size: 0.85rem; }
+  .vocab-word-card .vw-count { font-size: 0.7rem; background: var(--danger); color: #fff; padding: 1px 8px; border-radius: 10px; font-weight: 600; margin-left: auto; }
+  .vocab-word-card .vw-delete { padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.7rem; }
+  .vocab-word-card .vw-delete:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+  .vocab-review-empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px;
+    font-size: 0.9rem;
+  }
+
   /* Footer */
   .footer {
     text-align: center;
@@ -837,6 +1030,7 @@
         <button class="btn" data-view="conjugation" onclick="switchView('conjugation')">🔤 变位练习</button>
         <button class="btn" data-view="journal" onclick="switchView('journal')">📓 学习笔记</button>
         <button class="btn" data-view="summary" onclick="switchView('summary')">📊 学习汇总</button>
+        <button class="btn" data-view="vocab" onclick="switchView('vocab')">📝 遗忘词练</button>
       </div>
 
       <div id="viewToday">
@@ -911,6 +1105,47 @@
           </div>
         </div>
         <div class="summary-list" id="summaryList"></div>
+      </div>
+
+      <div id="viewVocab" style="display:none;">
+        <div class="vocab-subtab-bar" id="vocabSubtabBar">
+          <button class="vocab-subtab active" data-vtab="practice" onclick="vocabSwitchTab('practice')">📖 当前练习</button>
+          <button class="vocab-subtab" data-vtab="history" onclick="vocabSwitchTab('history')">📚 历史</button>
+          <button class="vocab-subtab" data-vtab="words" onclick="vocabSwitchTab('words')">📋 词库</button>
+        </div>
+
+        <!-- 当前练习 -->
+        <div id="vocabTabPractice">
+          <div id="practiceContent">
+            <div class="vocab-review-empty">还没有练习。<br>把新练习初始化文本粘贴到下方 → 点「创建练习」。</div>
+          </div>
+          <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+            <textarea id="vocabInitInput" placeholder="粘贴初始化文本（文章+词单）到这里…" style="width:100%;min-height:80px;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:var(--font);font-size:0.85rem;line-height:1.5;resize:vertical;outline:none;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:6px;">
+              <button class="btn primary" onclick="vocabCreatePractice()" style="font-size:0.8rem;">📥 创建练习</button>
+              <span style="font-size:0.7rem;color:var(--text-secondary);line-height:2.2;">也用来粘贴批改结果（页面会自动识别格式）</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 历史 -->
+        <div id="vocabTabHistory" style="display:none;"></div>
+
+        <!-- 词库 -->
+        <div id="vocabTabWords" style="display:none;">
+          <div class="vocab-topbar">
+            <button class="btn primary" onclick="vocabWordBankShowAdd()" style="font-size:0.8rem;padding:5px 12px;">＋ 添加单词</button>
+          </div>
+          <div class="vocab-add-form" id="vocabWordBankForm" style="display:none;">
+            <textarea id="vocabWordBankInput" placeholder="批量输入，自动识别：&#10;&#10;rechazar，acudir，consejo&#10;或 rechazar 拒绝，acudir 前往&#10;&#10;逗号、分号、换行都能分隔" style="width:100%;min-height:80px;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:var(--font);font-size:0.88rem;line-height:1.5;resize:vertical;outline:none;margin-bottom:8px;"></textarea>
+            <div style="display:flex;gap:8px;">
+              <button class="btn primary" onclick="vocabWordBankBulkAdd()" style="font-size:0.8rem;">💾 全部添加</button>
+              <button class="btn" onclick="vocabWordBankHideAdd()" style="font-size:0.8rem;">取消</button>
+            </div>
+          </div>
+          <div class="vocab-stats" id="vocabWordBankStats"></div>
+          <div class="vocab-word-list" id="vocabWordBankList"></div>
+        </div>
       </div>
     </main>
   </div>
@@ -1636,7 +1871,13 @@ function renderAll() {
   renderConjugation();
   renderJournal();
   renderSummary();
+  renderVocab();
   updateView();
+}
+
+function renderVocab() {
+  // 不自动刷新任何子视图，避免覆盖用户正在编辑的内容
+  // 各子视图由对应的渲染函数按需刷新
 }
 
 function updateView() {
@@ -1646,6 +1887,7 @@ function updateView() {
   document.getElementById("viewConjugation").style.display = currentView === "conjugation" ? "block" : "none";
   document.getElementById("viewJournal").style.display = currentView === "journal" ? "block" : "none";
   document.getElementById("viewSummary").style.display = currentView === "summary" ? "block" : "none";
+  document.getElementById("viewVocab").style.display = currentView === "vocab" ? "block" : "none";
 
   document.querySelectorAll(".view-toggle .btn").forEach(btn => {
     btn.classList.toggle("active-view", btn.dataset.view === currentView);
@@ -2890,12 +3132,322 @@ function renderSummary() {
   }).join("");
 }
 
+// ========== 遗忘词练 ==========
+const VOCAB_KEY = "spanish_vocab_practice";
+
+function vocabLoadData() {
+  try { const raw = localStorage.getItem(VOCAB_KEY); return raw ? JSON.parse(raw) : { practices: [], wordBank: [] }; }
+  catch (e) { return { practices: [], wordBank: [] }; }
+}
+function vocabSaveData(data) {
+  try { localStorage.setItem(VOCAB_KEY, JSON.stringify(data)); }
+  catch (e) {}
+}
+function vocabGenId() {
+  return "vp_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
+}
+
+let vocabActiveTab = "practice";
+let vocabActivePracticeId = null;
+
+function vocabSwitchTab(tab) {
+  vocabActiveTab = tab;
+  document.querySelectorAll(".vocab-subtab").forEach(b => b.classList.toggle("active", b.dataset.vtab === tab));
+  document.getElementById("vocabTabPractice").style.display = tab === "practice" ? "block" : "none";
+  document.getElementById("vocabTabHistory").style.display = tab === "history" ? "block" : "none";
+  document.getElementById("vocabTabWords").style.display = tab === "words" ? "block" : "none";
+  if (tab === "practice") vocabRenderPractice();
+  if (tab === "history") vocabRenderHistory();
+  if (tab === "words") vocabRenderWordBank();
+}
+
+// ========== 练习 ==========
+
+// 初始化文本格式：
+// ---practice---
+// title: 练习标题
+// words: palabra1|释义1, palabra2|释义2, ...
+// ---
+// 文章内容（支持markdown纯文本）
+function vocabCreatePractice() {
+  const raw = document.getElementById("vocabInitInput").value.trim();
+  if (!raw) { alert("请粘贴初始化文本"); return; }
+
+  // 判断是初始化文本还是批改结果
+  if (/^---[\wáéíóúüñ]+---/m.test(raw) && !/^---practice---/m.test(raw)) {
+    // 批改结果格式：---word--- 原句: ... 改句: ... 说明: ... ---
+    vocabParseCorrections(raw);
+    return;
+  }
+
+  // 解析初始化文本
+  const pMatch = raw.match(/^---practice---\s*\n/);
+  if (!pMatch) { alert("格式不识别。请粘贴以 ---practice--- 开头的初始化文本，或以 ---单词--- 开头的批改结果"); return; }
+
+  const sepIdx = raw.indexOf("\n---\n") > 0 ? raw.indexOf("\n---\n") : raw.indexOf("\n---");
+  let header = "", article = "";
+  if (sepIdx > 0) {
+    header = raw.substring(0, sepIdx);
+    article = raw.substring(sepIdx).replace(/^[\n-]+\n?/, "").trim();
+  } else {
+    header = raw;
+    article = "";
+  }
+
+  const titleMatch = header.match(/^title:\s*(.+)$/m);
+  const wordsMatch = header.match(/^words:\s*(.+)$/m);
+  if (!titleMatch || !wordsMatch) { alert("初始化文本缺少 title 或 words 字段"); return; }
+
+  const title = titleMatch[1].trim();
+  const words = wordsMatch[1].split(/[,;，；]+/).map(s => s.trim()).filter(Boolean).map(w => {
+    const parts = w.split(/\|/);
+    return { word: parts[0].trim(), meaning: parts[1] ? parts[1].trim() : "" };
+  });
+
+  const data = vocabLoadData();
+  const practice = {
+    id: vocabGenId(),
+    date: todayKey(),
+    title: title,
+    words: words,
+    article: article,
+    sentences: [],       // user's original sentences, indexed by word order
+    corrections: [],     // { word, original, corrected, note }
+    status: "writing"    // writing | corrected
+  };
+  data.practices.unshift(practice);
+  vocabSaveData(data);
+  vocabActivePracticeId = practice.id;
+  document.getElementById("vocabInitInput").value = "";
+  vocabRenderPractice();
+}
+
+function vocabRenderPractice() {
+  const data = vocabLoadData();
+  let practice = null;
+  if (vocabActivePracticeId) {
+    practice = data.practices.find(p => p.id === vocabActivePracticeId);
+    if (!practice) vocabActivePracticeId = null;
+  }
+  // 无活跃练习时显示最新的
+  if (!practice && data.practices.length > 0) {
+    practice = data.practices[0];
+    vocabActivePracticeId = practice.id;
+  }
+
+  const container = document.getElementById("practiceContent");
+  if (!practice) {
+    container.innerHTML = `<div class="vocab-review-empty">还没有练习。<br>把新练习初始化文本粘贴到下方 → 点「创建练习」。</div>`;
+    return;
+  }
+
+  // 词语标签
+  const chips = practice.words.map(w =>
+    `<span class="practice-word-chip"><span class="pw-word">${escapeHtml(w.word)}</span><span class="pw-meaning">${escapeHtml(w.meaning)}</span></span>`
+  ).join("");
+
+  // 文章
+  const articleHtml = practice.article
+    ? `<div class="practice-article"><h3>📖 ${escapeHtml(practice.title)}</h3>${escapeHtml(practice.article)}</div>`
+    : "";
+
+  let bodyHtml = "";
+  const statusLabel = practice.status === "corrected" ? "✅ 已批改" : "✏️ 造句中";
+  const statusColor = practice.status === "corrected" ? "var(--success)" : "var(--accent)";
+
+  bodyHtml += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <span style="font-weight:600;">${escapeHtml(practice.title)}</span>
+    <span style="font-size:0.78rem;color:${statusColor};">${statusLabel}</span>
+  </div>`;
+  bodyHtml += `<div class="practice-words-bar">${chips}</div>`;
+  bodyHtml += articleHtml;
+
+  if (practice.status === "corrected" && practice.corrections.length > 0) {
+    // 显示批改结果
+    bodyHtml += `<div style="font-weight:600;margin-bottom:8px;font-size:0.9rem;">📝 批改结果</div>`;
+    practice.corrections.forEach(c => {
+      const isOk = !c.corrected || c.corrected === "(✓ 正确)" || c.corrected.match(/^[✓✅]|^\(✓/);
+      const statusClass = isOk ? "ok" : "err";
+      const statusText = isOk ? "✓ 正确" : "✗ 有错";
+      bodyHtml += `<div class="correction-item">
+        <div class="ci-header"><span class="ci-word">${escapeHtml(c.word)}</span><span class="ci-status ${statusClass}">${statusText}</span></div>
+        <div class="ci-orig"><span class="label">原句：</span>${escapeHtml(c.original || "")}</div>
+        ${!isOk ? `<div class="ci-corr"><span class="label">改后：</span>${escapeHtml(c.corrected || "")}</div>` : ""}
+        ${c.note ? `<div class="ci-note">${escapeHtml(c.note)}</div>` : ""}
+      </div>`;
+    });
+  } else {
+    // 造句区
+    bodyHtml += `<div class="practice-sentence-area">
+      <div class="psa-hint">用上面 ${practice.words.length} 个词各造一句（一次性写完，复制发给 Claude 批改）</div>
+      <textarea id="practiceSentencesInput" placeholder="marchar: El coche no marcha bien.&#10;propósito: Mi propósito es aprobar el B2.&#10;...">${practice.sentences.map(s => s.word + ": " + s.text).join("\n")}</textarea>
+      <button class="btn" onclick="vocabSaveSentences()" style="font-size:0.8rem;">💾 暂存句子</button>
+    </div>`;
+  }
+
+  container.innerHTML = bodyHtml;
+}
+
+function vocabSaveSentences() {
+  const data = vocabLoadData();
+  const practice = data.practices.find(p => p.id === vocabActivePracticeId);
+  if (!practice) return;
+  const raw = document.getElementById("practiceSentencesInput").value.trim();
+  const lines = raw.split("\n").filter(Boolean);
+  practice.sentences = lines.map(line => {
+    const m = line.match(/^([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)\s*[:：]\s*(.*)$/);
+    return m ? { word: m[1], text: m[2].trim() } : { word: "", text: line };
+  });
+  vocabSaveData(data);
+  alert("句子已暂存。复制发送给 Claude 批改。");
+}
+
+// 解析批改格式：
+// ---marchar---
+// 原句: xxx
+// 改句: yyy（或 (✓ 正确)）
+// 说明: zzz（可选）
+// ---
+function vocabParseCorrections(raw) {
+  const data = vocabLoadData();
+  const practice = data.practices.find(p => p.id === vocabActivePracticeId);
+  if (!practice) { alert("没有活跃的练习。请先创建一个练习。"); return; }
+
+  // 按 ---word--- 分割
+  const blocks = raw.split(/^---/m).filter(b => b.trim());
+  const corrections = [];
+
+  blocks.forEach(block => {
+    const lines = block.trim().split("\n");
+    const word = lines[0].replace(/^---/, "").replace(/---$/, "").trim();
+    if (!word || word === "practice") return;
+
+    const origMatch = block.match(/原句\s*[：:]\s*(.+)/);
+    const corrMatch = block.match(/改句\s*[：:]\s*(.+)/);
+    const noteMatch = block.match(/说明\s*[：:]\s*(.+)/);
+
+    const isOk = corrMatch && corrMatch[1].match(/^[✓✅]|^\(✓/);
+    corrections.push({
+      word: word,
+      original: origMatch ? origMatch[1].trim() : "",
+      corrected: corrMatch ? corrMatch[1].trim() : "",
+      note: noteMatch ? noteMatch[1].trim() : ""
+    });
+  });
+
+  if (corrections.length === 0) { alert("未识别到批改内容。请确认格式：---单词--- 原句: ... 改句: ... 说明: ... ---"); return; }
+
+  practice.corrections = corrections;
+  practice.status = "corrected";
+  vocabSaveData(data);
+  document.getElementById("vocabInitInput").value = "";
+  vocabRenderPractice();
+}
+
+// ========== 历史 ==========
+
+function vocabRenderHistory() {
+  const data = vocabLoadData();
+  const container = document.getElementById("vocabTabHistory");
+  const practices = data.practices;
+
+  if (practices.length === 0) {
+    container.innerHTML = `<div class="vocab-review-empty">还没有完成的练习。</div>`;
+    return;
+  }
+
+  container.innerHTML = practices.map(p => {
+    const statusLabel = p.status === "corrected" ? "✅ 已批改" : "✏️ 造句中";
+    const statusColor = p.status === "corrected" ? "var(--success)" : "var(--accent)";
+    const wordCount = p.words.length;
+    return `<div class="practice-history-item" onclick="vocabOpenPractice('${p.id}')">
+      <div>
+        <div class="phi-title">${escapeHtml(p.title)}</div>
+        <div class="phi-meta">${p.date} · ${wordCount} 个词</div>
+      </div>
+      <span class="phi-status" style="background:${statusColor}20;color:${statusColor};">${statusLabel}</span>
+    </div>`;
+  }).join("");
+}
+
+function vocabOpenPractice(id) {
+  vocabActivePracticeId = id;
+  vocabSwitchTab("practice");
+}
+
+// ========== 词库 ==========
+
+function vocabRenderWordBank() {
+  const data = vocabLoadData();
+  const words = data.wordBank;
+  // 按添加时间倒序
+  const total = words.length;
+
+  document.getElementById("vocabWordBankStats").innerHTML = `共 <strong>${total}</strong> 个词`;
+
+  if (words.length === 0) {
+    document.getElementById("vocabWordBankList").innerHTML = `<div class="vocab-review-empty">还没有单词。<br>背单词时遇到记不住的，点「＋ 添加单词」加进来。</div>`;
+    return;
+  }
+
+  document.getElementById("vocabWordBankList").innerHTML = words.map((w, i) => {
+    return `<div class="vocab-word-card">
+      <span class="vw-word">${escapeHtml(w.word)}</span>
+      <span class="vw-meaning">${escapeHtml(w.meaning || "")}</span>
+      <button class="vw-delete" onclick="vocabWordBankDelete(${i})">✕</button>
+    </div>`;
+  }).join("");
+}
+
+function vocabWordBankShowAdd() {
+  document.getElementById("vocabWordBankForm").style.display = "block";
+  document.getElementById("vocabWordBankInput").focus();
+}
+
+function vocabWordBankHideAdd() {
+  document.getElementById("vocabWordBankForm").style.display = "none";
+}
+
+function vocabWordBankBulkAdd() {
+  const raw = document.getElementById("vocabWordBankInput").value.trim();
+  if (!raw) return;
+  const data = vocabLoadData();
+  let added = 0, skipped = 0;
+
+  // 简单按行和分隔符拆分
+  const tokens = raw.split(/[\n,;，；]+/).map(s => s.trim()).filter(Boolean);
+  tokens.forEach(token => {
+    // 尝试 "word meaning" 格式
+    const pair = token.match(/^([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)\s+(.+)$/);
+    const word = pair ? pair[1] : token;
+    const meaning = pair ? pair[2] : "";
+    if (data.wordBank.find(w => w.word.toLowerCase() === word.toLowerCase())) { skipped++; return; }
+    data.wordBank.push({ word: word, meaning: meaning });
+    added++;
+  });
+
+  vocabSaveData(data);
+  document.getElementById("vocabWordBankInput").value = "";
+  vocabWordBankHideAdd();
+  vocabRenderWordBank();
+  if (skipped > 0) alert(`已添加 ${added} 个词，跳过 ${skipped} 个重复词`);
+}
+
+function vocabWordBankDelete(idx) {
+  const data = vocabLoadData();
+  if (!confirm(`删除 "${data.wordBank[idx].word}"？`)) return;
+  data.wordBank.splice(idx, 1);
+  vocabSaveData(data);
+  vocabRenderWordBank();
+}
+
 // ========== 数据导出导入 ==========
 const ALL_DATA_KEYS = [
   "spanish_checkins",
   "spanish_journal_v2",
   "spanish_summaries",
-  "spanish_conj_errors"
+  "spanish_conj_errors",
+  "spanish_vocab_practice"
 ];
 
 function exportAllData() {
@@ -2973,6 +3525,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "c") switchView("conjugation");
   if (e.key === "j") switchView("journal");
   if (e.key === "s") switchView("summary");
+  if (e.key === "v") switchView("vocab");
 });
 
 // ========== 初始化 ==========
