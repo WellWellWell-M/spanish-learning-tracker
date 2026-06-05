@@ -1974,6 +1974,27 @@ function dailyReport() {
   }
   report += `\n`;
 
+  // 遗忘词练
+  const vocabData = vocabLoadData();
+  const todayPractices = vocabData.practices.filter(p => p.date === dk);
+  if (todayPractices.length > 0) {
+    report += `## 📝 今日遗忘词练 (${todayPractices.length}组)\n`;
+    todayPractices.forEach(p => {
+      const statusLabel = p.status === "corrected" ? "✅ 已批改" : (p.sentences.length > 0 ? "✏️ 造句中" : "📖 新练习");
+      const words = p.words.map(w => w.word).join("、");
+      report += `- ${statusLabel} · ${p.title}\n`;
+      report += `  词单：${words}\n`;
+      if (p.sentences.length > 0) {
+        report += `  已造句 ${p.sentences.length}/${p.words.length} 词\n`;
+      }
+      if (p.status === "corrected") {
+        const errCount = p.corrections.filter(c => c.corrected && !c.corrected.match(/^[✓✅]|^\(✓/)).length;
+        report += `  批改：${errCount > 0 ? errCount + "个需改" : "全部正确 🎉"}\n`;
+      }
+    });
+    report += `\n`;
+  }
+
   // 上周的汇总（如果有）
   if (hasSummary) {
     report += `## 📊 今日已有汇总\n`;
@@ -2136,7 +2157,7 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     }
     else if (part === "hacer") {
       yoIrreg = "hago"; subjIrreg = "hag-";
-      pretIrreg = { stem: "hic", ends: "hacer_indef" };
+      pretIrreg = { stem: "hi", ends: "hacer_indef" };
       futIrreg = "har"; impSubjIrreg = "hicier";
     }
     else if (part === "decir") {
@@ -2503,7 +2524,7 @@ const VERB_DB = [
 // 特殊词尾集
 const SPECIAL_ENDINGS = {
   tener_indef: ["e","iste","o","imos","isteis","ieron"],
-  hacer_indef: ["e","iste","o","imos","isteis","ieron"],
+  hacer_indef: ["ce","ciste","zo","cimos","cisteis","cieron"],
   decir_indef: ["e","iste","o","imos","isteis","eron"]
 };
 
@@ -3205,6 +3226,18 @@ function vocabCreatePractice() {
   });
 
   const data = vocabLoadData();
+  // 自动同步到词库
+  words.forEach(w => {
+    const existing = data.wordBank.find(bw => bw.word.toLowerCase() === w.word.toLowerCase());
+    if (existing) {
+      existing.appearances = (existing.appearances || 1) + 1;
+      existing.lastSeen = todayKey();
+      if (existing.meaning && !w.meaning) { /* keep old meaning */ }
+      else if (!existing.meaning && w.meaning) { existing.meaning = w.meaning; }
+    } else {
+      data.wordBank.push({ word: w.word, meaning: w.meaning, firstFrom: title, appearances: 1, lastSeen: todayKey() });
+    }
+  });
   const practice = {
     id: vocabGenId(),
     date: todayKey(),
@@ -3248,7 +3281,7 @@ function vocabRenderPractice() {
 
   // 文章
   const articleHtml = practice.article
-    ? `<div class="practice-article"><h3>📖 ${escapeHtml(practice.title)}</h3>${escapeHtml(practice.article)}</div>`
+    ? `<div class="practice-article"><h3>📖 ${escapeHtml(practice.title)}</h3>${vocabRenderArticle(practice.article)}</div>`
     : "";
 
   let bodyHtml = "";
@@ -3286,6 +3319,13 @@ function vocabRenderPractice() {
   }
 
   container.innerHTML = bodyHtml;
+}
+
+// 把 **text** 渲染为粗体，支持跨行
+function vocabRenderArticle(text) {
+  let html = escapeHtml(text);
+  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  return html;
 }
 
 function vocabSaveSentences() {
@@ -3360,14 +3400,38 @@ function vocabRenderHistory() {
     const statusLabel = p.status === "corrected" ? "✅ 已批改" : "✏️ 造句中";
     const statusColor = p.status === "corrected" ? "var(--success)" : "var(--accent)";
     const wordCount = p.words.length;
-    return `<div class="practice-history-item" onclick="vocabOpenPractice('${p.id}')">
-      <div>
+    return `<div class="practice-history-item">
+      <div style="flex:1;min-width:0;" onclick="vocabOpenPractice('${p.id}')">
         <div class="phi-title">${escapeHtml(p.title)}</div>
         <div class="phi-meta">${p.date} · ${wordCount} 个词</div>
       </div>
       <span class="phi-status" style="background:${statusColor}20;color:${statusColor};">${statusLabel}</span>
+      <button class="vw-delete" onclick="event.stopPropagation();vocabDeletePractice('${p.id}')" title="删除" style="margin-left:6px;">✕</button>
     </div>`;
   }).join("");
+
+  if (practices.length > 1) {
+    container.innerHTML += `<div style="text-align:right;margin-top:8px;"><button class="btn danger" onclick="vocabClearHistory()" style="font-size:0.7rem;">🗑 清空全部历史</button></div>`;
+  }
+}
+
+function vocabDeletePractice(id) {
+  const data = vocabLoadData();
+  const p = data.practices.find(p => p.id === id);
+  if (!confirm(`删除 "${p.title}"？`)) return;
+  data.practices = data.practices.filter(p => p.id !== id);
+  if (vocabActivePracticeId === id) vocabActivePracticeId = null;
+  vocabSaveData(data);
+  vocabRenderHistory();
+}
+
+function vocabClearHistory() {
+  if (!confirm("确定要清空全部历史吗？此操作不可撤销。")) return;
+  const data = vocabLoadData();
+  data.practices = [];
+  vocabActivePracticeId = null;
+  vocabSaveData(data);
+  vocabRenderHistory();
 }
 
 function vocabOpenPractice(id) {
@@ -3380,20 +3444,29 @@ function vocabOpenPractice(id) {
 function vocabRenderWordBank() {
   const data = vocabLoadData();
   const words = data.wordBank;
-  // 按添加时间倒序
+  // 按最近出现倒序
+  words.sort((a, b) => {
+    const da = a.lastSeen || "";
+    const db = b.lastSeen || "";
+    if (da > db) return -1; if (da < db) return 1; return 0;
+  });
   const total = words.length;
+  const totalApps = words.reduce((s, w) => s + (w.appearances || 1), 0);
 
-  document.getElementById("vocabWordBankStats").innerHTML = `共 <strong>${total}</strong> 个词`;
+  document.getElementById("vocabWordBankStats").innerHTML = `共 <strong>${total}</strong> 个词 · 累计出现 <strong>${totalApps}</strong> 次`;
 
   if (words.length === 0) {
-    document.getElementById("vocabWordBankList").innerHTML = `<div class="vocab-review-empty">还没有单词。<br>背单词时遇到记不住的，点「＋ 添加单词」加进来。</div>`;
+    document.getElementById("vocabWordBankList").innerHTML = `<div class="vocab-review-empty">还没有单词。<br>创建练习时词会自动加入，也可以手动添加。</div>`;
     return;
   }
 
   document.getElementById("vocabWordBankList").innerHTML = words.map((w, i) => {
+    const apps = w.appearances || 1;
+    const from = w.firstFrom ? `来自：${w.firstFrom}` : "手动添加";
     return `<div class="vocab-word-card">
       <span class="vw-word">${escapeHtml(w.word)}</span>
       <span class="vw-meaning">${escapeHtml(w.meaning || "")}</span>
+      <span style="font-size:0.7rem;color:var(--text-secondary);" title="${escapeHtml(from)}">${apps}期</span>
       <button class="vw-delete" onclick="vocabWordBankDelete(${i})">✕</button>
     </div>`;
   }).join("");
@@ -3422,7 +3495,7 @@ function vocabWordBankBulkAdd() {
     const word = pair ? pair[1] : token;
     const meaning = pair ? pair[2] : "";
     if (data.wordBank.find(w => w.word.toLowerCase() === word.toLowerCase())) { skipped++; return; }
-    data.wordBank.push({ word: word, meaning: meaning });
+    data.wordBank.push({ word: word, meaning: meaning, firstFrom: "手动添加", appearances: 1, lastSeen: todayKey() });
     added++;
   });
 
