@@ -3191,7 +3191,7 @@ function vocabSwitchTab(tab) {
 // ---
 // 文章内容（支持markdown纯文本）
 function vocabCreatePractice() {
-  const raw = document.getElementById("vocabInitInput").value.trim();
+  let raw = document.getElementById("vocabInitInput").value.replace(/\r\n/g, "\n").trim();
   if (!raw) { alert("请粘贴初始化文本"); return; }
 
   // 判断是初始化文本还是批改结果
@@ -3205,11 +3205,11 @@ function vocabCreatePractice() {
   const pMatch = raw.match(/^---practice---\s*\n/);
   if (!pMatch) { alert("格式不识别。请粘贴以 ---practice--- 开头的初始化文本，或以 ---单词--- 开头的批改结果"); return; }
 
-  const sepIdx = raw.indexOf("\n---\n") > 0 ? raw.indexOf("\n---\n") : raw.indexOf("\n---");
+  const sepIdx = raw.indexOf("\n===\n") > 0 ? raw.indexOf("\n===\n") : raw.indexOf("\n===");
   let header = "", article = "";
   if (sepIdx > 0) {
     header = raw.substring(0, sepIdx);
-    article = raw.substring(sepIdx).replace(/^[\n-]+\n?/, "").trim();
+    article = raw.substring(sepIdx).replace(/^[\n=]+\n?/, "").trim();
   } else {
     header = raw;
     article = "";

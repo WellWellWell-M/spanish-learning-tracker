@@ -1,7 +1,7 @@
 ---practice---
 title: El coleccionista de piedras · 遗忘词练习 #1
 words: rechazar|拒绝, acudir|前往, consejo|建议, viento|风, vencer|战胜, marchar|运转, ajeno|他人的, propósito|目的, merecer|值得, piedra|石头, caer|落下, aparato|装置
----
+===
 Siempre he pensado que cada **piedra** tiene una historia. Por eso, desde hace años, recorro ríos y montañas buscando piedras especiales. Mi **propósito** no es venderlas —eso sería un error—, sino entender qué nos quieren decir. Las piedras, a su manera, hablan.
 
 Mi amigo Luis no lo entiende. La semana pasada me dio un **consejo** que yo, como siempre, **rechacé**: «Deberías buscar un trabajo de verdad, no andar por ahí como un loco recogiendo piedras **ajenas**». Él cree que mi afición no **merece** la pena. Pero yo sé que sí.
