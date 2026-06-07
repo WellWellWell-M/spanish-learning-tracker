@@ -2340,10 +2340,36 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     overrides.indefinido[6] = "leyeron";
   }
 
+  // 计算不规则特征标签
+  const tags = [];
+  if (stemChange) tags.push(stemChange === "u>ue" ? "u→ue" : stemChange === "e>ie" ? "e→ie" : stemChange === "o>ue" ? "o→ue" : "e→i");
+  if (isZco) tags.push("yo-zco");
+  if (isGo) tags.push("yo-go");
+  if (isJo) tags.push("yo-jo");
+  // yo 现在时不规则（统合）
+  if (isZco || isGo || isJo || yoIrreg) tags.push("yo-irreg");
+  // pretérito 不规则，按家族细分
+  if (pretIrreg) {
+    tags.push("pret-irreg");
+    const pStem = pretIrreg.stem || "";
+    if (pStem.endsWith("j")) tags.push("pret-j");
+    else if (pStem.endsWith("uv") || pStem === "pud" || pStem === "pus" || pStem === "cup" || pStem === "sup") tags.push("pret-uv");
+  }
+  // 将来/条件式不规则
+  if (futIrreg) tags.push("fut-irreg");
+  // 完全不规则/特殊模型
+  const specialModels = ["tener","hacer","decir","venir","poder","poner","querer","traer","caer","saber","estar","dar","ver","haber","caber","oir","seguir","ducir"];
+  if (specialModels.some(m => pattern.includes(m))) tags.push("full-irreg");
+  // 纯正字法（-car/-gar/-zar）不标不规则，但标 ortho 提醒
+  const orthoVerbs = ["explicar","buscar","sacar","tocar","practicar","indicar","colocar","publicar","significar","comunicar","aplicar","educar","llegar","pagar","entregar","apagar","obligar","investigar","almorzar","cruzar","realizar","utilizar","organizar","rechazar","empezar","comenzar"];
+  if (orthoVerbs.includes(infinitive)) tags.push("ortho");
+  if (tags.length === 0) tags.push("regular");
+
   return {
     verb: infinitive, meaning, model,
     overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
-    stemChange: stemChange || undefined
+    stemChange: stemChange || undefined,
+    tags: tags
   };
 }
 
@@ -2512,8 +2538,8 @@ const VERB_PATTERN_LIST = [
 
 // 完全不规则动词（手工维护）
 const IRREG_VERBS = [
-  { verb: "ser", meaning: "是（本质）", model: "irregular", overrides: { presente_ind: { 1: "soy", 2: "eres", 3: "es", 4: "somos", 5: "sois", 6: "son" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "era", 2: "eras", 3: "era", 4: "éramos", 5: "erais", 6: "eran" }, presente_subj: { 1: "sea", 2: "seas", 3: "sea", 4: "seamos", 5: "seáis", 6: "sean" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "seré", 2: "serás", 3: "será", 4: "seremos", 5: "seréis", 6: "serán" }, condicional: { 1: "sería", 2: "serías", 3: "sería", 4: "seríamos", 5: "seríais", 6: "serían" } } },
-  { verb: "ir", meaning: "去", model: "irregular", overrides: { presente_ind: { 1: "voy", 2: "vas", 3: "va", 4: "vamos", 5: "vais", 6: "van" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "iba", 2: "ibas", 3: "iba", 4: "íbamos", 5: "ibais", 6: "iban" }, presente_subj: { 1: "vaya", 2: "vayas", 3: "vaya", 4: "vayamos", 5: "vayáis", 6: "vayan" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "iré", 2: "irás", 3: "irá", 4: "iremos", 5: "iréis", 6: "irán" }, condicional: { 1: "iría", 2: "irías", 3: "iría", 4: "iríamos", 5: "iríais", 6: "irían" } } },
+  { verb: "ser", meaning: "是（本质）", model: "irregular", tags: ["full-irreg","yo-irreg","pret-irreg","fut-irreg"], overrides: { presente_ind: { 1: "soy", 2: "eres", 3: "es", 4: "somos", 5: "sois", 6: "son" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "era", 2: "eras", 3: "era", 4: "éramos", 5: "erais", 6: "eran" }, presente_subj: { 1: "sea", 2: "seas", 3: "sea", 4: "seamos", 5: "seáis", 6: "sean" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "seré", 2: "serás", 3: "será", 4: "seremos", 5: "seréis", 6: "serán" }, condicional: { 1: "sería", 2: "serías", 3: "sería", 4: "seríamos", 5: "seríais", 6: "serían" } } },
+  { verb: "ir", meaning: "去", model: "irregular", tags: ["full-irreg","yo-irreg","pret-irreg","fut-irreg"], overrides: { presente_ind: { 1: "voy", 2: "vas", 3: "va", 4: "vamos", 5: "vais", 6: "van" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "iba", 2: "ibas", 3: "iba", 4: "íbamos", 5: "ibais", 6: "iban" }, presente_subj: { 1: "vaya", 2: "vayas", 3: "vaya", 4: "vayamos", 5: "vayáis", 6: "vayan" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "iré", 2: "irás", 3: "irá", 4: "iremos", 5: "iréis", 6: "irán" }, condicional: { 1: "iría", 2: "irías", 3: "iría", 4: "iríamos", 5: "iríais", 6: "irían" } } },
 ];
 
 // 生成最终 VERB_DB
@@ -2657,14 +2683,7 @@ function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 function generateQuestion() {
   // 按词干变化类型筛选动词池
-  let pool = VERB_DB;
-  const f = quizState.stemFilter;
-  if (f === "regular") {
-    pool = VERB_DB.filter(v => !v.stemChange && v.model !== "irregular");
-  } else if (f) {
-    pool = VERB_DB.filter(v => v.stemChange === f);
-  }
-  if (pool.length === 0) pool = VERB_DB; // fallback
+  let pool = getFilteredVerbPool();
 
   const verb = pickRandom(pool);
   const tenseId = pickRandom(quizState.activeTenses);
@@ -2703,20 +2722,30 @@ function renderConjugation() {
   });
   html += `</div>`;
 
-  // 词干变化过滤器
-  const stemTypes = [
-    { id: "e>ie", label: "e→ie" },
-    { id: "o>ue", label: "o→ue" },
-    { id: "e>i", label: "e→i" },
-    { id: "regular", label: "规则" }
+  // 不规则类型过滤器
+  const filterGroups = [
+    { label: "词干", filters: [
+      { id: "e→ie", label: "e→ie" }, { id: "o→ue", label: "o→ue" }, { id: "e→i", label: "e→i" }, { id: "u→ue", label: "u→ue" }
+    ]},
+    { label: "不规则", filters: [
+      { id: "yo-irreg", label: "yo" }, { id: "pret-irreg", label: "pret" }, { id: "fut-irreg", label: "fut" }, { id: "full-irreg", label: "完全" }
+    ]},
+    { label: "其他", filters: [
+      { id: "regular", label: "规则" }, { id: "ortho", label: "正字法" }
+    ]}
   ];
-  html += `<div class="tense-selector" style="margin-top:6px;">`;
-  html += `<span style="font-size:0.7rem;color:var(--text-secondary);margin-right:4px;">词干</span>`;
-  stemTypes.forEach(st => {
-    const active = quizState.stemFilter === st.id;
-    html += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="setStemFilter('${st.id}')" style="font-size:0.72rem;padding:2px 8px;">${st.label}</button>`;
+  filterGroups.forEach(fg => {
+    html += `<div class="tense-selector" style="margin-top:4px;">`;
+    html += `<span style="font-size:0.65rem;color:var(--text-secondary);margin-right:2px;">${fg.label}</span>`;
+    fg.filters.forEach(f => {
+      const active = quizState.stemFilter === f.id;
+      html += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="setStemFilter('${f.id}')" style="font-size:0.68rem;padding:1px 6px;">${f.label}</button>`;
+    });
+    html += `</div>`;
   });
-  html += `</div>`;
+  // 显示当前筛选匹配数
+  const pool = getFilteredVerbPool();
+  html += `<div style="font-size:0.6rem;color:var(--text-secondary);margin-top:2px;">${pool.length} 个动词</div>`;
 
   // 分数
   const pct = quizState.totalAttempts > 0 ? Math.round(quizState.totalCorrect / quizState.totalAttempts * 100) : 0;
@@ -2831,6 +2860,12 @@ function setStemFilter(type) {
   quizState.stemFilter = quizState.stemFilter === type ? null : type;
   generateQuestion();
   renderConjugation();
+}
+
+function getFilteredVerbPool() {
+  const f = quizState.stemFilter;
+  if (!f) return VERB_DB;
+  return VERB_DB.filter(v => v.tags && v.tags.includes(f));
 }
 
 // ========== 学习笔记（多条目版）==========
@@ -3205,11 +3240,11 @@ function vocabCreatePractice() {
   const pMatch = raw.match(/^---practice---\s*\n/);
   if (!pMatch) { alert("格式不识别。请粘贴以 ---practice--- 开头的初始化文本，或以 ---单词--- 开头的批改结果"); return; }
 
-  const sepIdx = raw.indexOf("\n===\n") > 0 ? raw.indexOf("\n===\n") : raw.indexOf("\n===");
+  const sepMatch = raw.match(/\n=+\n/);
   let header = "", article = "";
-  if (sepIdx > 0) {
-    header = raw.substring(0, sepIdx);
-    article = raw.substring(sepIdx).replace(/^[\n=]+\n?/, "").trim();
+  if (sepMatch) {
+    header = raw.substring(0, sepMatch.index);
+    article = raw.substring(sepMatch.index + sepMatch[0].length).trim();
   } else {
     header = raw;
     article = "";
@@ -3339,7 +3374,9 @@ function vocabSaveSentences() {
     return m ? { word: m[1], text: m[2].trim() } : { word: "", text: line };
   });
   vocabSaveData(data);
-  alert("句子已暂存。复制发送给 Claude 批改。");
+  navigator.clipboard.writeText(raw).then(() => {
+    alert("句子已暂存并复制到剪贴板！粘贴到 Claude 对话中即可。");
+  });
 }
 
 // 解析批改格式：
