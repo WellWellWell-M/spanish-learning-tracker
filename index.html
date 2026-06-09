@@ -2067,7 +2067,9 @@ const TENSES = [
   { id: "presente_subj", name: "虚拟式现在时", short: "Subj. Presente", week: 1,
     example: "Es importante que {person} ___." },
   { id: "imperfecto_subj", name: "虚拟式过去时(-ra)", short: "Subj. Imperfecto", week: 4,
-    example: "Si {person} ___, todo sería mejor." }
+    example: "Si {person} ___, todo sería mejor." },
+  { id: "participio", name: "过去分词", short: "Participio", week: 5,
+    example: "El documento está ___ por {person}." }
 ];
 
 // 规则变位词尾
@@ -2340,6 +2342,13 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     overrides.indefinido[6] = "leyeron";
   }
 
+  // 不规则过去分词检测
+  const irregPart = getIrregParticiple(infinitive);
+  if (irregPart) {
+    if (!overrides.participio) overrides.participio = {};
+    for (let i = 1; i <= 6; i++) overrides.participio[i] = irregPart;
+  }
+
   // 计算不规则特征标签
   const tags = [];
   if (stemChange) tags.push(stemChange === "u>ue" ? "u→ue" : stemChange === "e>ie" ? "e→ie" : stemChange === "o>ue" ? "o→ue" : "e→i");
@@ -2357,6 +2366,8 @@ function buildVerbEntry(infinitive, meaning, pattern) {
   }
   // 将来/条件式不规则
   if (futIrreg) tags.push("fut-irreg");
+  // 不规则过去分词
+  if (irregPart) tags.push("participio-irreg");
   // 完全不规则/特殊模型
   const specialModels = ["tener","hacer","decir","venir","poder","poner","querer","traer","caer","saber","estar","dar","ver","haber","caber","oir","seguir","ducir"];
   if (specialModels.some(m => pattern.includes(m))) tags.push("full-irreg");
@@ -2554,6 +2565,26 @@ const SPECIAL_ENDINGS = {
   decir_indef: ["e","iste","o","imos","isteis","eron"]
 };
 
+// 不规则过去分词
+const IRREG_PARTICIPLES = {
+  hacer: "hecho", rehacer: "rehecho", deshacer: "deshecho", satisfacer: "satisfecho",
+  decir: "dicho", predecir: "predicho",
+  escribir: "escrito", describir: "descrito", inscribir: "inscrito",
+  ver: "visto", prever: "previsto",
+  poner: "puesto", componer: "compuesto", suponer: "supuesto",
+  volver: "vuelto", devolver: "devuelto", resolver: "resuelto", absolver: "absuelto",
+  abrir: "abierto", cubrir: "cubierto", descubrir: "descubierto",
+  morir: "muerto",
+  romper: "roto",
+  freir: "frito", imprimir: "impreso",
+  // 代动词
+  ponerse: "puesto", volverse: "vuelto", morirse: "muerto"
+};
+
+function getIrregParticiple(infinitive) {
+  return IRREG_PARTICIPLES[infinitive] || null;
+}
+
 function conjugate(verbObj, personId, tenseId) {
   // personId: 1-6, tenseId: string
   const idx = personId - 1;
@@ -2585,6 +2616,13 @@ function conjugate(verbObj, personId, tenseId) {
     const stem = verbObj.overrides[tenseId].stem;
     const endings = REGULAR_ENDINGS[tenseId]["er"]; // 将来/条件式的词尾对所有动词相同
     return { form: stem.replace(/-+$/, "") + endings[idx], explanation: null };
+  }
+
+  // 过去分词：规则形式
+  if (tenseId === "participio") {
+    const modelEnding = verbObj.model;
+    const form = (modelEnding === "ar") ? infinitive.slice(0, -2) + "ado" : infinitive.slice(0, -2) + "ido";
+    return { form: form, explanation: null };
   }
 
   // 对不规则模型动词，返回 null（未覆盖到的形式）
@@ -2680,6 +2718,17 @@ function getTodayConjErrors(dk) {
 }
 
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+// 人称加权：vosotros(id=5)频率降到1/6，其他正常
+function pickWeightedPerson() {
+  const weights = PERSONS.map(p => p.id === 5 ? 1 : 6);
+  const total = weights.reduce((s, w) => s + w, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < PERSONS.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return PERSONS[i];
+  }
+  return PERSONS[5]; // fallback
+}
 
 function generateQuestion() {
   // 按词干变化类型筛选动词池
@@ -2687,7 +2736,7 @@ function generateQuestion() {
 
   const verb = pickRandom(pool);
   const tenseId = pickRandom(quizState.activeTenses);
-  const person = pickRandom(PERSONS);
+  const person = pickWeightedPerson();
 
   // 检查该动词+时态+人称是否有有效变位
   const result = conjugate(verb, person.id, tenseId);
@@ -2731,7 +2780,7 @@ function renderConjugation() {
       { id: "yo-irreg", label: "yo" }, { id: "pret-irreg", label: "pret" }, { id: "fut-irreg", label: "fut" }, { id: "full-irreg", label: "完全" }
     ]},
     { label: "其他", filters: [
-      { id: "regular", label: "规则" }, { id: "ortho", label: "正字法" }
+      { id: "regular", label: "规则" }, { id: "ortho", label: "正字法" }, { id: "participio-irreg", label: "分词" }
     ]}
   ];
   filterGroups.forEach(fg => {
@@ -2761,7 +2810,7 @@ function renderConjugation() {
     : "";
   html += `<div class="quiz-prompt">
     <div class="verb-word">${v.verb} <span style="font-size:0.6em;color:var(--text-secondary);">(${v.meaning})</span></div>
-    <div class="quiz-person">${p.label} · ${tense ? tense.name : ""}</div>
+    <div class="quiz-person">${quizState.currentTense === "participio" ? "过去分词（不分人称）" : (p.label + " · " + (tense ? tense.name : ""))}</div>
     ${exampleHtml}
   </div>`;
 
