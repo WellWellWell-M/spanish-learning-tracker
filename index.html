@@ -2553,18 +2553,6 @@ const IRREG_VERBS = [
   { verb: "ir", meaning: "去", model: "irregular", tags: ["full-irreg","yo-irreg","pret-irreg","fut-irreg"], overrides: { presente_ind: { 1: "voy", 2: "vas", 3: "va", 4: "vamos", 5: "vais", 6: "van" }, indefinido: { 1: "fui", 2: "fuiste", 3: "fue", 4: "fuimos", 5: "fuisteis", 6: "fueron" }, imperfecto: { 1: "iba", 2: "ibas", 3: "iba", 4: "íbamos", 5: "ibais", 6: "iban" }, presente_subj: { 1: "vaya", 2: "vayas", 3: "vaya", 4: "vayamos", 5: "vayáis", 6: "vayan" }, imperfecto_subj: { 1: "fuera", 2: "fueras", 3: "fuera", 4: "fuéramos", 5: "fuerais", 6: "fueran" }, futuro: { 1: "iré", 2: "irás", 3: "irá", 4: "iremos", 5: "iréis", 6: "irán" }, condicional: { 1: "iría", 2: "irías", 3: "iría", 4: "iríamos", 5: "iríais", 6: "irían" } } },
 ];
 
-// 生成最终 VERB_DB
-const VERB_DB = [
-  ...VERB_PATTERN_LIST.map(function(x) { return buildVerbEntry(x[0], x[1], x[2]); }),
-  ...IRREG_VERBS
-];
-// 特殊词尾集
-const SPECIAL_ENDINGS = {
-  tener_indef: ["e","iste","o","imos","isteis","ieron"],
-  hacer_indef: ["ce","ciste","zo","cimos","cisteis","cieron"],
-  decir_indef: ["e","iste","o","imos","isteis","eron"]
-};
-
 // 不规则过去分词
 const IRREG_PARTICIPLES = {
   hacer: "hecho", rehacer: "rehecho", deshacer: "deshecho", satisfacer: "satisfecho",
@@ -2584,6 +2572,18 @@ const IRREG_PARTICIPLES = {
 function getIrregParticiple(infinitive) {
   return IRREG_PARTICIPLES[infinitive] || null;
 }
+
+// 生成最终 VERB_DB
+const VERB_DB = [
+  ...VERB_PATTERN_LIST.map(function(x) { return buildVerbEntry(x[0], x[1], x[2]); }),
+  ...IRREG_VERBS
+];
+// 特殊词尾集
+const SPECIAL_ENDINGS = {
+  tener_indef: ["e","iste","o","imos","isteis","ieron"],
+  hacer_indef: ["ce","ciste","zo","cimos","cisteis","cieron"],
+  decir_indef: ["e","iste","o","imos","isteis","eron"]
+};
 
 function conjugate(verbObj, personId, tenseId) {
   // personId: 1-6, tenseId: string
