@@ -1958,19 +1958,24 @@ function dailyReport() {
   }
   report += `\n`;
 
-  // 变位错题
-  const conjErrors = getTodayConjErrors(dk);
-  if (conjErrors.length > 0) {
-    report += `## 🔤 今日变位错题 (${conjErrors.length}题)\n`;
+  // 变位记录
+  const conjLog = getTodayConjLog(dk);
+  if (conjLog.length > 0) {
+    const errCount = conjLog.filter(e => !e.isCorrect).length;
+    const okCount = conjLog.length - errCount;
+    report += `## 🔤 今日变位练习 (${conjLog.length}题 · ✅${okCount} · ❌${errCount})\n`;
     const tenseNames = {};
     TENSES.forEach(t => { tenseNames[t.id] = t.name; });
-    conjErrors.forEach(e => {
+    conjLog.forEach(e => {
       const personLabel = PERSONS.find(p => p.id === e.person);
-      report += `- ${e.verb} (${e.meaning}) · ${personLabel ? personLabel.short : e.person} · ${tenseNames[e.tense] || e.tense}\n`;
-      report += `  你写：${e.userAnswer} → 正确：${e.correct}\n`;
+      const mark = e.isCorrect ? "✅" : "❌";
+      report += `- ${mark} ${e.verb} (${e.meaning}) · ${personLabel ? personLabel.short : e.person} · ${tenseNames[e.tense] || e.tense}\n`;
+      if (!e.isCorrect) {
+        report += `  你写：${e.userAnswer} → 正确：${e.correct}\n`;
+      }
     });
   } else {
-    report += `## 🔤 今日变位错题\n（无错题 🎉）\n`;
+    report += `## 🔤 今日变位练习\n（还没练）\n`;
   }
   report += `\n`;
 
@@ -2698,22 +2703,28 @@ let quizState = {
 };
 
 // 变位错题记录
-const CONJ_ERRORS_KEY = "spanish_conj_errors";
-function loadConjErrors() {
-  try { const raw = localStorage.getItem(CONJ_ERRORS_KEY); return raw ? JSON.parse(raw) : {}; }
-  catch (e) { return {}; }
+const CONJ_LOG_KEY = "spanish_conj_log";
+
+function loadConjLog() {
+  // 兼容旧错题数据
+  try {
+    let raw = localStorage.getItem(CONJ_LOG_KEY);
+    if (raw) return JSON.parse(raw);
+    // 迁移旧错题记录
+    const oldRaw = localStorage.getItem("spanish_conj_errors");
+    if (oldRaw) { const old = JSON.parse(oldRaw); localStorage.setItem(CONJ_LOG_KEY, JSON.stringify(old)); return old; }
+  } catch (e) {}
+  return {};
 }
-function saveConjError(dateKey, error) {
-  const data = loadConjErrors();
+function saveConjLog(dateKey, entry) {
+  const data = loadConjLog();
   if (!data[dateKey]) data[dateKey] = [];
-  // 去重：同一动词+人称+时态今天只记一次
-  const dup = data[dateKey].find(e => e.verb === error.verb && e.person === error.person && e.tense === error.tense);
-  if (!dup) data[dateKey].push(error);
-  try { localStorage.setItem(CONJ_ERRORS_KEY, JSON.stringify(data)); }
+  data[dateKey].push(entry);
+  try { localStorage.setItem(CONJ_LOG_KEY, JSON.stringify(data)); }
   catch (e) {}
 }
-function getTodayConjErrors(dk) {
-  const data = loadConjErrors();
+function getTodayConjLog(dk) {
+  const data = loadConjLog();
   return data[dk || todayKey()] || [];
 }
 
@@ -2801,7 +2812,7 @@ function renderConjugation() {
   html += `<div class="quiz-score-bar">
     <span>✅ ${quizState.totalCorrect} / ${quizState.totalAttempts} (${pct}%)</span>
     <span>🔥 连续 ${quizState.streak} 题</span>
-    <span style="font-size:0.75rem;color:var(--danger);">❌ 今日错题 ${getTodayConjErrors().length}</span>
+    <span style="font-size:0.75rem;color:var(--text-secondary);">📊 今日 ${getTodayConjLog().length} 题 · ❌ ${getTodayConjLog().filter(e => !e.isCorrect).length} 错</span>
   </div>`;
 
   // 题目
@@ -2871,16 +2882,17 @@ function checkAnswer() {
     quizState.streak++;
   } else {
     quizState.streak = 0;
-    // 记录错题
-    saveConjError(todayKey(), {
-      verb: quizState.currentVerb.verb,
-      meaning: quizState.currentVerb.meaning,
-      person: quizState.currentPerson.id,
-      tense: quizState.currentTense,
-      userAnswer: userAnswer,
-      correct: correct
-    });
   }
+  // 记录所有尝试（对错都记）
+  saveConjLog(todayKey(), {
+    verb: quizState.currentVerb.verb,
+    meaning: quizState.currentVerb.meaning,
+    person: quizState.currentPerson.id,
+    tense: quizState.currentTense,
+    userAnswer: userAnswer,
+    correct: correct,
+    isCorrect: isCorrect
+  });
 
   renderConjugation();
 }
@@ -3605,7 +3617,7 @@ const ALL_DATA_KEYS = [
   "spanish_checkins",
   "spanish_journal_v2",
   "spanish_summaries",
-  "spanish_conj_errors",
+  "spanish_conj_log",
   "spanish_vocab_practice"
 ];
 
