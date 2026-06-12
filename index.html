@@ -2270,8 +2270,11 @@ function buildVerbEntry(infinitive, meaning, pattern) {
         if (stem[i] === f2) { is2 = stem.slice(0, i) + t2 + stem.slice(i + 1); break; }
       }
       if (!overrides.indefinido) overrides.indefinido = {};
-      overrides.indefinido[3] = is2 + "ió";
-      overrides.indefinido[6] = is2 + "ieron";
+      // 如果变化后词干以 i 结尾（如 reír→ri-, sonreír→sonri-），去掉词尾 i 避免和 ió/ieron 双拼
+      const ei1 = is2.endsWith("i") ? "ó" : "ió";
+      const ei2 = is2.endsWith("i") ? "eron" : "ieron";
+      overrides.indefinido[3] = is2 + ei1;
+      overrides.indefinido[6] = is2 + ei2;
     }
   }
 
