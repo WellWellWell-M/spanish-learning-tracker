@@ -614,8 +614,30 @@
     font-size: 0.88rem;
     line-height: 1.7;
     color: var(--text);
-    white-space: pre-wrap;
   }
+  .entry-text h3, .entry-text h4, .entry-text h5, .entry-text h6,
+  .summary-text h3, .summary-text h4, .summary-text h5, .summary-text h6 {
+    margin: 12px 0 6px;
+    color: var(--accent);
+  }
+  .entry-text h3, .summary-text h3 { font-size: 1.05rem; }
+  .entry-text h4, .summary-text h4 { font-size: 0.95rem; }
+  .entry-text hr, .summary-text hr {
+    border: none; border-top: 1px solid var(--border); margin: 12px 0;
+  }
+  .entry-text table, .summary-text table {
+    border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 0.82rem;
+  }
+  .entry-text th, .summary-text th { background: var(--bg); border: 1px solid var(--border); padding: 4px 8px; text-align: left; }
+  .entry-text td, .summary-text td { border: 1px solid var(--border); padding: 4px 8px; }
+  .entry-text code, .summary-text code {
+    background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 0.85em;
+  }
+  .entry-text pre, .summary-text pre {
+    background: var(--bg); padding: 10px; border-radius: var(--radius-sm); overflow-x: auto; font-size: 0.82rem; margin: 8px 0;
+  }
+  .entry-text p, .summary-text p { margin: 4px 0; }
+  .entry-text li, .summary-text li { margin: 2px 0 2px 20px; }
   .journal-entry-card .entry-actions {
     display: flex;
     gap: 6px;
@@ -735,7 +757,6 @@
   .summary-card .summary-text {
     font-size: 0.88rem;
     line-height: 1.8;
-    white-space: pre-wrap;
   }
   .summary-topbar {
     display: flex;
@@ -3144,6 +3165,75 @@ function escapeHtml(s) {
   return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
+// 简易 markdown → HTML（用于笔记和汇总渲染）
+function renderMarkdown(text) {
+  var lines = text.split("\n");
+  var out = [];
+  var inTable = false, inCodeBlock = false, codeBuf = "";
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    // 代码块
+    if (line.match(/^```/)) {
+      if (inCodeBlock) {
+        out.push("<pre><code>" + escapeHtml(codeBuf.trim()) + "</code></pre>");
+        codeBuf = "";
+        inCodeBlock = false;
+      } else {
+        inCodeBlock = true;
+      }
+      continue;
+    }
+    if (inCodeBlock) { codeBuf += line + "\n"; continue; }
+    // 表格
+    var cells = line.split("|").map(function(c) { return c.trim(); });
+    if (cells.length >= 2 && line.indexOf("|") >= 0 && !line.match(/^```/)) {
+      if (!inTable && i + 1 < lines.length && lines[i + 1].match(/^\|[\s\-:|]+\|/)) {
+        inTable = true;
+        var hcells = cells.filter(function(c) { return c !== ""; });
+        out.push("<table>");
+        out.push("<tr>" + hcells.map(function(c) { return "<th>" + escapeHtml(c) + "</th>"; }).join("") + "</tr>");
+        continue;
+      }
+      if (inTable && line.match(/^\|[\s\-:|]+\|/)) continue; // 表头分隔行
+      if (inTable && line.indexOf("|") >= 0) {
+        var dcells = cells.filter(function(c) { return c !== ""; });
+        out.push("<tr>" + dcells.map(function(c) { return "<td>" + escapeHtml(c) + "</td>"; }).join("") + "</tr>");
+        if (i + 1 >= lines.length || !lines[i + 1].match(/\|/)) { out.push("</table>"); inTable = false; }
+        continue;
+      }
+    }
+    if (inTable) { out.push("</table>"); inTable = false; }
+    // 空行
+    if (line.trim() === "") { out.push(""); continue; }
+    // 标题
+    var h6 = line.match(/^######\s+(.+)$/);
+    var h5 = line.match(/^#####\s+(.+)$/);
+    var h4 = line.match(/^####\s+(.+)$/);
+    var h3 = line.match(/^###\s+(.+)$/);
+    var h2 = line.match(/^##\s+(.+)$/);
+    if (h6) { out.push("<h6>" + mdInline(h6[1]) + "</h6>"); continue; }
+    if (h5) { out.push("<h5>" + mdInline(h5[1]) + "</h5>"); continue; }
+    if (h4) { out.push("<h4>" + mdInline(h4[1]) + "</h4>"); continue; }
+    if (h3) { out.push("<h4>" + mdInline(h3[1]) + "</h4>"); continue; }
+    if (h2) { out.push("<h3>" + mdInline(h2[1]) + "</h3>"); continue; }
+    // 横线
+    if (line.match(/^---+$/)) { out.push("<hr>"); continue; }
+    // 列表
+    var li = line.match(/^[\-\*]\s+(.+)$/);
+    if (li) { out.push("<li>" + mdInline(li[1]) + "</li>"); continue; }
+    // 普通段落
+    out.push("<p>" + mdInline(line) + "</p>");
+  }
+  if (inTable) { out.push("</table>"); }
+  if (inCodeBlock) { out.push("<pre><code>" + escapeHtml(codeBuf.trim()) + "</code></pre>"); }
+  return out.join("\n");
+}
+function mdInline(text) {
+  return escapeHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+
 function copyExport() {
   const text = document.getElementById("journalExport")._exportText || "";
   navigator.clipboard.writeText(text).then(() => alert("已复制！粘贴到 Claude 对话中即可"));
@@ -3169,7 +3259,7 @@ function renderJournal() {
           <span class="entry-time">🕐 ${e.time}</span>
           <span class="journal-tag tag-${e.tag}">${tagLabel}</span>
         </div>
-        <div class="entry-text">${escapeHtml(e.text)}</div>
+        <div class="entry-text">${renderMarkdown(e.text)}</div>
         <div class="entry-actions">
           <button onclick="journalEditEntry(${i})">✏️ 编辑</button>
           <button class="del" onclick="journalDeleteEntry(${i})">🗑 删除</button>
@@ -3247,7 +3337,7 @@ function renderSummary() {
         <span class="summary-week">${weekLabel}</span>
         <button class="btn" onclick="summaryDelete('${date}')" style="font-size:0.7rem;padding:2px 8px;margin-left:auto;">🗑</button>
       </div>
-      <div class="summary-text">${escapeHtml(entry.text)}</div>
+      <div class="summary-text">${renderMarkdown(entry.text)}</div>
     </div>`;
   }).join("");
 }
