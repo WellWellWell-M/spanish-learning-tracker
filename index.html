@@ -2716,7 +2716,8 @@ function getVerbExplanation(verbObj, tenseId) {
 // ========== 变位练习状态 ==========
 let quizState = {
   activeTenses: ["presente_ind", "indefinido"], // W1-2: 陈述式现在时 + 简单过去时  W3-4: +imperfecto  W5-6: +futuro  W7-8: +condicional  W9-10: +pres_subj  W11-12: +imp_subj
-  stemFilter: null, // null=all, "e>ie", "o>ue", "e>i", "regular"
+  stemFilter: null, // tag filter
+  verbFilter: null, // specific verb infinitive, e.g. "hacer"
   currentVerb: null,
   currentPerson: null,
   currentTense: null,
@@ -2827,9 +2828,17 @@ function renderConjugation() {
     });
     html += `</div>`;
   });
-  // 显示当前筛选匹配数
+  // 显示当前筛选匹配数 + 指定动词选择器
   const pool = getFilteredVerbPool();
-  html += `<div style="font-size:0.6rem;color:var(--text-secondary);margin-top:2px;">${pool.length} 个动词</div>`;
+  html += `<div style="font-size:0.6rem;color:var(--text-secondary);margin-top:2px;display:flex;align-items:center;gap:6px;">`;
+  html += `<span>${pool.length} 个动词</span>`;
+  html += `<select onchange="setVerbFilter(this.value)" style="font-size:0.65rem;padding:1px 4px;border:1px solid var(--border);border-radius:3px;background:var(--bg);color:var(--text);max-width:120px;">`;
+  html += `<option value="">全部动词</option>`;
+  pool.forEach(v => {
+    const sel = quizState.verbFilter === v.verb ? "selected" : "";
+    html += `<option value="${v.verb}" ${sel}>${v.verb}</option>`;
+  });
+  html += `</select></div>`;
 
   // 分数
   const pct = quizState.totalAttempts > 0 ? Math.round(quizState.totalCorrect / quizState.totalAttempts * 100) : 0;
@@ -2943,14 +2952,26 @@ function toggleTense(tenseId) {
 
 function setStemFilter(type) {
   quizState.stemFilter = quizState.stemFilter === type ? null : type;
+  quizState.verbFilter = null; // 切换标签时清空动词选择
+  generateQuestion();
+  renderConjugation();
+}
+
+function setVerbFilter(verb) {
+  quizState.verbFilter = verb || null;
   generateQuestion();
   renderConjugation();
 }
 
 function getFilteredVerbPool() {
+  let pool = VERB_DB;
+  // 先按标签筛
   const f = quizState.stemFilter;
-  if (!f) return VERB_DB;
-  return VERB_DB.filter(v => v.tags && v.tags.includes(f));
+  if (f) pool = pool.filter(v => v.tags && v.tags.includes(f));
+  // 再按具体动词筛
+  const vf = quizState.verbFilter;
+  if (vf) pool = pool.filter(v => v.verb.toLowerCase() === vf.toLowerCase());
+  return pool;
 }
 
 // ========== 学习笔记（多条目版）==========
@@ -3488,7 +3509,7 @@ function vocabRenderPractice() {
     // 显示批改结果
     bodyHtml += `<div style="font-weight:600;margin-bottom:8px;font-size:0.9rem;">📝 批改结果</div>`;
     practice.corrections.forEach(c => {
-      const isOk = !c.corrected || c.corrected === "(✓ 正确)" || c.corrected.match(/^[✓✅]|^\(✓/);
+      const isOk = vocabIsSentenceCorrect(c.original || "", c.corrected || "");
       const statusClass = isOk ? "ok" : "err";
       const statusText = isOk ? "✓ 正确" : "✗ 有错";
       bodyHtml += `<div class="correction-item">
@@ -3515,6 +3536,15 @@ function vocabRenderArticle(text) {
   let html = escapeHtml(text);
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   return html;
+}
+
+// 智能判断句子是否正确：✓标记 或 原句改句本质相同（仅差大小写/重音/标点/开头结尾空白）
+function vocabIsSentenceCorrect(original, corrected) {
+  if (corrected.match(/^[✓✅]|^\(✓/)) return true;
+  const norm = function(s) {
+    return s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[¡!¿?.,;:、，。；：""（）()\[\]]/g, "").trim().toLowerCase();
+  };
+  return norm(original) === norm(corrected);
 }
 
 function vocabSaveSentences() {
@@ -3557,7 +3587,7 @@ function vocabParseCorrections(raw) {
     const corrMatch = block.match(/改句\s*[：:]\s*(.+)/);
     const noteMatch = block.match(/说明\s*[：:]\s*(.+)/);
 
-    const isOk = corrMatch && corrMatch[1].match(/^[✓✅]|^\(✓/);
+    const isOk = vocabIsSentenceCorrect(origMatch ? origMatch[1].trim() : "", corrMatch ? corrMatch[1].trim() : "");
     corrections.push({
       word: word,
       original: origMatch ? origMatch[1].trim() : "",
