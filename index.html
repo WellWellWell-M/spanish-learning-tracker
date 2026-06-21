@@ -2330,7 +2330,7 @@ function buildVerbEntry(infinitive, meaning, pattern) {
 
   // Apply imperfecto subjunctive irregular
   if (impSubjIrreg) {
-    overrides.imperfecto_subj = { stem: impSubjIrreg };
+    overrides.imperfecto_subj = { stem: impSubjIrreg, endings: "ar" };
   }
 
   // -uir verbs: i→y
