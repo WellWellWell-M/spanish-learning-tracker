@@ -2181,27 +2181,27 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     else if (part === "tener") {
       yoIrreg = "tengo"; subjIrreg = "teng-"; stemChange = "e>ie";
       pretIrreg = { stem: "tuv", ends: "tener_indef" };
-      futIrreg = "tendr"; impSubjIrreg = "tuvier";
+      futIrreg = "tendr"; impSubjIrreg = "tuv";
     }
     else if (part === "hacer") {
       yoIrreg = "hago"; subjIrreg = "hag-";
       pretIrreg = { stem: "hi", ends: "hacer_indef" };
-      futIrreg = "har"; impSubjIrreg = "hicier";
+      futIrreg = "har"; impSubjIrreg = "hic";
     }
     else if (part === "decir") {
       yoIrreg = "digo"; subjIrreg = "dig-"; stemChange = "e>i";
       pretIrreg = { stem: "dij", ends: "decir_indef" };
-      futIrreg = "dir"; impSubjIrreg = "dijer";
+      futIrreg = "dir"; impSubjIrreg = "dij";
     }
     else if (part === "ducir") {
       const jStem = infinitive.slice(0, -3) + "j";
       pretIrreg = { stem: jStem, ends: "decir_indef" };
-      impSubjIrreg = jStem + "er";
+      impSubjIrreg = jStem;
     }
     else if (part === "venir") {
       yoIrreg = "vengo"; subjIrreg = "veng-"; stemChange = "e>ie";
       pretIrreg = { stem: "vin", ends: "tener_indef" };
-      futIrreg = "vendr"; impSubjIrreg = "vinier";
+      futIrreg = "vendr"; impSubjIrreg = "vin";
     }
     else if (part === "seguir") {
       const scStem = getSCStem(infinitive, "e>i"); // sig/consig
@@ -2211,28 +2211,28 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     }
     else if (part === "poder") {
       pretIrreg = { stem: "pud", ends: "tener_indef" };
-      futIrreg = "podr"; impSubjIrreg = "pudier";
+      futIrreg = "podr"; impSubjIrreg = "pud";
       stemChange = "o>ue";
     }
     else if (part === "poner") {
       isGo = true; subjIrreg = "pong-";
       pretIrreg = { stem: "pus", ends: "tener_indef" };
-      futIrreg = "pondr"; impSubjIrreg = "pusier";
+      futIrreg = "pondr"; impSubjIrreg = "pus";
     }
     else if (part === "querer") {
       pretIrreg = { stem: "quis", ends: "tener_indef" };
-      futIrreg = "querr"; impSubjIrreg = "quisier";
+      futIrreg = "querr"; impSubjIrreg = "quis";
       stemChange = "e>ie";
     }
     else if (part === "saber") {
       yoIrreg = "sé"; subjIrreg = "sep-";
       pretIrreg = { stem: "sup", ends: "tener_indef" };
-      futIrreg = "sabr"; impSubjIrreg = "supier";
+      futIrreg = "sabr"; impSubjIrreg = "sup";
     }
     else if (part === "estar") {
       yoIrreg = "estoy";
       pretIrreg = { stem: "estuv", ends: "tener_indef" };
-      impSubjIrreg = "estuvier";
+      impSubjIrreg = "estuv";
     }
     else if (part === "dar")   { yoIrreg = "doy"; }
     else if (part === "ver")   { yoIrreg = "veo"; }
@@ -2240,7 +2240,7 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     else if (part === "caber") {
       yoIrreg = "quepo"; subjIrreg = "quep-";
       pretIrreg = { stem: "cup", ends: "tener_indef" };
-      futIrreg = "cabr"; impSubjIrreg = "cupier";
+      futIrreg = "cabr"; impSubjIrreg = "cup";
     }
     else if (part === "oir") { yoIrreg = "oigo"; subjIrreg = "oig-"; }
     else if (part === "traer") { yoIrreg = "traigo"; subjIrreg = "traig-"; }
@@ -2330,7 +2330,7 @@ function buildVerbEntry(infinitive, meaning, pattern) {
 
   // Apply imperfecto subjunctive irregular
   if (impSubjIrreg) {
-    overrides.imperfecto_subj = { stem: impSubjIrreg, endings: "ar" };
+    overrides.imperfecto_subj = { stem: impSubjIrreg };
   }
 
   // -uir verbs: i→y
