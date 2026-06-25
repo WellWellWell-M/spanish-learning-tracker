@@ -2330,7 +2330,11 @@ function buildVerbEntry(infinitive, meaning, pattern) {
 
   // Apply imperfecto subjunctive irregular
   if (impSubjIrreg) {
-    overrides.imperfecto_subj = { stem: impSubjIrreg };
+    // j-词干（dij, conduj 等）的结尾 i 与词尾 iera 的 i 合并成 era
+    overrides.imperfecto_subj = {
+      stem: impSubjIrreg,
+      endings: impSubjIrreg.endsWith("j") ? "impSubj_j" : "er"
+    };
   }
 
   // -uir verbs: i→y
@@ -2611,7 +2615,8 @@ const VERB_DB = [
 const SPECIAL_ENDINGS = {
   tener_indef: ["e","iste","o","imos","isteis","ieron"],
   hacer_indef: ["ce","ciste","zo","cimos","cisteis","cieron"],
-  decir_indef: ["e","iste","o","imos","isteis","eron"]
+  decir_indef: ["e","iste","o","imos","isteis","eron"],
+  impSubj_j: ["era","eras","era","éramos","erais","eran"]
 };
 
 function conjugate(verbObj, personId, tenseId) {
