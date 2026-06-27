@@ -2632,7 +2632,7 @@ function conjugate(verbObj, personId, tenseId) {
     if (ov.stem) {
       let endings;
       if (typeof ov.endings === "string") {
-        endings = SPECIAL_ENDINGS[ov.endings] || REGULAR_ENDINGS[tenseId][verbObj.model] || REGULAR_ENDINGS[tenseId]["er"];
+        endings = SPECIAL_ENDINGS[ov.endings] || REGULAR_ENDINGS[tenseId][ov.endings] || REGULAR_ENDINGS[tenseId][verbObj.model] || REGULAR_ENDINGS[tenseId]["er"];
       } else if (ov.endings) {
         endings = ov.endings;
       } else {
