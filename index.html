@@ -1487,11 +1487,11 @@ const STORAGE_KEY = "spanish_checkins";
 const START_DATE = new Date(2026, 4, 8); // May 8, 2026
 const END_DATE = new Date(2026, 6, 31);  // Jul 31, 2026
 const CATEGORIES = [
-  { key: "lt", name: "LT 听课", icon: "🎧", time: "30min", desc: "Language Transfer" },
   { key: "ds", name: "Dreaming Spanish", icon: "📺", time: "45min", desc: "视频输入" },
   { key: "anki", name: "Anki 词汇", icon: "📝", time: "35min", desc: "背单词 + 复习旧卡" },
   { key: "leer", name: "阅读", icon: "📖", time: "20min", desc: "分级读物 / 真实文章" },
-  { key: "escribir", name: "写作 + 变位", icon: "✍️", time: "30min", desc: "每日写作 + 变位练习" },
+  { key: "escribir", name: "写作", icon: "✍️", time: "20min", desc: "每日写作造句" },
+  { key: "conjugar", name: "变位练习", icon: "🔤", time: "20min", desc: "变位刷题" },
   { key: "hablar", name: "口语输出", icon: "🗣️", time: "30min", desc: "Shadowing + 录音 + 语伴" }
 ];
 
@@ -1520,6 +1520,19 @@ const CATEGORIES = [
     if (Object.keys(newDay).length > 0) {
       data[date] = newDay;
       changed = true;
+    }
+  });
+  if (changed) saveCheckins(data);
+})();
+
+// 清理旧版 lt 键（已不用）+ 确保旧数据兼容
+(function cleanupOldKeys() {
+  const data = loadCheckins();
+  let changed = false;
+  Object.keys(data).forEach(date => {
+    const day = data[date];
+    if (day.lt !== undefined) {
+      delete day.lt; changed = true;
     }
   });
   if (changed) saveCheckins(data);
@@ -3817,11 +3830,11 @@ document.addEventListener("keydown", e => {
   const tag = document.activeElement?.tagName;
   if (tag === "INPUT" || tag === "TEXTAREA" || document.activeElement?.isContentEditable) return;
 
-  if (e.key === "1") toggleCheckin("lt");
-  if (e.key === "2") toggleCheckin("ds");
-  if (e.key === "3") toggleCheckin("anki");
-  if (e.key === "4") toggleCheckin("leer");
-  if (e.key === "5") toggleCheckin("escribir");
+  if (e.key === "1") toggleCheckin("ds");
+  if (e.key === "2") toggleCheckin("anki");
+  if (e.key === "3") toggleCheckin("leer");
+  if (e.key === "4") toggleCheckin("escribir");
+  if (e.key === "5") toggleCheckin("conjugar");
   if (e.key === "6") toggleCheckin("hablar");
   if (e.key === "a" && !e.metaKey && !e.ctrlKey) { e.preventDefault(); checkAll(); }
   if (e.key === "t") switchView("today");
