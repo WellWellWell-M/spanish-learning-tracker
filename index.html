@@ -3595,8 +3595,36 @@ function vocabSaveSentences() {
 // ---
 function vocabParseCorrections(raw) {
   const data = vocabLoadData();
-  const practice = data.practices.find(p => p.id === vocabActivePracticeId);
-  if (!practice) { alert("没有活跃的练习。请先创建一个练习。"); return; }
+  let practice = data.practices.find(p => p.id === vocabActivePracticeId);
+
+  // 如果没有活跃练习，从批改数据自动创建一个
+  if (!practice) {
+    const blocks = raw.split(/^---/m).filter(b => b.trim());
+    const words = [];
+    blocks.forEach(block => {
+      const word = block.trim().split("\n")[0].replace(/^---/, "").replace(/---$/, "").trim();
+      if (word && word !== "practice") words.push({ word: word, meaning: "" });
+    });
+    if (words.length === 0) { alert("未识别到批改内容。"); return; }
+    practice = {
+      id: vocabGenId(),
+      date: todayKey(),
+      title: "造句练习 · " + words.map(w => w.word).join("、"),
+      words: words,
+      article: "",
+      sentences: [],
+      corrections: [],
+      status: "writing"
+    };
+    data.practices.unshift(practice);
+    vocabActivePracticeId = practice.id;
+    // 同步词库
+    words.forEach(w => {
+      const existing = data.wordBank.find(bw => bw.word.toLowerCase() === w.word.toLowerCase());
+      if (existing) { existing.appearances = (existing.appearances || 1) + 1; existing.lastSeen = todayKey(); }
+      else { data.wordBank.push({ word: w.word, meaning: w.meaning, firstFrom: practice.title, appearances: 1, lastSeen: todayKey() }); }
+    });
+  }
 
   // 按 ---word--- 分割
   const blocks = raw.split(/^---/m).filter(b => b.trim());
