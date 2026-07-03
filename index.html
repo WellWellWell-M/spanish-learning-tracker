@@ -3879,19 +3879,20 @@ document.addEventListener("keydown", e => {
 renderAll();
 
 // ========== 自动备份 ==========
-// 每天首次加载页面时自动下载一份 JSON 备份
+// 每天首次打开页面自动备份到 localStorage + 浏览器下载文件夹
+// 浏览器安全限制：无法写入项目文件夹；请手动移动下载文件到项目目录
 (function autoBackup() {
   const BACKUP_KEY = "_last_backup_date";
+  const BACKUP_DATA_PREFIX = "_auto_backup_data_";
   var today = todayKey();
   var lastBackup = localStorage.getItem(BACKUP_KEY);
 
-  // 更新页脚备份状态
   var statusEl = document.getElementById("backupStatus");
   function updateStatus() {
     if (!lastBackup) {
       statusEl.textContent = "⚠️ 从未自动备份";
     } else if (lastBackup === today) {
-      statusEl.textContent = "✅ 今日已自动备份 | " + today;
+      statusEl.textContent = "✅ 今日已备份 | " + today;
     } else {
       var daysAgo = Math.floor((new Date(today + "T00:00:00") - new Date(lastBackup + "T00:00:00")) / 86400000);
       statusEl.textContent = "⚠️ 上次备份 " + lastBackup + "（" + daysAgo + " 天前）";
@@ -3899,15 +3900,12 @@ renderAll();
   }
   updateStatus();
 
-  // 如果今天已经备份过，跳过
+  // 确认今天有数据才备份
+  var ci = loadCheckins();
+  if (!ci[today] || Object.keys(ci[today]).length === 0) return;
   if (lastBackup === today) return;
 
-  // 延迟 3 秒执行，不阻塞页面加载
   setTimeout(function() {
-    // 确认今天有数据才备份
-    var ci = loadCheckins();
-    if (!ci[today] || Object.keys(ci[today]).length === 0) return;
-
     try {
       var bundle = {};
       ALL_DATA_KEYS.forEach(function(key) {
@@ -3918,11 +3916,21 @@ renderAll();
       bundle._version = "1.0";
       bundle._auto_backup = true;
 
+      // 1) 存到 localStorage，始终保留最近 7 天
+      localStorage.setItem(BACKUP_DATA_PREFIX + today, JSON.stringify(bundle));
+      // 清理超过 7 天的
+      for (var i = 7; i <= 14; i++) {
+        var oldDate = new Date(new Date(today + "T00:00:00") - i * 86400000);
+        var oldKey = BACKUP_DATA_PREFIX + oldDate.toISOString().split("T")[0];
+        if (localStorage.getItem(oldKey)) localStorage.removeItem(oldKey);
+      }
+
+      // 2) 浏览器下载（进入默认下载文件夹）
       var blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json;charset=utf-8" });
       var url = URL.createObjectURL(blob);
       var a = document.createElement("a");
       a.href = url;
-      a.download = "西语学习数据_" + today + "_auto.json";
+      a.download = "西语学习数据_" + today + ".json";  // 同名文件浏览器会自动在后面加 (1)
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
