@@ -2257,7 +2257,11 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       futIrreg = "cabr"; impSubjIrreg = "cup";
     }
     else if (part === "oir") { yoIrreg = "oigo"; subjIrreg = "oig-"; }
-    else if (part === "traer") { yoIrreg = "traigo"; subjIrreg = "traig-"; }
+    else if (part === "traer") {
+      yoIrreg = "traigo"; subjIrreg = "traig-";
+      pretIrreg = { stem: "traj", ends: "decir_indef" };
+      impSubjIrreg = "traj";
+    }
     else if (part === "caer")  { yoIrreg = "caigo"; subjIrreg = "caig-"; }
   }
 
