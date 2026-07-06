@@ -2001,12 +2001,39 @@ function dailyReport() {
     report += `## 🔤 今日变位练习 (${conjLog.length}题 · ✅${okCount} · ❌${errCount})\n`;
     const tenseNames = {};
     TENSES.forEach(t => { tenseNames[t.id] = t.name; });
-    conjLog.forEach(e => {
-      const personLabel = PERSONS.find(p => p.id === e.person);
-      const mark = e.isCorrect ? "✅" : "❌";
-      report += `- ${mark} ${e.verb} (${e.meaning}) · ${personLabel ? personLabel.short : e.person} · ${tenseNames[e.tense] || e.tense}\n`;
-      if (!e.isCorrect) {
-        report += `  你写：${e.userAnswer} → 正确：${e.correct}\n`;
+    // 折叠连续重复的题（减少报告长度）
+    var prevKey = null, prevCount = 0, prevMark = null, prevCorrect = null, prevUserAnswer = null, collapsed = [];
+    function flush() {
+      if (!prevKey) return;
+      if (prevCount === 1) {
+        collapsed.push({ key: prevKey, mark: prevMark, correct: prevCorrect, userAnswer: prevUserAnswer, count: 1 });
+      } else {
+        collapsed.push({ key: prevKey, mark: prevMark, correct: prevCorrect, userAnswer: prevUserAnswer, count: prevCount });
+      }
+    }
+    conjLog.forEach(function(e) {
+      var mark = e.isCorrect ? "✅" : "❌";
+      var key = e.verb + " · " + (PERSONS.find(function(p) { return p.id === e.person; }) || {}).short + " · " + (tenseNames[e.tense] || e.tense);
+      if (key === prevKey && mark === prevMark && (mark === "✅" ? e.correct === prevCorrect : e.userAnswer === prevUserAnswer && e.correct === prevCorrect)) {
+        prevCount++;
+      } else {
+        flush();
+        prevKey = key; prevCount = 1; prevMark = mark;
+        prevCorrect = e.correct; prevUserAnswer = e.userAnswer;
+      }
+    });
+    flush();
+    collapsed.forEach(function(c) {
+      if (c.count === 1) {
+        report += "- " + c.mark + " " + c.key + " → " + c.correct + "\n";
+        if (!c.mark.startsWith("✅")) {
+          report += "  你写：" + c.userAnswer + "\n";
+        }
+      } else {
+        report += "- " + c.mark + " " + c.key + " ×" + c.count + " → " + c.correct + "\n";
+        if (!c.mark.startsWith("✅")) {
+          report += "  你写：" + c.userAnswer + "\n";
+        }
       }
     });
   } else {
