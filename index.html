@@ -2249,7 +2249,10 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       impSubjIrreg = "estuv";
     }
     else if (part === "dar")   { yoIrreg = "doy"; }
-    else if (part === "ver")   { yoIrreg = "veo"; }
+    else if (part === "ver") {
+      yoIrreg = "veo";
+      subjIrreg = "ve-";
+    }
     else if (part === "haber") { futIrreg = "habr"; }
     else if (part === "caber") {
       yoIrreg = "quepo"; subjIrreg = "quep-";
