@@ -2279,6 +2279,9 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     else if (part === "ver") {
       yoIrreg = "veo";
       subjIrreg = "ve-";
+      // 保持 ve- 词干用于 imperfecto 和派生时态
+      if (!overrides.imperfecto) overrides.imperfecto = {};
+      overrides.imperfecto.stem = "ve-";
     }
     else if (part === "haber") { futIrreg = "habr"; }
     else if (part === "caber") {
