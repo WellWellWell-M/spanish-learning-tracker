@@ -2283,7 +2283,16 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       if (!overrides.imperfecto) overrides.imperfecto = {};
       overrides.imperfecto.stem = "ve-";
     }
-    else if (part === "haber") { futIrreg = "habr"; }
+    else if (part === "haber") {
+      // presente: he, has, ha, hemos, habéis, han
+      overrides.presente_ind = { 1: "he", 2: "has", 3: "ha", 4: "hemos", 5: "habéis", 6: "han" };
+      // presente_subj: haya, hayas, haya, hayamos, hayáis, hayan
+      subjIrreg = "hay-";
+      // indefinido: hube, hubiste, hubo, hubimos, hubisteis, hubieron
+      pretIrreg = { stem: "hub", ends: "tener_indef" };
+      futIrreg = "habr";
+      impSubjIrreg = "hub";
+    }
     else if (part === "caber") {
       yoIrreg = "quepo"; subjIrreg = "quep-";
       pretIrreg = { stem: "cup", ends: "tener_indef" };
