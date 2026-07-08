@@ -2300,7 +2300,7 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       overrides.indefinido[3] = "oyó";
       overrides.indefinido[6] = "oyeron";
       if (!overrides.imperfecto_subj) overrides.imperfecto_subj = {};
-      overrides.imperfecto_subj.stem = "oy-";
+      overrides.imperfecto_subj = { stem: "oy-", endings: "impSubj_j" };
     }
     else if (part === "traer") {
       yoIrreg = "traigo"; subjIrreg = "traig-";
@@ -2394,9 +2394,10 @@ function buildVerbEntry(infinitive, meaning, pattern) {
   // Apply imperfecto subjunctive irregular
   if (impSubjIrreg) {
     // j-词干（dij, conduj 等）的结尾 i 与词尾 iera 的 i 合并成 era
+    // y-词干（oy- 等）同样，y 后面不跟 i
     overrides.imperfecto_subj = {
       stem: impSubjIrreg,
-      endings: impSubjIrreg.endsWith("j") ? "impSubj_j" : "er"
+      endings: (impSubjIrreg.endsWith("j") || impSubjIrreg.endsWith("y")) ? "impSubj_j" : "er"
     };
   }
 
