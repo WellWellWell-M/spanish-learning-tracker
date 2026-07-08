@@ -2291,7 +2291,7 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     }
     else if (part === "oir") {
       yoIrreg = "oigo"; subjIrreg = "oig-";
-      // i→y: oyes, oye, oyen (pres 2,3,6); oyó, oyeron (indef 3,6)
+      // i→y: oyes, oye, oyen (pres 2,3,6); oyó, oyeron (indef 3,6); oyera... (imp_subj)
       if (!overrides.presente_ind) overrides.presente_ind = {};
       overrides.presente_ind[2] = "oyes";
       overrides.presente_ind[3] = "oye";
@@ -2299,6 +2299,8 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       if (!overrides.indefinido) overrides.indefinido = {};
       overrides.indefinido[3] = "oyó";
       overrides.indefinido[6] = "oyeron";
+      if (!overrides.imperfecto_subj) overrides.imperfecto_subj = {};
+      overrides.imperfecto_subj.stem = "oy-";
     }
     else if (part === "traer") {
       yoIrreg = "traigo"; subjIrreg = "traig-";
