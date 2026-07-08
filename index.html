@@ -2289,7 +2289,17 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       pretIrreg = { stem: "cup", ends: "tener_indef" };
       futIrreg = "cabr"; impSubjIrreg = "cup";
     }
-    else if (part === "oir") { yoIrreg = "oigo"; subjIrreg = "oig-"; }
+    else if (part === "oir") {
+      yoIrreg = "oigo"; subjIrreg = "oig-";
+      // i→y: oyes, oye, oyen (pres 2,3,6); oyó, oyeron (indef 3,6)
+      if (!overrides.presente_ind) overrides.presente_ind = {};
+      overrides.presente_ind[2] = "oyes";
+      overrides.presente_ind[3] = "oye";
+      overrides.presente_ind[6] = "oyen";
+      if (!overrides.indefinido) overrides.indefinido = {};
+      overrides.indefinido[3] = "oyó";
+      overrides.indefinido[6] = "oyeron";
+    }
     else if (part === "traer") {
       yoIrreg = "traigo"; subjIrreg = "traig-";
       pretIrreg = { stem: "traj", ends: "decir_indef" };
