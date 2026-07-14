@@ -2450,12 +2450,14 @@ function buildVerbEntry(infinitive, meaning, pattern) {
 
   // ser/ir are handled as full overrides elsewhere — here we only process pattern-list verbs
   // leer: indefinido 3rd person i→y
-  if (infinitive === "leer") {
+  // Verbos -eer: i→y en indef 3/6 + impSubj (creyó, poseyó, leyó...)
+  if (["creer","poseer","proveer","leer"].includes(infinitive)) {
+    var yStem = infinitive.slice(0, -2) + "y";
     if (!overrides.indefinido) overrides.indefinido = {};
-    overrides.indefinido[3] = "leyó";
-    overrides.indefinido[6] = "leyeron";
+    overrides.indefinido[3] = yStem + "ó";
+    overrides.indefinido[6] = yStem + "eron";
     if (!overrides.imperfecto_subj) overrides.imperfecto_subj = {};
-    overrides.imperfecto_subj = { stem: "ley-", endings: "impSubj_j" };
+    overrides.imperfecto_subj = { stem: yStem + "-", endings: "impSubj_j" };
   }
 
   // 不规则过去分词检测
