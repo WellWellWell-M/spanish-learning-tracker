@@ -2316,7 +2316,15 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       pretIrreg = { stem: "traj", ends: "decir_indef" };
       impSubjIrreg = "traj";
     }
-    else if (part === "caer")  { yoIrreg = "caigo"; subjIrreg = "caig-"; }
+    else if (part === "caer") {
+      yoIrreg = "caigo"; subjIrreg = "caig-";
+      // i→y in indefinido 3/6 and impSubj: cayó/cayeron/cayera... (same as leer/oír group)
+      if (!overrides.indefinido) overrides.indefinido = {};
+      overrides.indefinido[3] = "cayó";
+      overrides.indefinido[6] = "cayeron";
+      if (!overrides.imperfecto_subj) overrides.imperfecto_subj = {};
+      overrides.imperfecto_subj = { stem: "cay-", endings: "impSubj_j" };
+    }
   }
 
   // Compute changed stem (for both stem changes and yo irregulars)
@@ -2446,6 +2454,8 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     if (!overrides.indefinido) overrides.indefinido = {};
     overrides.indefinido[3] = "leyó";
     overrides.indefinido[6] = "leyeron";
+    if (!overrides.imperfecto_subj) overrides.imperfecto_subj = {};
+    overrides.imperfecto_subj = { stem: "ley-", endings: "impSubj_j" };
   }
 
   // 不规则过去分词检测
