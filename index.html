@@ -2805,7 +2805,7 @@ function getVerbExplanation(verbObj, tenseId) {
 
 // ========== 变位练习状态 ==========
 let quizState = {
-  activeTenses: ["presente_ind", "indefinido"], // W1-2: 陈述式现在时 + 简单过去时  W3-4: +imperfecto  W5-6: +futuro  W7-8: +condicional  W9-10: +pres_subj  W11-12: +imp_subj
+  activeTenses: ["presente_ind","indefinido","imperfecto","futuro","condicional","presente_subj","imperfecto_subj","participio"],
   stemFilter: null, // tag filter
   verbFilter: null, // specific verb infinitive, e.g. "hacer"
   showAllVerbs: false, // checkbox to show all verbs in dropdown (default: irregular only)
@@ -3035,7 +3035,6 @@ function nextQuestion() {
 function toggleTense(tenseId) {
   const idx = quizState.activeTenses.indexOf(tenseId);
   if (idx >= 0) {
-    if (quizState.activeTenses.length <= 1) return; // 至少保留一个时态
     quizState.activeTenses.splice(idx, 1);
   } else {
     quizState.activeTenses.push(tenseId);
