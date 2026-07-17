@@ -2925,14 +2925,15 @@ function renderConjugation() {
   const showPool = quizState.showAllVerbs ? pool : (irregPool.length > 0 ? irregPool : pool);
   html += `<div style="font-size:0.6rem;color:var(--text-secondary);margin-top:2px;display:flex;align-items:center;gap:6px;">`;
   html += `<span>${pool.length} 个动词</span>`;
-  html += `<select onchange="setVerbFilter(this.value)" style="font-size:0.65rem;padding:1px 4px;border:1px solid var(--border);border-radius:3px;background:var(--bg);color:var(--text);max-width:120px;">`;
+  // 可搜索的下拉
+  html += `<input type="text" id="verbSearchInput" placeholder="🔍 搜索..." oninput="filterVerbDropdown()" autocomplete="off" style="font-size:0.65rem;padding:1px 4px;border:1px solid var(--border);border-radius:3px;background:var(--bg);color:var(--text);width:80px;">`;
+  html += `<select id="verbSearchSelect" onchange="setVerbFilter(this.value)" style="font-size:0.65rem;padding:1px 4px;border:1px solid var(--border);border-radius:3px;background:var(--bg);color:var(--text);max-width:120px;">`;
   html += `<option value="">— 选动词 —</option>`;
   showPool.forEach(v => {
     const sel = quizState.verbFilter === v.verb ? "selected" : "";
-    html += `<option value="${v.verb}" ${sel}>${v.verb}</option>`;
+    html += `<option value="${v.verb}" data-vname="${v.verb}" ${sel}>${v.verb}</option>`;
   });
   html += `</select>`;
-  // 切换显示全部/仅不规则
   html += `<label style="cursor:pointer;font-size:0.6rem;color:var(--accent);white-space:nowrap;"><input type="checkbox" onchange="quizState.showAllVerbs=this.checked;renderConjugation();" ${quizState.showAllVerbs ? "checked" : ""}> 全部</label>`;
   html += `</div>`;
 
@@ -3057,6 +3058,18 @@ function setVerbFilter(verb) {
   quizState.verbFilter = verb || null;
   generateQuestion();
   renderConjugation();
+}
+
+function filterVerbDropdown() {
+  const input = document.getElementById("verbSearchInput");
+  const select = document.getElementById("verbSearchSelect");
+  if (!input || !select) return;
+  const q = input.value.toLowerCase();
+  for (var i = 0; i < select.options.length; i++) {
+    const opt = select.options[i];
+    if (!opt.value) continue; // placeholder
+    opt.style.display = opt.value.toLowerCase().indexOf(q) >= 0 ? "" : "none";
+  }
 }
 
 function getFilteredVerbPool() {
