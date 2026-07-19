@@ -2431,11 +2431,13 @@ function buildVerbEntry(infinitive, meaning, pattern) {
     overrides.indefinido[6] = yst + "yeron";
   }
 
-  // dar: uses -er/-ir endings in indefinido
+  // dar: uses -er/-ir endings in indefinido + impSubj
   if (parts.includes("dar")) {
     if (!overrides.indefinido) overrides.indefinido = {};
     overrides.indefinido.stem = "d";
     overrides.indefinido.endings = "er";
+    if (!overrides.imperfecto_subj) overrides.imperfecto_subj = {};
+    overrides.imperfecto_subj = { stem: "d", endings: "er" };
   }
 
   // estar: presente_subj has accents
