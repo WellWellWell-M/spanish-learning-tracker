@@ -2376,6 +2376,13 @@ function buildVerbEntry(infinitive, meaning, pattern) {
       const ei2 = is2.endsWith("i") ? "eron" : "ieron";
       overrides.indefinido[3] = is2 + ei1;
       overrides.indefinido[6] = is2 + ei2;
+      // impSubj inherits the same stem change (consiguiera, sintiera, durmiera...)
+      if (!impSubjIrreg) {
+        overrides.imperfecto_subj = {
+          stem: is2,
+          endings: is2.endsWith("i") ? "impSubj_j" : "er"
+        };
+      }
     }
   }
 
