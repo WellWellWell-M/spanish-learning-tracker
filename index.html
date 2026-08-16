@@ -2841,8 +2841,10 @@ function conjugate(verbObj, personId, tenseId) {
 
   // 过去分词：规则形式
   if (tenseId === "participio") {
+    const isPron = verbObj.verb.endsWith("se") && verbObj.verb.length > 4;
+    const inf = isPron ? verbObj.verb.slice(0, -2) : verbObj.verb;
     const modelEnding = verbObj.model;
-    const form = (modelEnding === "ar") ? infinitive.slice(0, -2) + "ado" : infinitive.slice(0, -2) + "ido";
+    const form = (modelEnding === "ar") ? inf.slice(0, -2) + "ado" : inf.slice(0, -2) + "ido";
     return { form: form, explanation: null };
   }
 
