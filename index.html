@@ -2168,25 +2168,33 @@ function dailyReport() {
     report += `\n`;
   }
 
-  // 冠词练习
-  const articleErrs = loadArticleErrors();
-  if (articleErrs.total > 0) {
-    const acc = articleErrs.correct || 0;
-    const atot = articleErrs.total || 0;
-    const awrong = Object.keys(articleErrs.wrong || {}).filter(i => (articleErrs.wrong[i] || 0) > 0).length;
-    report += `## 📝 今日冠词练习 (${atot}题 · ✅${acc} · ❌${atot - acc})\n`;
-    report += `  累计待巩固 ${awrong} 道\n`;
+  // 冠词练习（当天日志明细）
+  const articleLog = getTodayArticleLog(dk);
+  if (articleLog.length > 0) {
+    const aErr = articleLog.filter(e => !e.isCorrect).length;
+    report += `## 📝 今日冠词练习 (${articleLog.length}题 · ✅${articleLog.length - aErr} · ❌${aErr})\n`;
+    articleLog.forEach(e => {
+      const mark = e.isCorrect ? "✅" : "❌";
+      report += `- ${mark} ${e.question}\n`;
+      if (!e.isCorrect) {
+        report += `  你填：${e.userAnswer} → 正确：${e.correct}\n`;
+      }
+    });
     report += `\n`;
   }
 
-  // 介词练习
-  const prepErrs = loadPrepErrors();
-  if (prepErrs.total > 0) {
-    const pacc = prepErrs.correct || 0;
-    const ptot = prepErrs.total || 0;
-    const pwrong = Object.keys(prepErrs.wrong || {}).filter(i => (prepErrs.wrong[i] || 0) > 0).length;
-    report += `## 🔗 今日介词练习 (${ptot}题 · ✅${pacc} · ❌${ptot - pacc})\n`;
-    report += `  累计待巩固 ${pwrong} 道\n`;
+  // 介词练习（当天日志明细）
+  const prepLog = getTodayPrepLog(dk);
+  if (prepLog.length > 0) {
+    const pErr = prepLog.filter(e => !e.isCorrect).length;
+    report += `## 🔗 今日介词练习 (${prepLog.length}题 · ✅${prepLog.length - pErr} · ❌${pErr})\n`;
+    prepLog.forEach(e => {
+      const mark = e.isCorrect ? "✅" : "❌";
+      report += `- ${mark} ${e.verb} (${e.meaning}) → ${e.correct}\n`;
+      if (!e.isCorrect) {
+        report += `  你填：${e.userAnswer}\n`;
+      }
+    });
     report += `\n`;
   }
 
@@ -3343,12 +3351,24 @@ const ARTICLE_QUESTIONS = [
 const ARTICLE_KEY = "spanish_article_errors";
 
 function loadArticleErrors() {
-  try { const raw = localStorage.getItem(ARTICLE_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0 }; }
-  catch (e) { return { wrong: {}, total: 0, correct: 0 }; }
+  try { const raw = localStorage.getItem(ARTICLE_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0, log: {} }; }
+  catch (e) { return { wrong: {}, total: 0, correct: 0, log: {} }; }
 }
 function saveArticleErrors(data) {
   try { localStorage.setItem(ARTICLE_KEY, JSON.stringify(data)); }
   catch (e) {}
+}
+function getTodayArticleLog(dk) {
+  const data = loadArticleErrors();
+  return (data.log || {})[dk || todayKey()] || [];
+}
+function saveArticleLog(entry) {
+  const data = loadArticleErrors();
+  if (!data.log) data.log = {};
+  const dk = todayKey();
+  if (!data.log[dk]) data.log[dk] = [];
+  data.log[dk].push(entry);
+  saveArticleErrors(data);
 }
 
 let articleState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], levelFilter: 0 };
@@ -3506,6 +3526,14 @@ function articleCheck() {
   }
   saveArticleErrors(errs);
 
+  // 记录每日日志（题目 + 答案 + 对错）
+  saveArticleLog({
+    question: q.s.replace("__", "____"),
+    correct: q.a === "0" ? "0（零冠词）" : q.a,
+    userAnswer: articleState.lastAnswer,
+    isCorrect: isCorrect
+  });
+
   renderArticle();
 }
 
@@ -3605,12 +3633,24 @@ const PREP_QUESTIONS = [
 const PREP_KEY = "spanish_prep_errors";
 
 function loadPrepErrors() {
-  try { const raw = localStorage.getItem(PREP_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0 }; }
-  catch (e) { return { wrong: {}, total: 0, correct: 0 }; }
+  try { const raw = localStorage.getItem(PREP_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0, log: {} }; }
+  catch (e) { return { wrong: {}, total: 0, correct: 0, log: {} }; }
 }
 function savePrepErrors(data) {
   try { localStorage.setItem(PREP_KEY, JSON.stringify(data)); }
   catch (e) {}
+}
+function getTodayPrepLog(dk) {
+  const data = loadPrepErrors();
+  return (data.log || {})[dk || todayKey()] || [];
+}
+function savePrepLog(entry) {
+  const data = loadPrepErrors();
+  if (!data.log) data.log = {};
+  const dk = todayKey();
+  if (!data.log[dk]) data.log[dk] = [];
+  data.log[dk].push(entry);
+  savePrepErrors(data);
 }
 
 let prepState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], prepFilter: "" };
@@ -3753,6 +3793,15 @@ function prepCheck() {
     errs.wrong[qi] = PREP_MASTER_AT;
   }
   savePrepErrors(errs);
+
+  // 记录每日日志
+  savePrepLog({
+    verb: q.v,
+    meaning: q.m,
+    correct: q.p,
+    userAnswer: prepState.lastAnswer,
+    isCorrect: isCorrect
+  });
 
   renderPrep();
 }
