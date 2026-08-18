@@ -1051,6 +1051,7 @@
         <button class="btn" data-view="conjugation" onclick="switchView('conjugation')">🔤 变位练习</button>
         <button class="btn" data-view="article" onclick="switchView('article')">📝 冠词练习</button>
         <button class="btn" data-view="prep" onclick="switchView('prep')">🔗 介词练习</button>
+        <button class="btn" data-view="verbid" onclick="switchView('verbid')">🎭 动词身份</button>
         <button class="btn" data-view="journal" onclick="switchView('journal')">📓 学习笔记</button>
         <button class="btn" data-view="summary" onclick="switchView('summary')">📊 学习汇总</button>
         <button class="btn" data-view="vocab" onclick="switchView('vocab')">📝 遗忘词练</button>
@@ -1092,6 +1093,10 @@
 
       <div id="viewPrep" style="display:none;">
         <div class="quiz-container" id="prepContainer"></div>
+      </div>
+
+      <div id="viewVerbId" style="display:none;">
+        <div class="quiz-container" id="verbIdContainer"></div>
       </div>
 
       <div id="viewJournal" style="display:none;">
@@ -2008,6 +2013,7 @@ function renderAll() {
   renderConjugation();
   renderArticle();
   renderPrep();
+  renderVerbId();
   renderJournal();
   renderSummary();
   renderVocab();
@@ -2026,6 +2032,7 @@ function updateView() {
   document.getElementById("viewConjugation").style.display = currentView === "conjugation" ? "block" : "none";
   document.getElementById("viewArticle").style.display = currentView === "article" ? "block" : "none";
   document.getElementById("viewPrep").style.display = currentView === "prep" ? "block" : "none";
+  document.getElementById("viewVerbId").style.display = currentView === "verbid" ? "block" : "none";
   document.getElementById("viewJournal").style.display = currentView === "journal" ? "block" : "none";
   document.getElementById("viewSummary").style.display = currentView === "summary" ? "block" : "none";
   document.getElementById("viewVocab").style.display = currentView === "vocab" ? "block" : "none";
@@ -2191,6 +2198,22 @@ function dailyReport() {
     prepLog.forEach(e => {
       const mark = e.isCorrect ? "✅" : "❌";
       report += `- ${mark} ${e.verb} (${e.meaning}) → ${e.correct}\n`;
+      if (!e.isCorrect) {
+        report += `  你填：${e.userAnswer}\n`;
+      }
+    });
+    report += `\n`;
+  }
+
+  // 动词身份练习
+  const verbIdLog = getTodayVerbIdLog(dk);
+  if (verbIdLog.length > 0) {
+    const vErr = verbIdLog.filter(e => !e.isCorrect).length;
+    report += `## 🎭 今日动词身份练习 (${verbIdLog.length}题 · ✅${verbIdLog.length - vErr} · ❌${vErr})\n`;
+    verbIdLog.forEach(e => {
+      const mark = e.isCorrect ? "✅" : "❌";
+      const typeLabel = e.type === "pronominal" ? "代动词" : "gustar式";
+      report += `- ${mark} ${e.verb} (${e.meaning}) [${typeLabel}] → ${e.correct}\n`;
       if (!e.isCorrect) {
         report += `  你填：${e.userAnswer}\n`;
       }
@@ -3816,6 +3839,261 @@ function prepNext() {
   renderPrep();
 }
 
+// ========== 动词身份练习（代动词判断 + gustar式）==========
+// 题型1：代动词判断——这个动词带不带 se？
+// 题型2：gustar式——人用 me/te/le 还是主语
+
+const VERB_ID_QUESTIONS = [
+  // === 代动词判断（pronominal: true=需要se, false=不需要）===
+  { type: "pronominal", verb: "quejarse", meaning: "抱怨", pronominal: true, r: "quejar（使抱怨）是及物，quejarse de（自己抱怨）必须带 se" },
+  { type: "pronominal", verb: "enojarse", meaning: "生气", pronominal: true, r: "enojar=使生气（及物），enojarse=自己生气，带 se" },
+  { type: "pronominal", verb: "asustarse", meaning: "害怕", pronominal: true, r: "asustar=吓（及物），asustarse=自己害怕，带 se" },
+  { type: "pronominal", verb: "preocuparse", meaning: "担心", pronominal: true, r: "preocupar=使担心，preocuparse=自己担心，带 se" },
+  { type: "pronominal", verb: "aburrirse", meaning: "无聊", pronominal: true, r: "aburrir=使无聊，aburrirse=自己无聊，带 se" },
+  { type: "pronominal", verb: "enamorarse", meaning: "爱上", pronominal: true, r: "enamorar=使爱上，enamorarse=自己爱上，带 se" },
+  { type: "pronominal", verb: "casarse", meaning: "结婚", pronominal: true, r: "casar=主持婚礼，casarse=自己结婚，带 se" },
+  { type: "pronominal", verb: "arrepentirse", meaning: "后悔", pronominal: true, r: "arrepentir 不带 se 几乎不用，必须 arrepentirse" },
+  { type: "pronominal", verb: "acostumbrarse", meaning: "习惯", pronominal: true, r: "acostumbrar=使习惯，acostumbrarse=自己习惯，带 se" },
+  { type: "pronominal", verb: "caerse", meaning: "掉下", pronominal: true, r: "caer=落下（自然），caerse=意外掉落，带 se 表'非自愿'" },
+  { type: "pronominal", verb: "romperse", meaning: "破碎", pronominal: true, r: "romper=打碎（及物），romperse=自己碎，带 se" },
+  { type: "pronominal", verb: "perderse", meaning: "丢失、迷路", pronominal: true, r: "perder=丢失（及物），perderse=自己迷路，带 se" },
+  { type: "pronominal", verb: "despertarse", meaning: "醒来", pronominal: true, r: "despertar=叫醒（及物），despertarse=自己醒，带 se" },
+  { type: "pronominal", verb: "levantarse", meaning: "起床", pronominal: true, r: "levantar=抬起（及物），levantarse=自己起身，带 se" },
+  { type: "pronominal", verb: "quedarse", meaning: "留下", pronominal: true, r: "quedar=位于/剩下，quedarse=自己留下，带 se 意思变" },
+  { type: "pronominal", verb: "darse cuenta", meaning: "意识到", pronominal: true, r: "dar=给，darse cuenta de=意识到，固定代动词，带 se" },
+  { type: "pronominal", verb: "enterarse", meaning: "得知", pronominal: true, r: "enterar=告知（及物），enterarse de=自己得知，带 se" },
+  { type: "pronominal", verb: "olvidarse", meaning: "忘记", pronominal: true, r: "olvidar=忘记（及物），olvidarse de=自己忘记，带 se" },
+  { type: "pronominal", verb: "acordarse", meaning: "记得", pronominal: true, r: "acordar=同意，acordarse de=记得，带 se 意思完全变" },
+  { type: "pronominal", verb: "irse", meaning: "离开", pronominal: true, r: "ir=去，irse=离开，带 se 意思变（去→离开）" },
+  { type: "pronominal", verb: "dedicarse", meaning: "从事", pronominal: true, r: "dedicar=奉献（及物），dedicarse a=自己从事，带 se" },
+  { type: "pronominal", verb: "negarse", meaning: "拒绝", pronominal: true, r: "negar=否认（及物），negarse a=拒绝，带 se 意思变" },
+  { type: "pronominal", verb: "convertirse", meaning: "变成", pronominal: true, r: "convertir=使变成（及物），convertirse en=自己变成，带 se" },
+  { type: "pronominal", verb: "fijarse", meaning: "注意", pronominal: true, r: "fijar=固定（及物），fijarse en=注意，带 se 意思变" },
+
+  // === 非代动词（干扰项，不该带 se）===
+  { type: "pronominal", verb: "hablar", meaning: "说话", pronominal: false, r: "hablar 是普通及物/不及物动词，不带 se" },
+  { type: "pronominal", verb: "comer", meaning: "吃", pronominal: false, r: "comer 普通动词，不带 se" },
+  { type: "pronominal", verb: "trabajar", meaning: "工作", pronominal: false, r: "trabajar 普通动词，不带 se" },
+  { type: "pronominal", verb: "estudiar", meaning: "学习", pronominal: false, r: "estudiar 普通动词，不带 se" },
+  { type: "pronominal", verb: "vivir", meaning: "居住", pronominal: false, r: "vivir 普通动词，不带 se" },
+  { type: "pronominal", verb: "correr", meaning: "跑", pronominal: false, r: "correr 普通动词，不带 se" },
+  { type: "pronominal", verb: "extrañar", meaning: "想念（拉美）", pronominal: false, r: "extrañar 是普通及物动词（Te extraño），不是代动词，别写成 extrañarse" },
+  { type: "pronominal", verb: "fascinar", meaning: "使着迷", pronominal: false, r: "fascinar 是 gustar 式（Me fascina），不是代动词，不带 se" },
+  { type: "pronominal", verb: "interesar", meaning: "使感兴趣", pronominal: false, r: "interesar 是 gustar 式（Me interesa），不是代动词" },
+
+  // === gustar 式填空 ===
+  { type: "gustar", verb: "gustar", meaning: "喜欢", example: "____ gusta el café（我）", answer: "me", r: "gustar 是 gustar 式：主语是 el café，人是间接宾语 me" },
+  { type: "gustar", verb: "encantar", meaning: "超喜欢", example: "____ encanta leer（我）", answer: "me", r: "encantar 是 gustar 式，人用 me" },
+  { type: "gustar", verb: "fascinar", meaning: "着迷", example: "____ fascina la música（他）", answer: "le", r: "fascinar 是 gustar 式，'他'用 le" },
+  { type: "gustar", verb: "interesar", meaning: "感兴趣", example: "¿____ interesa?（你）", answer: "te", r: "interesar 是 gustar 式，'你'用 te" },
+  { type: "gustar", verb: "importar", meaning: "在乎", example: "No ____ importa（我）", answer: "me", r: "importar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "molestar", meaning: "烦", example: "____ molesta el ruido（我）", answer: "me", r: "molestar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "parecer", meaning: "觉得", example: "____ parece bien（我）", answer: "me", r: "parecer 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "doler", meaning: "疼", example: "____ duele la cabeza（我）", answer: "me", r: "doler 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "quedar", meaning: "剩/合身", example: "____ quedan dos（我）", answer: "me", r: "quedar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "faltar", meaning: "缺", example: "____ falta tiempo（我）", answer: "me", r: "faltar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "sobrar", meaning: "多余", example: "____ sobra dinero（我）", answer: "me", r: "sobrar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "costar", meaning: "费劲", example: "____ cuesta entender（我）", answer: "me", r: "costar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "preocupar", meaning: "担心", example: "____ preocupa el futuro（我）", answer: "me", r: "preocupar 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "caer bien", meaning: "觉得某人好", example: "____ cae bien（我）", answer: "me", r: "caer bien/mal 是 gustar 式，'我'用 me" },
+  { type: "gustar", verb: "resultar", meaning: "觉得", example: "____ resulta difícil（我）", answer: "me", r: "resultar 是 gustar 式，'我'用 me" },
+];
+
+const VERB_ID_KEY = "spanish_verb_id_errors";
+
+function loadVerbIdErrors() {
+  try { const raw = localStorage.getItem(VERB_ID_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0, log: {} }; }
+  catch (e) { return { wrong: {}, total: 0, correct: 0, log: {} }; }
+}
+function saveVerbIdErrors(data) {
+  try { localStorage.setItem(VERB_ID_KEY, JSON.stringify(data)); }
+  catch (e) {}
+}
+function getTodayVerbIdLog(dk) {
+  const data = loadVerbIdErrors();
+  return (data.log || {})[dk || todayKey()] || [];
+}
+function saveVerbIdLog(entry) {
+  const data = loadVerbIdErrors();
+  if (!data.log) data.log = {};
+  const dk = todayKey();
+  if (!data.log[dk]) data.log[dk] = [];
+  data.log[dk].push(entry);
+  saveVerbIdErrors(data);
+}
+
+let verbIdState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], typeFilter: "" };
+const VERB_ID_MASTER_AT = 3;
+
+function verbIdInit() {
+  verbIdState.index = 0;
+  verbIdState.answered = false;
+  verbIdState.order = verbIdBuildOrder();
+}
+
+function verbIdBuildOrder() {
+  const errs = loadVerbIdErrors();
+  const tf = verbIdState.typeFilter || "";
+
+  let candidates = VERB_ID_QUESTIONS.map((_, i) => i);
+  if (tf) {
+    candidates = candidates.filter(i => VERB_ID_QUESTIONS[i].type === tf);
+  }
+
+  const wrongIdx = candidates.filter(i => (errs.wrong[i] || 0) > 0);
+  const freshIdx = candidates.filter(i => !(errs.wrong[i] || 0));
+  wrongIdx.sort((a, b) => (errs.wrong[b] || 0) - (errs.wrong[a] || 0));
+  for (let i = freshIdx.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [freshIdx[i], freshIdx[j]] = [freshIdx[j], freshIdx[i]];
+  }
+  return [...wrongIdx, ...freshIdx];
+}
+
+function renderVerbId() {
+  const container = document.getElementById("verbIdContainer");
+  if (!verbIdState.order || verbIdState.order.length === 0) verbIdInit();
+
+  const errs = loadVerbIdErrors();
+  const types = [
+    { id: "", label: "全部" },
+    { id: "pronominal", label: "代动词" },
+    { id: "gustar", label: "gustar式" },
+  ];
+
+  let bar = `<div class="tense-selector" style="margin-bottom:12px;">`;
+  bar += `<span style="font-size:0.7rem;color:var(--text-secondary);margin-right:4px;">题型</span>`;
+  types.forEach(t => {
+    const active = verbIdState.typeFilter === t.id;
+    bar += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="verbIdSetFilter('${t.id}')" style="font-size:0.72rem;padding:2px 8px;">${t.label === "" ? "全部" : t.label}</button>`;
+  });
+  bar += `</div>`;
+
+  if (verbIdState.index >= verbIdState.order.length) {
+    const wrongLeft = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+    container.innerHTML = `
+      ${bar}
+      <div class="quiz-score-bar">
+        <span>🎉 本轮完成！</span>
+        <span>✅ 正确率 ${errs.total > 0 ? Math.round(errs.correct / errs.total * 100) : 0}%</span>
+      </div>
+      <div class="quiz-prompt">
+        <div class="verb-word">本轮 ${verbIdState.order.length} 题全部完成</div>
+        <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固</div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn primary" onclick="verbIdInit();renderVerbId();">🔁 再练一轮</button>
+      </div>`;
+    return;
+  }
+
+  const q = VERB_ID_QUESTIONS[verbIdState.order[verbIdState.index]];
+  const wrongCount = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+
+  let prompt = "";
+  let placeholder = "";
+  let correctAnswer = "";
+
+  if (q.type === "pronominal") {
+    prompt = `"${q.verb}"（${q.meaning}）是代动词吗？`;
+    placeholder = "填 sí / no";
+    correctAnswer = q.pronominal ? "sí" : "no";
+  } else {
+    prompt = `${q.example}`;
+    placeholder = "填 me / te / le / nos / les";
+    correctAnswer = q.answer;
+  }
+
+  let html = bar;
+  html += `<div class="quiz-score-bar">
+    <span>📝 第 ${verbIdState.index + 1} / ${verbIdState.order.length} 题</span>
+    <span>❌ 待巩固 ${wrongCount} 题</span>
+  </div>`;
+
+  html += `<div class="quiz-prompt">
+    <div class="verb-word" style="font-size:1.2rem;">${prompt}</div>
+  </div>`;
+
+  html += `<div class="quiz-input-row">
+    <input type="text" id="verbIdInput" placeholder="${placeholder}" autocomplete="off"
+      ${verbIdState.answered ? "disabled" : ""}
+      onkeydown="if(event.key==='Enter'){event.preventDefault();${verbIdState.answered ? "verbIdNext()" : "verbIdCheck()"};}">
+    ${verbIdState.answered
+      ? `<button class="quiz-next-btn" onclick="verbIdNext()">下一题 →</button>`
+      : `<button class="quiz-submit" onclick="verbIdCheck()">检查</button>`}
+  </div>`;
+
+  if (verbIdState.answered) {
+    if (verbIdState.lastCorrect) {
+      html += `<div class="quiz-feedback show correct-ans">
+        ✅ 正确！<span class="correct-form">${correctAnswer}</span>
+        <div class="explanation">${q.r}</div>
+      </div>`;
+    } else {
+      html += `<div class="quiz-feedback show wrong-ans">
+        ❌ 你填的是「<strong>${verbIdState.lastAnswer}</strong>」，正确答案是「<strong>${correctAnswer}</strong>」
+        <div class="explanation">${q.r}</div>
+      </div>`;
+    }
+  }
+
+  container.innerHTML = html;
+  if (!verbIdState.answered) document.getElementById("verbIdInput").focus();
+}
+
+function verbIdSetFilter(type) {
+  verbIdState.typeFilter = type;
+  verbIdInit();
+  renderVerbId();
+}
+
+function verbIdCheck() {
+  if (verbIdState.answered) return;
+  const input = document.getElementById("verbIdInput");
+  const userAnswer = input.value.trim().toLowerCase();
+  const q = VERB_ID_QUESTIONS[verbIdState.order[verbIdState.index]];
+  const correct = q.type === "pronominal" ? (q.pronominal ? "sí" : "no") : q.answer;
+
+  const isCorrect = userAnswer === correct;
+  verbIdState.answered = true;
+  verbIdState.lastCorrect = isCorrect;
+  verbIdState.lastAnswer = userAnswer;
+
+  const errs = loadVerbIdErrors();
+  errs.total = (errs.total || 0) + 1;
+  const qi = verbIdState.order[verbIdState.index];
+
+  if (isCorrect) {
+    errs.correct = (errs.correct || 0) + 1;
+    if (errs.wrong[qi] && errs.wrong[qi] > 0) {
+      errs.wrong[qi]--;
+      if (errs.wrong[qi] <= 0) delete errs.wrong[qi];
+    }
+  } else {
+    errs.wrong[qi] = VERB_ID_MASTER_AT;
+  }
+  saveVerbIdErrors(errs);
+
+  saveVerbIdLog({
+    type: q.type,
+    verb: q.verb,
+    meaning: q.meaning,
+    correct: correct,
+    userAnswer: verbIdState.lastAnswer,
+    isCorrect: isCorrect
+  });
+
+  renderVerbId();
+}
+
+function verbIdNext() {
+  verbIdState.index++;
+  verbIdState.answered = false;
+  verbIdState.lastCorrect = false;
+  verbIdState.lastAnswer = "";
+  renderVerbId();
+}
+
 // ========== 学习笔记（多条目版）==========
 const JOURNAL_KEY = "spanish_journal_v2";
 const TAG_LABELS = { ganho: "🌟 收获", xinde: "💡 心得", jiucuo: "🔧 纠错", qita: "📌 其他" };
@@ -4613,7 +4891,8 @@ const ALL_DATA_KEYS = [
   "spanish_conj_log",
   "spanish_vocab_practice",
   "spanish_article_errors",
-  "spanish_prep_errors"
+  "spanish_prep_errors",
+  "spanish_verb_id_errors"
 ];
 
 function exportAllData() {
@@ -4694,6 +4973,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "v") switchView("vocab");
   if (e.key === "g") switchView("article");
   if (e.key === "k") switchView("prep");
+  if (e.key === "m") switchView("verbid");
 });
 
 // ========== 初始化 ==========
