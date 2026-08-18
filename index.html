@@ -1050,6 +1050,7 @@
         <button class="btn" data-view="progress" onclick="switchView('progress')">📊 总览</button>
         <button class="btn" data-view="conjugation" onclick="switchView('conjugation')">🔤 变位练习</button>
         <button class="btn" data-view="article" onclick="switchView('article')">📝 冠词练习</button>
+        <button class="btn" data-view="prep" onclick="switchView('prep')">🔗 介词练习</button>
         <button class="btn" data-view="journal" onclick="switchView('journal')">📓 学习笔记</button>
         <button class="btn" data-view="summary" onclick="switchView('summary')">📊 学习汇总</button>
         <button class="btn" data-view="vocab" onclick="switchView('vocab')">📝 遗忘词练</button>
@@ -1087,6 +1088,10 @@
 
       <div id="viewArticle" style="display:none;">
         <div class="quiz-container" id="articleContainer"></div>
+      </div>
+
+      <div id="viewPrep" style="display:none;">
+        <div class="quiz-container" id="prepContainer"></div>
       </div>
 
       <div id="viewJournal" style="display:none;">
@@ -2002,6 +2007,7 @@ function renderAll() {
   renderProgress();
   renderConjugation();
   renderArticle();
+  renderPrep();
   renderJournal();
   renderSummary();
   renderVocab();
@@ -2019,6 +2025,7 @@ function updateView() {
   document.getElementById("viewProgress").style.display = currentView === "progress" ? "block" : "none";
   document.getElementById("viewConjugation").style.display = currentView === "conjugation" ? "block" : "none";
   document.getElementById("viewArticle").style.display = currentView === "article" ? "block" : "none";
+  document.getElementById("viewPrep").style.display = currentView === "prep" ? "block" : "none";
   document.getElementById("viewJournal").style.display = currentView === "journal" ? "block" : "none";
   document.getElementById("viewSummary").style.display = currentView === "summary" ? "block" : "none";
   document.getElementById("viewVocab").style.display = currentView === "vocab" ? "block" : "none";
@@ -3488,6 +3495,254 @@ function articleNext() {
   renderArticle();
 }
 
+// ========== 介词练习 ==========
+// 题库：动词+介词搭配，prep 是正确介词，r 是语义逻辑解释
+const PREP_QUESTIONS = [
+  // de 家族
+  { v: "carecer", m: "缺乏", p: "de", e: "carecer de algo（缺乏某物）—— de 表'缺的是什么'" },
+  { v: "depender", m: "取决于", p: "de", e: "depender de（取决于）—— de 表'依赖的对象'" },
+  { v: "prescindir", m: "不需要", p: "de", e: "prescindir de（不需要）—— de 表'去掉的东西'" },
+  { v: "constar", m: "由…组成", p: "de", e: "constar de（由…组成）—— de 表'构成的成分'" },
+  { v: "tratarse", m: "是关于", p: "de", e: "tratarse de（是关于）—— de 表'谈论的主题'" },
+  { v: "quejarse", m: "抱怨", p: "de", e: "quejarse de（抱怨）—— de 表'抱怨的对象'" },
+  { v: "alegrarse", m: "高兴", p: "de", e: "alegrarse de（高兴）—— de 表'高兴的原因'" },
+  { v: "acordarse", m: "记得", p: "de", e: "acordarse de（记得）—— de 表'记得的内容'" },
+  { v: "olvidarse", m: "忘记", p: "de", e: "olvidarse de（忘记）—— de 表'忘记的事情'" },
+  { v: "enterarse", m: "得知", p: "de", e: "enterarse de（得知）—— de 表'得知的消息'" },
+  { v: "darse cuenta", m: "意识到", p: "de", e: "darse cuenta de（意识到）—— de 表'意识到的事'" },
+  { v: "enamorarse", m: "爱上", p: "de", e: "enamorarse de（爱上）—— de 表'爱上的对象'" },
+  { v: "arrepentirse", m: "后悔", p: "de", e: "arrepentirse de（后悔）—— de 表'后悔的事'" },
+  { v: "burlarse", m: "嘲笑", p: "de", e: "burlarse de（嘲笑）—— de 表'嘲笑的对象'" },
+  { v: "despedirse", m: "告别", p: "de", e: "despedirse de（告别）—— de 表'告别的对象'" },
+  { v: "fiarse", m: "信任", p: "de", e: "fiarse de（信任）—— de 表'信任的对象'" },
+  { v: "ocuparse", m: "负责", p: "de", e: "ocuparse de（负责）—— de 表'负责的事'" },
+  { v: "tratar", m: "试图", p: "de", e: "tratar de（试图）—— de 后接原形，表'尝试做的事'" },
+  { v: "acabar", m: "刚刚", p: "de", e: "acabar de（刚刚）—— de 后接原形，表'刚做完的事'" },
+  { v: "dejar", m: "停止", p: "de", e: "dejar de（停止）—— de 后接原形，表'停止做的事'" },
+  { v: "terminar", m: "做完", p: "de", e: "terminar de（做完）—— de 后接原形，表'完成的事'" },
+
+  // a 家族
+  { v: "empezar", m: "开始", p: "a", e: "empezar a（开始）—— a 后接原形，表'开始做的事'" },
+  { v: "comenzar", m: "开始", p: "a", e: "comenzar a（开始）—— a 后接原形" },
+  { v: "aprender", m: "学会", p: "a", e: "aprender a（学会）—— a 后接原形，表'学会做的事'" },
+  { v: "enseñar", m: "教", p: "a", e: "enseñar a（教）—— a 后接原形，表'教做的事'" },
+  { v: "ayudar", m: "帮助", p: "a", e: "ayudar a（帮助）—— a 后接原形，表'帮助做的事'" },
+  { v: "atreverse", m: "敢于", p: "a", e: "atreverse a（敢于）—— a 后接原形，表'敢做的事'" },
+  { v: "animarse", m: "鼓起勇气", p: "a", e: "animarse a（鼓起勇气）—— a 后接原形" },
+  { v: "negarse", m: "拒绝", p: "a", e: "negarse a（拒绝）—— a 后接原形，表'拒绝做的事'" },
+  { v: "acostumbrarse", m: "习惯", p: "a", e: "acostumbrarse a（习惯）—— a 表'适应的对象'" },
+  { v: "adaptarse", m: "适应", p: "a", e: "adaptarse a（适应）—— a 表'适应的对象'" },
+  { v: "dedicarse", m: "从事", p: "a", e: "dedicarse a（从事）—— a 表'投入的领域'" },
+  { v: "someterse", m: "屈服", p: "a", e: "someterse a（屈服）—— a 表'屈服的对象'" },
+  { v: "atenerse", m: "遵守", p: "a", e: "atenerse a（遵守）—— a 表'遵守的规则'" },
+  { v: "ceñirse", m: "局限于", p: "a", e: "ceñirse a（局限于）—— a 表'限定的范围'" },
+  { v: "referirse", m: "指的是", p: "a", e: "referirse a（指的是）—— a 表'指代的对象'" },
+  { v: "dirigirse", m: "走向、对…说", p: "a", e: "dirigirse a（走向/对…说）—— a 表'朝向的对象'" },
+  { v: "volver", m: "再次", p: "a", e: "volver a（再次）—— a 后接原形，表'再次做的事'" },
+  { v: "llegar", m: "达到、终于", p: "a", e: "llegar a（终于/达到）—— a 后接原形，表'最终做到的事'" },
+  { v: "contribuir", m: "促成", p: "a", e: "contribuir a（促成）—— a 表'促成的结果'" },
+
+  // en 家族
+  { v: "pensar", m: "想、考虑", p: "en", e: "pensar en（想/考虑）—— en 表'思维停留的对象'" },
+  { v: "confiar", m: "信任", p: "en", e: "confiar en（信任）—— en 表'信任的对象'" },
+  { v: "insistir", m: "坚持", p: "en", e: "insistir en（坚持）—— en 表'坚持的事'" },
+  { v: "empeñarse", m: "执意", p: "en", e: "empeñarse en（执意）—— en 表'执意做的事'" },
+  { v: "esforzarse", m: "努力", p: "en", e: "esforzarse en/por（努力）—— en/por 都可，表'努力的方向'" },
+  { v: "consistir", m: "在于", p: "en", e: "consistir en（在于）—— en 表'本质所在'" },
+  { v: "quedar", m: "约定", p: "en", e: "quedar en（约定）—— en 表'约定的内容'" },
+  { v: "tardar", m: "花时间", p: "en", e: "tardar en（花时间）—— en 后接原形，表'耗时做的事'" },
+  { v: "convertirse", m: "变成", p: "en", e: "convertirse en（变成）—— en 表'变成后的状态'" },
+  { v: "fijarse", m: "注意", p: "en", e: "fijarse en（注意）—— en 表'注意的对象'" },
+  { v: "especializarse", m: "专攻", p: "en", e: "especializarse en（专攻）—— en 表'专攻的领域'" },
+  { v: "participar", m: "参加", p: "en", e: "participar en（参加）—— en 表'参加的活动'" },
+  { v: "creer", m: "相信", p: "en", e: "creer en（相信）—— en 表'信仰/信任的对象'" },
+
+  // con 家族
+  { v: "contar", m: "拥有、指望", p: "con", e: "contar con（拥有/指望）—— con 表'拥有或依靠的东西'" },
+  { v: "soñar", m: "梦见、梦想", p: "con", e: "soñar con（梦见/梦想）—— con 表'梦到的内容'" },
+  { v: "casarse", m: "和…结婚", p: "con", e: "casarse con（和…结婚）—— con 表'结合的对象'" },
+  { v: "quedarse", m: "留下、保留", p: "con", e: "quedarse con（留下/保留）—— con 表'保留的东西'" },
+  { v: "conformarse", m: "满足于", p: "con", e: "conformarse con（满足于）—— con 表'满足的对象'" },
+  { v: "relacionarse", m: "与…相关", p: "con", e: "relacionarse con（与…相关）—— con 表'关联的对象'" },
+  { v: "contentarse", m: "满足于", p: "con", e: "contentarse con（满足于）—— con 表'满足的对象'" },
+  { v: "enfadarse", m: "和…生气", p: "con", e: "enfadarse con（和…生气）—— con 表'生气的对象'" },
+  { v: "comparar", m: "与…比较", p: "con", e: "comparar con（与…比较）—— con 表'比较的对象'" },
+  { v: "encontrarse", m: "遇见", p: "con", e: "encontrarse con（遇见）—— con 表'遇到的人'" },
+
+  // por 家族
+  { v: "preocuparse", m: "担心", p: "por", e: "preocuparse por（担心）—— por 表'担心的对象'" },
+  { v: "esforzarse", m: "努力", p: "por", e: "esforzarse por（努力）—— por 表'努力的目标'" },
+  { v: "interesarse", m: "对…感兴趣", p: "por", e: "interesarse por（对…感兴趣）—— por 表'感兴趣的对象'" },
+  { v: "preguntar", m: "打听、问起", p: "por", e: "preguntar por（打听）—— por 表'打听的对象'" },
+  { v: "luchar", m: "为…奋斗", p: "por", e: "luchar por（为…奋斗）—— por 表'奋斗的目标'" },
+  { v: "decidirse", m: "决定选", p: "por", e: "decidirse por（决定选）—— por 表'选择的方向'" },
+  { v: "optar", m: "选择", p: "por", e: "optar por（选择）—— por 表'选择的选项'" },
+  { v: "agradecer", m: "感谢", p: "por", e: "agradecer por（感谢）—— por 表'感谢的原因'" },
+];
+
+const PREP_KEY = "spanish_prep_errors";
+
+function loadPrepErrors() {
+  try { const raw = localStorage.getItem(PREP_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0 }; }
+  catch (e) { return { wrong: {}, total: 0, correct: 0 }; }
+}
+function savePrepErrors(data) {
+  try { localStorage.setItem(PREP_KEY, JSON.stringify(data)); }
+  catch (e) {}
+}
+
+let prepState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], prepFilter: "" };
+const PREP_MASTER_AT = 3;
+
+function prepInit() {
+  prepState.index = 0;
+  prepState.answered = false;
+  prepState.order = prepBuildOrder();
+}
+
+function prepBuildOrder() {
+  const errs = loadPrepErrors();
+  const pf = prepState.prepFilter || "";
+
+  let candidates = PREP_QUESTIONS.map((_, i) => i);
+  if (pf) {
+    candidates = candidates.filter(i => PREP_QUESTIONS[i].p === pf);
+  }
+
+  const wrongIdx = candidates.filter(i => (errs.wrong[i] || 0) > 0);
+  const freshIdx = candidates.filter(i => !(errs.wrong[i] || 0));
+  wrongIdx.sort((a, b) => (errs.wrong[b] || 0) - (errs.wrong[a] || 0));
+  for (let i = freshIdx.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [freshIdx[i], freshIdx[j]] = [freshIdx[j], freshIdx[i]];
+  }
+  return [...wrongIdx, ...freshIdx];
+}
+
+function renderPrep() {
+  const container = document.getElementById("prepContainer");
+  if (!prepState.order || prepState.order.length === 0) prepInit();
+
+  const errs = loadPrepErrors();
+  const preps = [
+    { id: "", label: "全部" },
+    { id: "de", label: "de" },
+    { id: "a", label: "a" },
+    { id: "en", label: "en" },
+    { id: "con", label: "con" },
+    { id: "por", label: "por" },
+  ];
+
+  let bar = `<div class="tense-selector" style="margin-bottom:12px;">`;
+  bar += `<span style="font-size:0.7rem;color:var(--text-secondary);margin-right:4px;">介词</span>`;
+  preps.forEach(pp => {
+    const active = prepState.prepFilter === pp.id;
+    bar += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="prepSetFilter('${pp.id}')" style="font-size:0.72rem;padding:2px 8px;">${pp.label === "" ? "全部" : pp.label}</button>`;
+  });
+  bar += `</div>`;
+
+  if (prepState.index >= prepState.order.length) {
+    const wrongLeft = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+    container.innerHTML = `
+      ${bar}
+      <div class="quiz-score-bar">
+        <span>🎉 本轮完成！</span>
+        <span>✅ 正确率 ${errs.total > 0 ? Math.round(errs.correct / errs.total * 100) : 0}%</span>
+      </div>
+      <div class="quiz-prompt">
+        <div class="verb-word">本轮 ${prepState.order.length} 题全部完成</div>
+        <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固</div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn primary" onclick="prepInit();renderPrep();">🔁 再练一轮</button>
+      </div>`;
+    return;
+  }
+
+  const q = PREP_QUESTIONS[prepState.order[prepState.index]];
+  const wrongCount = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+
+  let html = bar;
+  html += `<div class="quiz-score-bar">
+    <span>📝 第 ${prepState.index + 1} / ${prepState.order.length} 题</span>
+    <span>❌ 待巩固 ${wrongCount} 题</span>
+  </div>`;
+
+  html += `<div class="quiz-prompt">
+    <div class="verb-word" style="font-size:1.3rem;">${q.v} <span style="font-size:0.6em;color:var(--text-secondary);">(${q.m})</span> ___ algo</div>
+    <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">填入正确的介词</div>
+  </div>`;
+
+  html += `<div class="quiz-input-row">
+    <input type="text" id="prepInput" placeholder="de / a / en / con / por" autocomplete="off"
+      ${prepState.answered ? "disabled" : ""}
+      onkeydown="if(event.key==='Enter'){event.preventDefault();${prepState.answered ? "prepNext()" : "prepCheck()"};}">
+    ${prepState.answered
+      ? `<button class="quiz-next-btn" onclick="prepNext()">下一题 →</button>`
+      : `<button class="quiz-submit" onclick="prepCheck()">检查</button>`}
+  </div>`;
+
+  if (prepState.answered) {
+    if (prepState.lastCorrect) {
+      html += `<div class="quiz-feedback show correct-ans">
+        ✅ 正确！<span class="correct-form">${q.p}</span>
+      </div>`;
+    } else {
+      html += `<div class="quiz-feedback show wrong-ans">
+        ❌ 你填的是「<strong>${prepState.lastAnswer}</strong>」，正确答案是「<strong>${q.p}</strong>」
+        <div class="explanation">${q.e}</div>
+      </div>`;
+    }
+  }
+
+  container.innerHTML = html;
+  if (!prepState.answered) document.getElementById("prepInput").focus();
+}
+
+function prepSetFilter(prep) {
+  prepState.prepFilter = prep;
+  prepInit();
+  renderPrep();
+}
+
+function prepCheck() {
+  if (prepState.answered) return;
+  const input = document.getElementById("prepInput");
+  const userAnswer = input.value.trim().toLowerCase();
+  const q = PREP_QUESTIONS[prepState.order[prepState.index]];
+  const correct = q.p.toLowerCase();
+
+  const isCorrect = userAnswer === correct;
+  prepState.answered = true;
+  prepState.lastCorrect = isCorrect;
+  prepState.lastAnswer = userAnswer;
+
+  const errs = loadPrepErrors();
+  errs.total = (errs.total || 0) + 1;
+  const qi = prepState.order[prepState.index];
+
+  if (isCorrect) {
+    errs.correct = (errs.correct || 0) + 1;
+    if (errs.wrong[qi] && errs.wrong[qi] > 0) {
+      errs.wrong[qi]--;
+      if (errs.wrong[qi] <= 0) delete errs.wrong[qi];
+    }
+  } else {
+    errs.wrong[qi] = PREP_MASTER_AT;
+  }
+  savePrepErrors(errs);
+
+  renderPrep();
+}
+
+function prepNext() {
+  prepState.index++;
+  prepState.answered = false;
+  prepState.lastCorrect = false;
+  prepState.lastAnswer = "";
+  renderPrep();
+}
+
 // ========== 学习笔记（多条目版）==========
 const JOURNAL_KEY = "spanish_journal_v2";
 const TAG_LABELS = { ganho: "🌟 收获", xinde: "💡 心得", jiucuo: "🔧 纠错", qita: "📌 其他" };
@@ -4284,7 +4539,8 @@ const ALL_DATA_KEYS = [
   "spanish_summaries",
   "spanish_conj_log",
   "spanish_vocab_practice",
-  "spanish_article_errors"
+  "spanish_article_errors",
+  "spanish_prep_errors"
 ];
 
 function exportAllData() {
@@ -4364,6 +4620,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "s") switchView("summary");
   if (e.key === "v") switchView("vocab");
   if (e.key === "g") switchView("article");
+  if (e.key === "k") switchView("prep");
 });
 
 // ========== 初始化 ==========
