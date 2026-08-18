@@ -3479,6 +3479,7 @@ function renderArticle() {
     if (articleState.lastCorrect) {
       html += `<div class="quiz-feedback show correct-ans">
         ✅ 正确！<span class="correct-form">${articleState.lastAnswer === "0" ? "（零冠词）" : articleState.lastAnswer}</span>
+        <div class="explanation">${q.r}</div>
       </div>`;
     } else {
       html += `<div class="quiz-feedback show wrong-ans">
@@ -3748,6 +3749,7 @@ function renderPrep() {
     if (prepState.lastCorrect) {
       html += `<div class="quiz-feedback show correct-ans">
         ✅ 正确！<span class="correct-form">${q.p}</span>
+        <div class="explanation">${q.e}</div>
       </div>`;
     } else {
       html += `<div class="quiz-feedback show wrong-ans">
