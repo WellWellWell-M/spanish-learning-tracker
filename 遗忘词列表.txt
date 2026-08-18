@@ -1,0 +1,2430 @@
+
+1. rechazar（动词）｜拒绝；驳回
+* 核心： 不接受某人、某物或某提议。
+* 例： rechazar una oferta = 拒绝一个报价。
+* 词源： re-（再次）+ echar（扔、赶走）。
+* 英语： reject / refuse
+* 记忆： ❌ 推回去。
+
+2. acudir（动词）｜前往；参加；求助于
+* 核心： 去某个地方，尤其正式场合。
+* 例： acudir al médico = 去看医生。
+* 词源： 来自拉丁 accurrere（跑向）。
+* 英语： go to / attend
+* 记忆： 🏃 朝某处赶去。
+
+3. consejo（阳性名词）｜建议；委员会
+* 核心： 建议，也指组织机构。
+* 例： dar un consejo = 提建议。
+* 词源： 来自拉丁 consilium（意见、计划）。
+* 英语： advice / council
+* 记忆： 💡 给别人方向。
+
+4. viento（阳性名词）｜风
+* 核心： 空气流动。
+* 例： hace mucho viento = 风很大。
+* 词源： 来自拉丁 ventus。
+* 英语： wind
+* 记忆： 🌬️ 空气移动。
+
+5. vencer（动词）｜战胜；克服；到期
+* 核心： 赢过，也用于期限结束。
+* 例：
+    * vencer al enemigo = 战胜敌人
+    * el contrato vence mañana = 合同明天到期
+* 词源： 来自拉丁 vincere（征服）。
+* 英语： defeat / expire
+* 记忆： 🏆 赢过。
+
+6. marchar（动词）｜离开；行进；运行
+* 核心： 离开某地，也可表示机器运转。
+* 例：
+    * marcharse de casa = 离开家
+    * la máquina marcha bien = 机器运行良好
+* 词源： 来自法语 marcher。
+* 英语： leave / march / work
+* 记忆： 🚶 往前走。
+
+7. ajeno（形容词）｜别人的；陌生的；无关的
+* 核心： 属于别人，不属于自己。
+* 例： problemas ajenos = 别人的问题。
+* 词源： 来自拉丁 alienus（外国的、别人的）。
+* 英语： чужой / чужой = чужой（对应英文： чужой → чужой；英文： чужой = чужой?）
+* 英语： чужой概念对应：other people's / чужой → чужой
+* 记忆： 👤 不是自己的。
+
+8. propósito（阳性名词）｜目的；意图
+* 核心： 想达到的目标。
+* 例： con el propósito de mejorar = 为了改善。
+* 词源： 来自拉丁 proponere（提出）。
+* 英语： purpose
+* 记忆： 🎯 目标。
+
+9. merecer（动词）｜值得；应得
+* 核心： 因行为获得某种结果。
+* 例： merecer respeto = 值得尊重。
+* 词源： 来自拉丁 merescere。
+* 英语： deserve
+* 记忆： 🏅 配得上。
+
+10. piedra（阴性名词）｜石头
+* 核心： 岩石、小石块。
+* 例： una piedra grande = 大石头。
+* 词源： 来自拉丁 petra。
+* 英语： stone / rock
+* 记忆： 🪨 石头。
+
+11. caer（动词）｜掉落；下降；发生
+* 核心： 从高处向下，也可表示喜欢/合适。
+* 例：
+    * caer al suelo = 掉到地上
+    * me cae bien = 我觉得他人不错
+* 词源： 拉丁 cadere。
+* 英语： fall
+* 记忆： ⬇️ 向下。
+
+12. aparato（阳性名词）｜设备；装置；器官系统
+* 核心： 机器设备，也可指身体系统。
+* 例： aparato digestivo = 消化系统。
+* 词源： 来自拉丁 apparatus（准备好的东西）。
+* 英语： device / apparatus
+* 记忆： ⚙️ 装置。
+
+13. permanecer（动词）｜保持；停留
+* 核心： 继续处于某状态。
+* 例： permanecer tranquilo = 保持冷静。
+* 词源： per-（持续）+ manere（停留）。
+* 英语： remain / stay
+* 记忆： ⏳ 留在那里。
+
+14. saltar（动词）｜跳；跳跃；爆发
+* 核心： 跳起来，也可表示突然发生。
+* 例：
+    * saltar una valla = 跳过围栏
+    * saltar una alarma = 警报响起
+* 词源： 拉丁 saltare。
+* 英语： jump
+* 记忆： 🦘 跳。
+
+15. contestar（动词）｜回答；回应
+* 核心： 对问题作答。
+* 例： contestar una pregunta = 回答问题。
+* 词源： con- + testari（证明）。
+* 英语： answer / reply
+* 记忆： 💬 回话。
+
+16. moneda（阴性名词）｜硬币；货币
+* 核心： 钱币。
+* 例： moneda extranjera = 外币。
+* 词源： 来自拉丁 moneta。
+* 英语： coin / currency
+* 记忆： 🪙 钱。
+
+17. ejército（阳性名词）｜军队
+* 核心： 国家军事力量。
+* 例： el ejército español = 西班牙军队。
+* 词源： 来自拉丁 exercitus（训练、军队）。
+* 英语： army
+* 记忆： ⚔️ 武装力量。
+
+18. entregar（动词）｜交付；递给；提交
+* 核心： 把东西交给别人。
+* 例： entregar un documento = 提交文件。
+* 词源： en- + entregar（给予）。
+* 英语： deliver / hand in
+* 记忆： 🤲 交出去。
+
+19. manifestar（动词）｜表达；表明；显示
+* 核心： 公开表达观点或状态。
+* 例： manifestar una opinión = 表达观点。
+* 词源： 来自拉丁 manifestus（明显的）。
+* 英语： express / manifest
+* 记忆： 📢 让别人看见。
+
+20. acaso（副词）｜也许；难道；偶然
+* 核心： 表示可能或疑问。
+* 例： ¿Acaso eres tú? = 难道是你？
+* 词源： a + caso（情况）。
+* 英语： perhaps / maybe
+* 记忆： ❓ 不确定。
+
+继续第二轮（21/250+）：
+
+21. entero（形容词）｜完整的；整个的；整数的
+* 核心： 没有缺少部分。
+* 例： el día entero = 整整一天。
+* 词源： 来自拉丁 integer（未被触碰的、完整的）。
+* 英语： whole / entire
+* 记忆： 🧩 完整无缺。
+
+22. apenas（副词）｜几乎不；刚刚；仅仅
+* 核心： 表示程度很低。
+* 例：
+    * Apenas tengo tiempo. = 我几乎没时间。
+    * Acaba de llegar apenas. = 刚刚到。
+* 词源： a + penas（困难地）。
+* 英语： hardly / barely
+* 记忆： 📉 少到几乎没有。
+
+23. gasto（阳性名词）｜花费；支出
+* 核心： 花出去的钱。
+* 例： gastos de casa = 家庭开支。
+* 词源： 来自 gastar（花费）。
+* 英语： expense / spending
+* 记忆： 💸 钱出去。
+
+24. suceder（动词）｜发生；接替
+* 核心： 事情发生，也指职位继承。
+* 例：
+    * ¿Qué sucedió? = 发生了什么？
+    * suceder al rey = 继承王位
+* 词源： 拉丁 succedere（跟随而来）。
+* 英语： happen / succeed
+* 记忆： ➡️ 接着发生。
+
+25. caber（动词）｜容纳；装得下
+* 核心： 某物能进入某空间。
+* 例： No cabe en la caja. = 它装不进箱子。
+* 词源： 来自拉丁 capere（抓住、容纳）。
+* 英语： fit
+* 记忆： 📦 能不能放进去。
+
+26. actual（形容词）｜现在的；当前的
+* 核心： 表示“目前的”。
+* 例： la situación actual = 当前情况。
+* 词源： 来自拉丁 actualis（现实中的）。
+* 英语： current / present
+* 注意：
+    * actual ≠ 英语 actual（真实的）
+    * “真实的”= real
+* 记忆： 🕒 现在。
+
+27. prestar（动词）｜借出；提供；给予
+* 核心： 把东西暂时给别人。
+* 例：
+    * prestar dinero = 借钱给别人
+    * prestar atención = 注意
+* 词源： 来自拉丁 praestare（提供）。
+* 英语： lend / provide
+* 记忆： 🤲 给出去。
+
+28. siglo（阳性名词）｜世纪
+* 核心： 一百年。
+* 例： el siglo XXI = 21世纪。
+* 词源： 来自拉丁 saeculum（时代）。
+* 英语： century
+* 记忆： 📅 100年。
+
+29. arrancar（动词）｜拔出；启动；突然开始
+* 核心： 从根部拉出，也用于机器启动。
+* 例：
+    * arrancar un árbol = 拔树
+    * arrancar el coche = 发动车
+* 词源： 来自日耳曼语。
+* 英语： pull out / start
+* 记忆： 🔑 强力启动。
+
+30. escaso（形容词）｜少的；不足的
+* 核心： 数量不足。
+* 例： recursos escasos = 稀缺资源。
+* 词源： 来自拉丁 excarpsus（取出的）。
+* 英语： scarce / limited
+* 记忆： 📉 不够。
+
+31. confundir（动词）｜混淆；弄错
+* 核心： 把两个东西搞混。
+* 例： confundir nombres = 弄错名字。
+* 词源： 拉丁 confundere（混合）。
+* 英语： confuse
+* 记忆： 🔀 混在一起。
+
+32. acontecimiento（阳性名词）｜事件；重大事情
+* 核心： 值得注意的事情。
+* 例： un acontecimiento histórico = 历史事件。
+* 词源： acontecer（发生）+ -miento。
+* 英语： event / occurrence
+* 记忆： 📰 大事件。
+
+33. rama（阴性名词）｜树枝；分支
+* 核心： 植物枝条，也指学科分支。
+* 例：
+    * rama de árbol = 树枝
+    * rama de ciencia = 科学分支
+* 词源： 来自拉丁 ramus。
+* 英语： branch
+* 记忆： 🌳 分出去。
+
+34. someter（动词）｜使服从；提交
+* 核心： 控制别人，或把问题交给处理。
+* 例：
+    * someter a alguien = 使某人服从
+    * someter una propuesta = 提交提案
+* 词源： so-（下面）+ meter（放）。
+* 英语： submit / subject
+* 记忆： ⬇️ 放在控制之下。
+
+35. plantear（动词）｜提出；考虑；设想
+* 核心： 提出问题、方案。
+* 例： plantear una pregunta = 提出问题。
+* 词源： 来自 planta（植物、基础）。
+* 英语： propose / raise
+* 记忆： 💡 把想法放出来。
+
+36. esconder（动词）｜隐藏
+* 核心： 让别人看不到。
+* 例： esconder un secreto = 隐藏秘密。
+* 词源： 来自拉丁 abscondere。
+* 英语： hide
+* 记忆： 🙈 藏起来。
+
+37. trasladar（动词）｜移动；转移；调动
+* 核心： 从一个地方移动到另一个地方。
+* 例：
+    * trasladar una oficina = 搬办公室
+    * trasladar información = 转达信息
+* 词源： 拉丁 translatus（搬过去）。
+* 英语： transfer / move
+* 记忆： 🚚 转移。
+
+38. cometer（动词）｜犯（错误、罪行）
+* 核心： 与负面行为搭配。
+* 例：
+    * cometer un error = 犯错误
+    * cometer un delito = 犯罪
+* 词源： 拉丁 committere（做、交付）。
+* 英语： commit
+* 记忆： ⚠️ 做出某事。
+
+39. cadena（阴性名词）｜链条；连锁；系列
+* 核心： 一个接一个连接。
+* 例：
+    * cadena de tiendas = 连锁店
+    * cadena de hierro = 铁链
+* 词源： 拉丁 catena。
+* 英语： chain
+* 记忆： ⛓️ 连接。
+
+40. dedo（阳性名词）｜手指；脚趾
+* 核心： 手脚末端的小指状部分。
+* 例： dedo pulgar = 拇指。
+* 词源： 拉丁 digitus。
+* 英语： finger / toe
+* 记忆： ☝️ 手指。
+
+41. torno（阳性名词）｜车床；旋转装置；回转
+* 核心： 机械加工工具，也指旋转。
+* 例： trabajar con un torno = 用车床工作。
+* 词源： 拉丁 tornus。
+* 英语： lathe / turn
+* 记忆： ⚙️ 旋转加工。
+
+42. rasgo（阳性名词）｜特点；特征；一笔
+* 核心： 某人的特点或明显部分。
+* 例： rasgos de personalidad = 性格特点。
+* 词源： 来自 rasgar（划、画）。
+* 英语： trait / feature
+* 记忆： 👤 特征。
+
+43. remedio（阳性名词）｜办法；药物；补救措施
+* 核心： 解决问题的方法。
+* 例： no hay remedio = 没办法。
+* 词源： 拉丁 remedium。
+* 英语： remedy / solution
+* 记忆： 🩹 解决办法。
+
+44. comportamiento（阳性名词）｜行为；举止
+* 核心： 人的表现方式。
+* 例： buen comportamiento = 良好行为。
+* 词源： comportarse（表现）+ -miento。
+* 英语： behavior
+* 记忆： 👤 怎么表现。
+
+45. atrever（动词，常用 atreverse a）｜敢于
+* 核心： 有勇气做某事。
+* 例： atreverse a decir la verdad = 敢说真话。
+* 词源： 来自拉丁语相关词。
+* 英语： dare
+* 记忆： 💪 敢做。
+
+继续第三轮（46/250+）：
+
+46. época（阴性名词）｜时期；时代
+* 核心： 一段历史或人生阶段。
+* 例： en aquella época = 在那个时期。
+* 词源： 来自希腊语 epokhḗ（停留、阶段）。
+* 英语： era / period
+* 记忆： 📅 某个时代。
+
+47. ceder（动词）｜让出；放弃；屈服
+* 核心： 把权利、空间或优势让给别人。
+* 例：
+    * ceder el paso = 让路
+    * ceder un derecho = 放弃权利
+* 词源： 拉丁 cedere（走开、让出）。
+* 英语： yield / give up
+* 记忆： 🤲 让出去。
+
+48. cobrar（动词）｜收钱；获得；恢复
+* 核心： 收取费用，也可表示恢复某种状态。
+* 例：
+    * cobrar un sueldo = 领取工资
+    * cobrar fuerza = 恢复力量
+* 词源： 来自拉丁 recuperare（收回）。
+* 英语： charge / collect / recover
+* 记忆： 💰 把钱收回来。
+
+49. plazo（阳性名词）｜期限；时间段
+* 核心： 规定完成事情的时间。
+* 例：
+    * plazo de entrega = 交付期限
+    * a largo plazo = 长期
+* 词源： 来自拉丁 placitum（约定）。
+* 英语： deadline / term
+* 记忆： ⏳ 时间限制。
+
+50. invierno（阳性名词）｜冬天
+* 核心： 四季之一。
+* 例： en invierno hace frío = 冬天很冷。
+* 词源： 来自拉丁 hibernum。
+* 英语： winter
+* 记忆： ❄️ 寒冷季节。
+
+51. molestar（动词）｜打扰；使烦恼
+* 核心： 造成不便或不舒服。
+* 例： ¿Te molesto? = 我打扰你了吗？
+* 词源： 来自拉丁 molestus（麻烦的）。
+* 英语： bother / annoy
+* 记忆： 😣 让人不舒服。
+
+52. salvo（形容词/介词）｜除了；安全的
+* 核心：
+    * salvo Juan = 除了胡安
+    * estar a salvo = 安全
+* 词源： 拉丁 salvus（安全）。
+* 英语： except / safe
+* 记忆： 🛡️ 被保护。
+
+53. regresar（动词）｜返回
+* 核心： 回到原来的地方。
+* 例： regresar a casa = 回家。
+* 词源： re-（再次）+ gradior（走）。
+* 英语： return
+* 记忆： 🔙 回去。
+
+54. ausencia（阴性名词）｜缺席；缺乏
+* 核心： 某人不在，或某物不存在。
+* 例：
+    * ausencia de pruebas = 缺少证据
+    * su ausencia = 他的缺席
+* 词源： 拉丁 absentia。
+* 英语： absence
+* 记忆： 🚫 不在那里。
+
+55. sombra（阴性名词）｜影子；阴影
+* 核心： 遮挡光线形成的暗处。
+* 例： sentarse a la sombra = 坐在阴凉处。
+* 词源： 拉丁 umbra。
+* 英语： shadow
+* 记忆： 🌑 没有光。
+
+56. éxito（阳性名词）｜成功
+* 核心： 达到目标的结果。
+* 例： tener éxito = 成功。
+* 词源： 拉丁 exitus（出口、结果）。
+* 英语： success
+* 记忆： 🏆 好结果。
+
+57. arreglar（动词）｜修理；整理；解决
+* 核心： 让事情恢复正常。
+* 例：
+    * arreglar un coche = 修车
+    * arreglar un problema = 解决问题
+* 词源： a- + regla（规则）。
+* 英语： fix / arrange
+* 记忆： 🔧 修好。
+
+58. ciego（形容词/名词）｜瞎的；盲人
+* 核心： 失去视觉。
+* 例： un hombre ciego = 盲人。
+* 词源： 来自拉丁 caecus。
+* 英语： blind
+* 记忆： 👁️ 看不见。
+
+59. facilitar（动词）｜使容易；提供
+* 核心： 降低难度或提供帮助。
+* 例：
+    * facilitar información = 提供信息
+    * facilitar el acceso = 方便进入
+* 词源： fácil（容易）+ -itar。
+* 英语： facilitate / provide
+* 记忆： ✅ 让事情更容易。
+
+60. puente（阳性名词）｜桥；桥梁；长周末
+* 核心：
+    * 实体桥
+    * 西班牙常指连休假期
+* 例： hacer puente = 连休。
+* 词源： 拉丁 pons。
+* 英语： bridge
+* 记忆： 🌉 连接两边。
+
+61. procurar（动词）｜努力；设法；提供
+* 核心： 尝试实现某目标。
+* 例： procurar evitar errores = 努力避免错误。
+* 词源： 拉丁 procurare（管理、照顾）。
+* 英语： try / seek / provide
+* 记忆： 🎯 努力做到。
+
+62. capaz（形容词）｜有能力的；能够的
+* 核心： 具备能力。
+* 例：
+    * ser capaz de hacer algo = 能做某事
+* 词源： 拉丁 capax（能容纳的）。
+* 英语： capable / able
+* 记忆： 💪 有能力。
+
+63. rodear（动词）｜围绕；包围
+* 核心： 在周围形成圈。
+* 例： rodear una ciudad = 包围城市。
+* 词源： rueda（轮子）相关。
+* 英语： surround
+* 记忆： 🔄 围一圈。
+
+64. hallar（动词）｜找到；发现
+* 核心： 比 encontrar 更正式。
+* 例： hallar una solución = 找到解决方案。
+* 词源： 来自拉丁 afflare（发现）。
+* 英语： find
+* 记忆： 🔍 找到。
+
+65. pegar（动词）｜粘；贴；打
+* 核心：
+    * 粘东西
+    * 打人
+    * 传播
+* 例：
+    * pegar un golpe = 打一拳
+    * pegar un cartel = 贴海报
+* 词源： 拉丁 picare。
+* 英语： stick / hit
+* 记忆： 📌 贴上去。
+
+66. lamentar（动词）｜遗憾；哀悼
+* 核心： 对坏结果感到难过。
+* 例： Lamento lo ocurrido. = 我对此感到遗憾。
+* 词源： 拉丁 lamentari。
+* 英语： regret / lament
+* 记忆： 😔 后悔难过。
+
+67. rendir（动词）｜产生；屈服；交出
+* 核心： 多义高频词。
+* 例：
+    * rendir frutos = 产生效果
+    * rendir examen（拉美）= 考试
+    * rendirse = 投降
+* 词源： 来自拉丁 reddere（归还）。
+* 英语： yield / surrender
+* 记忆： 📈 产生结果。
+
+68. meter（动词）｜放入；进入；使进入
+* 核心： 放进去。
+* 例：
+    * meter la llave = 插钥匙
+    * meter miedo = 吓人
+* 词源： 拉丁 mittere（送、放）。
+* 英语： put / insert
+* 记忆： 📦 放进去。
+
+69. rueda（阴性名词）｜轮子；车轮
+* 核心： 圆形旋转物。
+* 例： rueda del coche = 汽车轮胎。
+* 词源： 拉丁 rota。
+* 英语： wheel
+* 记忆： 🚗 转动。
+
+70. régimen（阳性名词）｜制度；政体；饮食计划
+* 核心：
+    * 政治制度
+    * 饮食控制
+* 例：
+    * régimen político = 政治制度
+    * régimen de dieta = 饮食计划
+* 词源： 拉丁 regimen（管理）。
+* 英语： regime / diet
+* 记忆： 📋 规则体系。
+
+继续第四轮（71/250+）：
+
+71. techo（阳性名词）｜屋顶；天花板
+* 核心： 房子的顶部。
+* 例： el techo de la casa = 房顶。
+* 词源： 来自拉丁 tectum（覆盖物）。
+* 英语： roof / ceiling
+* 记忆： 🏠 上面的盖子。
+
+72. exigir（动词）｜要求；需要
+* 核心： 强烈要求，或某事需要某条件。
+* 例：
+    * exigir respeto = 要求尊重
+    * el trabajo exige experiencia = 工作需要经验
+* 词源： 来自拉丁 exigere（驱赶出来、要求）。
+* 英语： demand / require
+* 记忆： 📢 强烈要求。
+
+73. equivocarse（动词）｜弄错；犯错
+* 核心： 判断错误。
+* 例： Me he equivocado de camino. = 我走错路了。
+* 词源： 来自拉丁 aequivocus（同名、混淆）。
+* 英语： make a mistake / be wrong
+* 记忆： ❌ 搞错。
+
+74. padecer（动词）｜遭受；患（病）
+* 核心： 经历痛苦、不好的状态。
+* 例：
+    * padecer una enfermedad = 患病
+    * padecer hambre = 忍受饥饿
+* 词源： 来自拉丁 pati（受苦）。
+* 英语： suffer / suffer from
+* 记忆： 😣 承受痛苦。
+
+75. riqueza（阴性名词）｜财富；丰富
+* 核心：
+    * 金钱财富
+    * 内容丰富
+* 例：
+    * riqueza cultural = 文化丰富性
+* 词源： rico（富有）+ -eza。
+* 英语： wealth / richness
+* 记忆： 💎 富足。
+
+76. alma（阴性名词）｜灵魂；内心
+* 核心： 人的精神部分。
+* 例： con toda el alma = 全心全意。
+* 词源： 拉丁 anima（生命、灵魂）。
+* 英语： soul
+* 记忆： ❤️ 内在的自己。
+
+77. inquietud（阴性名词）｜不安；忧虑；兴趣
+* 核心： 心里不平静。
+* 例：
+    * sentir inquietud = 感到不安
+    * inquietud intelectual = 求知欲
+* 词源： in-（不）+ quietus（安静）。
+* 英语： concern / restlessness
+* 记忆： 😟 心无法安静。
+
+78. espalda（阴性名词）｜背；后面
+* 核心： 身体背部。
+* 例： dolor de espalda = 背痛。
+* 词源： 可能来自拉丁 spatula（肩胛）。
+* 英语： back
+* 记忆： 🧍 身后。
+
+79. fingir（动词）｜假装
+* 核心： 表现出并不存在的状态。
+* 例： fingir estar enfermo = 假装生病。
+* 词源： 拉丁 fingere（塑造、创造）。
+* 英语： pretend / fake
+* 记忆： 🎭 演出来。
+
+80. lento（形容词）｜慢的
+* 核心： 速度低。
+* 例： un coche lento = 慢车。
+* 词源： 拉丁 lentus（缓慢）。
+* 英语： slow
+* 记忆： 🐢 慢。
+
+81. escala（阴性名词）｜规模；等级；楼梯；停留
+* 核心： 多义词。
+* 例：
+    * escala de precios = 价格等级
+    * hacer escala = 中途停留
+* 词源： 拉丁 scala（梯子）。
+* 英语： scale / stopover
+* 记忆： 📊 一层一层。
+
+82. pertenecer（动词）｜属于
+* 核心： 表示归属关系。
+* 例： pertenecer a un grupo = 属于一个群体。
+* 词源： per- + tener（拥有）。
+* 英语： belong
+* 记忆： 👥 是其中一部分。
+
+83. recurrir（动词）｜求助；诉诸；再次发生
+* 核心：
+    * 寻求帮助
+    * 使用某方法
+* 例： recurrir a un médico = 求助医生。
+* 词源： 拉丁 recurrere（跑回来）。
+* 英语： resort to / appeal
+* 记忆： 🆘 找办法。
+
+84. rato（阳性名词）｜一会儿；一段时间
+* 核心： 不确定的短时间。
+* 例： esperar un rato = 等一会儿。
+* 词源： 拉丁 raptus（短暂时间）。
+* 英语： while / moment
+* 记忆： ⏱️ 一小段时间。
+
+85. acerca（副词/介词）｜关于；接近
+* 核心：
+    * acerca de = 关于
+    * acercarse = 靠近
+* 例： hablar acerca del problema = 谈论问题。
+* 词源： a + cerca（近）。
+* 英语： about / near
+* 记忆： 📌 靠近主题。
+
+86. digno（形容词）｜值得的；有尊严的
+* 核心： 配得上某种评价。
+* 例：
+    * digno de respeto = 值得尊重
+* 词源： 拉丁 dignus。
+* 英语： worthy / dignified
+* 记忆： 👑 有价值。
+
+87. percibir（动词）｜感知；察觉；收到
+* 核心： 用感官或思想发现。
+* 例：
+    * percibir un olor = 闻到气味
+    * percibir un salario = 收工资
+* 词源： 拉丁 percipere（获得、理解）。
+* 英语： perceive / receive
+* 记忆： 👁️ 感受到。
+
+88. ingreso（阳性名词）｜收入；进入；入院
+* 核心：
+    * 钱收入
+    * 进入某机构
+* 例：
+    * ingresos mensuales = 月收入
+    * ingreso hospitalario = 入院
+* 词源： 拉丁 ingressus。
+* 英语： income / admission
+* 记忆： 💰 进入的钱。
+
+89. gozar（动词）｜享受；拥有
+* 核心： 获得快乐或享有权利。
+* 例：
+    * gozar de buena salud = 拥有健康
+    * gozar la vida = 享受生活
+* 词源： 来自拉丁 gaudere（欢乐）。
+* 英语： enjoy
+* 记忆： 😊 享受。
+
+90. placer（阳性名词）｜快乐；乐趣
+* 核心： 愉快感受。
+* 例： Es un placer conocerte. = 很高兴认识你。
+* 词源： 拉丁 placere（使喜欢）。
+* 英语： pleasure
+* 记忆： 😄 开心。
+
+91. dominio（阳性名词）｜控制；领域；域名
+* 核心：
+    * 掌控
+    * 专业领域
+    * 网络域名
+* 例： dominio del idioma = 语言掌握。
+* 词源： 拉丁 dominium（所有权）。
+* 英语： domain / control
+* 记忆： 👑 掌控范围。
+
+92. conforme（形容词/介词）｜符合的；按照
+* 核心： 与规则或标准一致。
+* 例： estar conforme con algo = 同意某事。
+* 词源： con- + forma（形式）。
+* 英语： according to / satisfied
+* 记忆： ✅ 符合。
+
+93. obstante（常见于 no obstante）｜然而；尽管如此
+* 核心： 转折表达。
+* 例： No obstante, continuó. = 然而，他继续了。
+* 词源： 来自 obstar（阻碍）。
+* 英语： nevertheless / however
+* 记忆： 🔄 转折。
+
+94. desprender（动词）｜脱落；释放；产生
+* 核心：
+    * 从某物分离
+    * 散发
+* 例：
+    * desprender un olor = 散发气味
+    * desprenderse de algo = 摆脱某物
+* 词源： des-（分离）+ prender（抓住）。
+* 英语： detach / release
+* 记忆： 🍃 脱离。
+
+95. voluntad（阴性名词）｜意志；愿望
+* 核心： 内心决定做某事的力量。
+* 例： fuerza de voluntad = 意志力。
+* 词源： 拉丁 voluntas。
+* 英语： will / willpower
+* 记忆： 💪 想做并坚持。
+
+
+继续第五轮（96/250+）：
+
+96. amistad（阴性名词）｜友谊；友情
+* 核心： 人与人之间的友好关系。
+* 例： una amistad verdadera = 真正的友谊。
+* 词源： amigo（朋友）相关，来自拉丁 amicus。
+* 英语： friendship
+* 记忆： 🤝 朋友关系。
+
+97. prometer（动词）｜承诺；答应
+* 核心： 表示未来会做某事。
+* 例： prometer ayudar = 承诺帮助。
+* 词源： 拉丁 promittere（向前送出、保证）。
+* 英语： promise
+* 记忆： 🤞 许诺。
+
+98. constar（动词）｜存在；证明；记载
+* 核心： 正式表达“有记录、显示”。
+* 例：
+    * constar en un documento = 记录在文件中
+    * me consta = 我知道/我确认
+* 词源： con- + stare（站立）。
+* 英语： be recorded / be known
+* 记忆： 📄 写在记录里。
+
+99. ancho（形容词）｜宽的；宽广的
+* 核心： 横向距离大。
+* 例： una calle ancha = 宽街。
+* 词源： 拉丁 amplus（大的）。
+* 英语： wide / broad
+* 记忆： ↔️ 宽。
+
+100. empujar（动词）｜推动；推
+* 核心： 用力使物体移动。
+* 例： empujar una puerta = 推门。
+* 词源： 可能来自拉丁语相关词。
+* 英语： push
+* 记忆： ✋ 向前用力。
+
+101. impedir（动词）｜阻止；妨碍
+* 核心： 让某事无法发生。
+* 例： impedir un accidente = 防止事故。
+* 词源： 拉丁 impedire（阻挡脚）。
+* 英语： prevent / stop
+* 记忆： 🚧 挡住。
+
+102. agregar（动词）｜添加；加入
+* 核心： 加入额外部分。
+* 例： agregar información = 添加信息。
+* 词源： 拉丁 aggregare（聚集）。
+* 英语： add / add up
+* 记忆： ➕ 加进去。
+
+103. agradable（形容词）｜令人愉快的；舒服的
+* 核心： 给人好感。
+* 例： una persona agradable = 令人喜欢的人。
+* 词源： agradar（使喜欢）+ -able。
+* 英语： pleasant / nice
+* 记忆： 😊 舒服。
+
+104. estrecho（形容词）｜窄的；紧密的
+* 核心：
+    * 空间窄
+    * 关系亲密
+* 例：
+    * una calle estrecha = 窄街
+    * una relación estrecha = 密切关系
+* 词源： 拉丁 strictus（紧的）。
+* 英语： narrow / close
+* 记忆： ↔️ 挤在一起。
+
+105. aportar（动词）｜贡献；提供
+* 核心： 给出有价值的东西。
+* 例： aportar ideas = 提供想法。
+* 词源： a- + portar（带来）。
+* 英语： contribute / provide
+* 记忆： 📦 带来东西。
+
+106. agotar（动词）｜耗尽；用完
+* 核心： 资源完全消失。
+* 例：
+    * agotar las reservas = 用尽储备
+    * estar agotado = 筋疲力尽
+* 词源： 来自拉丁 exhaurire。
+* 英语： exhaust / run out
+* 记忆： 🔋 没电了。
+
+107. dispuesto（形容词）｜准备好的；愿意的
+* 核心： 有意愿做某事。
+* 例： estar dispuesto a ayudar = 愿意帮忙。
+* 词源： disponer（安排）。
+* 英语： willing / ready
+* 记忆： ✅ 准备好了。
+
+108. aguantar（动词）｜忍受；坚持；支撑
+* 核心： 承受困难。
+* 例：
+    * aguantar el dolor = 忍受疼痛
+    * aguantar mucho tiempo = 坚持很久
+* 词源： 来自古西班牙语。
+* 英语： endure / stand / tolerate
+* 记忆： 💪 扛住。
+
+109. ubicar（动词）｜定位；放置；位于
+* 核心： 确定位置。
+* 例：
+    * ubicar una casa = 找到房子位置
+    * ubicarse en una ciudad = 定居
+* 词源： 来自拉丁 ubi（哪里）。
+* 英语： locate / place
+* 记忆： 📍 找位置。
+
+110. sueldo（阳性名词）｜工资
+* 核心： 固定收入。
+* 例： cobrar el sueldo = 领工资。
+* 词源： 来自拉丁 solidus（一种金币）。
+* 英语： salary
+* 记忆： 💰 月收入。
+
+111. suelto（形容词）｜松的；散开的；零钱
+* 核心：
+    * 不固定
+    * 分开的
+    * 零钱
+* 例：
+    * pelo suelto = 散着的头发
+    * dinero suelto = 零钱
+* 词源： soltar（释放）。
+* 英语： loose / change
+* 记忆： 🔓 没绑住。
+
+112. grabar（动词）｜录制；刻；记录
+* 核心： 保存声音、图像或信息。
+* 例： grabar un vídeo = 录视频。
+* 词源： 来自法语 graver（刻）。
+* 英语： record / engrave
+* 记忆： 🎥 记录下来。
+
+113. puesto（阳性名词/形容词）｜位置；岗位；放置的
+* 核心：
+    * 工作岗位
+    * 位置
+    * 放好的
+* 例：
+    * puesto de trabajo = 工作岗位
+    * mercado puesto = 摆好的市场摊位
+* 词源： poner（放）的过去分词。
+* 英语： position / post
+* 记忆： 📍 放在那里。
+
+114. sustituir（动词）｜替代
+* 核心： 用新的代替旧的。
+* 例： sustituir una pieza = 更换零件。
+* 词源： 拉丁 substituere。
+* 英语： replace / substitute
+* 记忆： 🔄 换掉。
+
+115. desempeñar（动词）｜履行；担任
+* 核心： 执行职责。
+* 例：
+    * desempeñar un cargo = 担任职位
+    * desempeñar una función = 履行功能
+* 词源： des- + empeño（任务）。
+* 英语： perform / hold a position
+* 记忆： 👔 做好职责。
+
+116. orilla（阴性名词）｜边缘；岸边
+* 核心：
+    * 河岸
+    * 路边
+    * 边缘
+* 例： a la orilla del mar = 海边。
+* 词源： 来自拉丁 ora（边缘）。
+* 英语： shore / edge
+* 记忆： 🌊 边上。
+
+117. criar（动词）｜养育；饲养；培养
+* 核心：
+    * 养孩子
+    * 养动物
+* 例：
+    * criar hijos = 抚养孩子
+    * criar ganado = 养牲畜
+* 词源： 拉丁 creare（创造）。
+* 英语： raise / breed
+* 记忆： 🌱 培养成长。
+
+118. abarcar（动词）｜包含；覆盖；涉及
+* 核心： 范围包括。
+* 例： El curso abarca muchos temas. = 课程包含很多主题。
+* 词源： 可能来自 a- + barco（双手环抱）。
+* 英语： include / cover
+* 记忆： 🤲 把范围包住。
+
+119. alegría（阴性名词）｜快乐；喜悦
+* 核心： 积极情绪。
+* 例： lleno de alegría = 充满快乐。
+* 词源： 拉丁 alacer（活泼）。
+* 英语： joy / happiness
+* 记忆： 😄 开心。
+
+120. orgullo（阳性名词）｜骄傲；自豪
+* 核心：
+    * 正面的自豪
+    * 负面的自负
+* 例： sentir orgullo = 感到自豪。
+* 词源： 来自日耳曼语。
+* 英语： pride
+* 记忆： 🦁 自豪感。
+
+继续第六轮（121/250+）：
+
+121. carecer（动词）｜缺少；没有
+* 核心： 正式表达“不具备某物”。
+* 例： carecer de experiencia = 缺乏经验。
+* 词源： 来自拉丁 carere（缺少）。
+* 英语： lack / be without
+* 记忆： 🚫 没有。
+
+122. agradecer（动词）｜感谢
+* 核心： 表达感激。
+* 例： agradecer la ayuda = 感谢帮助。
+* 词源： a- + grado（满意、喜悦）。
+* 英语： thank / appreciate
+* 记忆： 🙏 表达感谢。
+
+123. arrojar（动词）｜扔；投掷；产生
+* 核心：
+    * 扔出去
+    * 引出结果
+* 例：
+    * arrojar una piedra = 扔石头
+    * arrojar resultados = 得出结果
+* 词源： 来自拉丁 rotulare（滚动）。
+* 英语： throw / produce
+* 记忆： 🏹 投出去。
+
+124. empeñar（动词）｜抵押；使尽力；承诺
+* 核心：
+    * 抵押物品换钱
+    * 花精力完成
+* 例：
+    * empeñar un reloj = 抵押手表
+    * empeñarse en algo = 坚持做某事
+* 词源： 来自拉丁 pignus（抵押品）。
+* 英语： pawn / strive
+* 记忆： 🔒 押上。
+
+125. otorgar（动词）｜授予；给予
+* 核心： 正式给予权利、许可。
+* 例： otorgar un premio = 授予奖项。
+* 词源： 来自拉丁 auctoricare。
+* 英语： grant / award
+* 记忆： 🏅 授予。
+
+126. polvo（阳性名词）｜灰尘；粉末
+* 核心： 细小颗粒。
+* 例： limpiar el polvo = 擦灰尘。
+* 词源： 拉丁 pulvis。
+* 英语： dust / powder
+* 记忆： 🌫️ 小颗粒。
+
+127. enterar（动词，常用 enterarse de）｜得知；通知
+* 核心： 获得信息。
+* 例： Me enteré de la noticia. = 我得知了消息。
+* 词源： entero（完整）相关，原意“使完整知道”。
+* 英语： find out / inform
+* 记忆： 💡 知道事情。
+
+128. denominar（动词）｜命名；称为
+* 核心： 给某事物取名称。
+* 例： se denomina así = 被称为这样。
+* 词源： de- + nomen（名字）。
+* 英语： name / call
+* 记忆： 🏷️ 贴名字。
+
+129. proporcionar（动词）｜提供；给予
+* 核心： 正式表达提供资源、帮助。
+* 例： proporcionar información = 提供信息。
+* 词源： 拉丁 proportio（比例、适合）。
+* 英语： provide / supply
+* 记忆： 📦 提供。
+
+130. apagar（动词）｜关闭；熄灭
+* 核心：
+    * 关灯
+    * 灭火
+* 例：
+    * apagar la luz = 关灯
+    * apagar un fuego = 灭火
+* 词源： 来自拉丁 pacare（使平静）。
+* 英语： turn off / extinguish
+* 记忆： 💡 让光消失。
+
+131. tapar（动词）｜盖住；堵住
+* 核心： 覆盖开口。
+* 例： tapar una botella = 盖瓶子。
+* 词源： 来自拉丁语相关词。
+* 英语： cover / block
+* 记忆： 🛑 盖上。
+
+132. borrar（动词）｜擦除；删除
+* 核心： 消除文字、痕迹。
+* 例：
+    * borrar un archivo = 删除文件
+    * borrar una palabra = 擦掉单词
+* 词源： 来自 borra（羊毛废料，用于擦除）。
+* 英语： erase / delete
+* 记忆： 🧽 消掉。
+
+133. andar（动词）｜走；行走；运转
+* 核心： 日常“走路”。
+* 例：
+    * andar por la calle = 在街上走
+    * ¿Cómo anda el coche? = 车运行如何？
+* 词源： 来自拉丁 ambulare。
+* 英语： walk / work
+* 记忆： 🚶 走。
+
+134. acabar（动词）｜结束；完成；用完
+* 核心：
+    * 结束事情
+    * acabar de + 动词 = 刚刚做完
+* 例： Acabo de llegar. = 我刚到。
+* 词源： a- + cabo（末端）。
+* 英语： finish / end
+* 记忆： 🏁 到尽头。
+
+135. hacia（介词）｜向；朝；大约
+* 核心： 表示方向或时间接近。
+* 例：
+    * hacia Madrid = 朝马德里
+    * hacia las cinco = 大约五点
+* 词源： 来自拉丁 facia（方向）。
+* 英语： toward / around
+* 记忆： ➡️ 朝向。
+
+136. averiguar（动词）｜查明；弄清
+* 核心： 通过调查获得答案。
+* 例： averiguar la verdad = 查明真相。
+* 词源： 来自拉丁 verificare（验证）。
+* 英语： find out / investigate
+* 记忆： 🔍 查出来。
+
+137. extrañar（动词）｜想念；感到奇怪
+* 核心：
+    * 想念某人
+    * 对某事感到意外
+* 例：
+    * Te extraño.（拉美）= 我想你。
+    * Me extraña eso. = 那让我觉得奇怪。
+* 词源： extraño（陌生的）。
+* 英语： miss / find strange
+* 记忆： 😢 想念。
+
+138. asustar（动词）｜吓；使害怕
+* 核心： 引起恐惧。
+* 例： Me asustaste. = 你吓到我了。
+* 词源： 来自拉丁 exterritare。
+* 英语： scare / frighten
+* 记忆： 😱 吓一跳。
+
+139. remontar（动词）｜追上；回升；逆流而上
+* 核心：
+    * 恢复优势
+    * 向上追赶
+* 例：
+    * remontar el marcador = 逆转比分
+* 词源： re- + montar（上升）。
+* 英语： recover / come back
+* 记忆： 📈 往上追回。
+
+140. pelear（动词）｜打架；争吵；竞争
+* 核心： 发生冲突。
+* 例：
+    * pelear con alguien = 和某人争吵
+    * pelear por un objetivo = 为目标奋斗
+* 词源： 来自 pelo（头发），可能与古代抓头发打架有关。
+* 英语： fight
+* 记忆： ⚔️ 冲突。
+
+141. conquistar（动词）｜征服；赢得
+* 核心：
+    * 占领
+    * 获得喜欢
+* 例：
+    * conquistar un país = 征服国家
+    * conquistar a alguien = 赢得某人
+* 词源： 拉丁 conquirere。
+* 英语： conquer / win
+* 记忆： 🏆 赢下来。
+
+142. apretar（动词）｜压紧；握紧；挤压
+* 核心： 施加压力。
+* 例：
+    * apretar un botón = 按按钮
+    * apretar la mano = 握紧手
+* 词源： 来自拉丁 appectorare。
+* 英语： press / squeeze
+* 记忆： ✊ 用力。
+
+143. quebrar（动词）｜打破；破裂；破产
+* 核心：
+    * 物理破裂
+    * 企业破产
+* 例：
+    * quebrar un vaso = 打碎杯子
+    * la empresa quebró = 公司破产
+* 词源： 拉丁 crepare（破裂声）。
+* 英语： break / go bankrupt
+* 记忆： 💥 断裂。
+
+144. brindar（动词）｜敬酒；提供
+* 核心：
+    * 举杯祝酒
+    * 提供帮助
+* 例：
+    * brindar por la salud = 为健康干杯
+    * brindar apoyo = 提供支持
+* 词源： 来自德语 bring dir（给你）。
+* 英语： toast / offer
+* 记忆： 🥂 举杯。
+
+继续第七轮（145/250+）：
+
+145. sobrellevar（动词）｜忍受；承受
+* 核心： 艰难情况下继续坚持。
+* 例： sobrellevar una pérdida = 承受损失。
+* 词源： sobre-（超过）+ llevar（带）。
+* 英语： endure / cope with
+* 记忆： 🎒 背着困难继续走。
+
+146. asomar（动词）｜露出；探出；出现
+* 核心： 从隐藏处出现一点。
+* 例：
+    * asomar la cabeza = 探出头
+    * asomarse a la ventana = 探身看窗外
+* 词源： 可能来自拉丁 summa（顶部）。
+* 英语： appear / peek out
+* 记忆： 👀 冒出来。
+
+147. frenar（动词）｜刹车；阻止；减缓
+* 核心： 让速度降低。
+* 例：
+    * frenar el coche = 刹车
+    * frenar un problema = 阻止问题
+* 词源： freno（刹车）。
+* 英语： brake / slow down
+* 记忆： 🛑 停下来。
+
+148. engañar（动词）｜欺骗；误导
+* 核心： 让别人相信错误信息。
+* 例：
+    * engañar a alguien = 欺骗某人
+    * engañarse = 自欺
+* 词源： 来自拉丁 ingannare。
+* 英语： deceive / fool
+* 记忆： 🎭 骗。
+
+149. sembrar（动词）｜播种；种植；散播
+* 核心： 撒下种子，也用于抽象事物。
+* 例：
+    * sembrar trigo = 播种小麦
+    * sembrar dudas = 制造怀疑
+* 词源： 拉丁 seminare（播种）。
+* 英语： sow / plant
+* 记忆： 🌱 撒下。
+
+150. lanzar（动词）｜投掷；发射；推出
+* 核心： 向外释放。
+* 例：
+    * lanzar una pelota = 扔球
+    * lanzar un producto = 推出产品
+* 词源： 来自拉丁 lanceare。
+* 英语： throw / launch
+* 记忆： 🚀 发出去。
+
+151. inaugurar（动词）｜开幕；启用
+* 核心： 正式开始使用。
+* 例： inaugurar un edificio = 启用建筑。
+* 词源： 拉丁 inaugurare（举行开幕仪式）。
+* 英语： inaugurate / open
+* 记忆： 🎉 开始。
+
+152. ahorrar（动词）｜节省；储蓄
+* 核心： 不浪费，留下资源。
+* 例：
+    * ahorrar dinero = 存钱
+    * ahorrar tiempo = 节省时间
+* 词源： 来自阿拉伯语 hurr（自由，免除）。
+* 英语： save
+* 记忆： 💰 存下来。
+
+153. aprovechar（动词）｜利用；充分利用
+* 核心： 把机会或资源用好。
+* 例： aprovechar el tiempo = 利用时间。
+* 词源： a- + provecho（利益）。
+* 英语： take advantage of / make use of
+* 记忆： 🎯 抓住机会。
+
+154. ahogar（动词）｜淹没；使窒息；压制
+* 核心：
+    * 水中无法呼吸
+    * 压迫感
+* 例：
+    * ahogarse en el agua = 溺水
+    * ahogar un grito = 压住喊声
+* 词源： 拉丁 offocare。
+* 英语： drown / suffocate
+* 记忆： 🌊 没法呼吸。
+
+155. restar（动词）｜减去；剩余
+* 核心： 数学中的减法，也表示减少。
+* 例：
+    * restar cinco = 减五
+    * restar importancia = 降低重要性
+* 词源： 拉丁 restare（留下）。
+* 英语： subtract / remain
+* 记忆： ➖ 减少。
+
+156. rezar（动词）｜祈祷
+* 核心： 宗教或表达愿望。
+* 例： rezar una oración = 祈祷。
+* 词源： 拉丁 recitare（朗读）。
+* 英语： pray
+* 记忆： 🙏 祈求。
+
+157. jurar（动词）｜发誓
+* 核心： 以郑重方式保证。
+* 例： jurar decir la verdad = 发誓说真话。
+* 词源： 拉丁 jurare。
+* 英语： swear
+* 记忆： 🤞 严肃保证。
+
+158. privar（动词）｜剥夺；使失去
+* 核心： 让某人没有某物。
+* 例：
+    * privar de libertad = 剥夺自由
+* 词源： 拉丁 privare。
+* 英语： deprive
+* 记忆： 🚫 拿走。
+
+159. redactar（动词）｜撰写；起草
+* 核心： 正式写文件。
+* 例： redactar un informe = 写报告。
+* 词源： 拉丁 redigere（整理）。
+* 英语： write / draft
+* 记忆： ✍️ 写出来。
+
+160. negar（动词）｜否认；拒绝
+* 核心： 说“不”。
+* 例：
+    * negar una acusación = 否认指控
+    * negar ayuda = 拒绝帮助
+* 词源： 拉丁 negare。
+* 英语： deny / refuse
+* 记忆： ❌ 不承认。
+
+161. sujetar（动词）｜抓住；固定；支撑
+* 核心： 让东西保持位置。
+* 例：
+    * sujetar una caja = 扶住箱子
+    * sujetar con fuerza = 紧紧抓住
+* 词源： 拉丁 subiectare。
+* 英语： hold / fasten
+* 记忆： ✋ 固定住。
+
+162. disparar（动词）｜射击；发射；猛增
+* 核心：
+    * 开枪
+    * 数量突然增加
+* 例：
+    * disparar un arma = 开枪
+    * los precios se disparan = 价格暴涨
+* 词源： 拉丁 disparare。
+* 英语： shoot / soar
+* 记忆： 🔫 瞬间出去。
+
+163. adivinar（动词）｜猜；猜中；预言
+* 核心： 在不知道情况下得到答案。
+* 例： adivinar la respuesta = 猜答案。
+* 词源： 拉丁 divinare（预言）。
+* 英语： guess
+* 记忆： 🔮 猜测。
+
+164. tragar（动词）｜吞；忍受
+* 核心：
+    * 吞下食物
+    * 勉强接受
+* 例：
+    * tragar una pastilla = 吞药
+    * tragarse una mentira = 相信谎言
+* 词源： 可能来自拉丁 traginare。
+* 英语： swallow
+* 记忆： 👄 咽下去。
+
+165. suprimir（动词）｜取消；删除；消除
+* 核心： 让某物不存在。
+* 例：
+    * suprimir un impuesto = 取消税
+    * suprimir información = 删除信息
+* 词源： 拉丁 supprimere（压下）。
+* 英语： suppress / remove
+* 记忆： 🗑️ 去掉。
+
+166. sobrar（动词）｜剩余；多余
+* 核心： 比需要更多。
+* 例：
+    * sobrar comida = 食物剩下
+    * me sobra tiempo = 我时间多
+* 词源： 拉丁 superare（超过）。
+* 英语： be left over / be extra
+* 记忆： ➕ 多出来。
+
+167. brotar（动词）｜发芽；涌出；出现
+* 核心： 从内部冒出来。
+* 例：
+    * brotar una planta = 植物发芽
+    * brotar lágrimas = 流泪
+* 词源： 日耳曼语来源。
+* 英语： sprout / emerge
+* 记忆： 🌱 冒出来。
+
+继续第八轮（168/250+）：
+
+168. suscitar（动词）｜引起；激起
+* 核心： 使某种反应、情绪、问题出现。
+* 例： suscitar interés = 引起兴趣。
+* 词源： 拉丁 suscitare（唤醒）。
+* 英语： arouse / provoke
+* 记忆： 🔥 引发。
+
+169. agarrar（动词）｜抓住；拿住
+* 核心： 用手牢牢抓。
+* 例：
+    * agarrar una pelota = 接住球
+    * agarrar una oportunidad = 抓住机会
+* 词源： 可能来自日耳曼语。
+* 英语： grab / catch
+* 记忆： ✋ 抓紧。
+
+170. agitar（动词）｜摇动；搅动；激起
+* 核心： 使东西移动或情绪波动。
+* 例：
+    * agitar una botella = 摇瓶子
+    * agitar la opinión pública = 激起舆论
+* 词源： 拉丁 agitare（驱动）。
+* 英语： shake / stir
+* 记忆： 🔄 摇动。
+
+171. burlar（动词）｜嘲笑；欺骗；躲避
+* 核心： 通过技巧逃过某事。
+* 例：
+    * burlarse de alguien = 嘲笑某人
+    * burlar la seguridad = 绕过安全措施
+* 词源： 来自古西班牙语。
+* 英语： mock / evade
+* 记忆： 😏 捉弄。
+
+172. amanecer（动词/阳性名词）｜黎明；天亮
+* 核心： 太阳升起、一天开始。
+* 例：
+    * al amanecer = 黎明时
+    * amanecer cansado = 醒来很累
+* 词源： a- + mañana（早晨）。
+* 英语： dawn
+* 记忆： 🌅 天亮。
+
+173. desplegar（动词）｜展开；部署
+* 核心：
+    * 打开折叠物
+    * 安排力量
+* 例：
+    * desplegar un mapa = 展开地图
+    * desplegar tropas = 部署军队
+* 词源： des- + plegar（折叠）。
+* 英语： unfold / deploy
+* 记忆： 🗺️ 展开。
+
+174. desembocar（动词）｜流入；导致
+* 核心：
+    * 河流进入海洋
+    * 事情导致结果
+* 例：
+    * El río desemboca en el mar.= 河流流入大海。
+    * desembocar en una crisis= 导致危机。
+* 词源： des- + boca（嘴、出口）。
+* 英语： flow into / lead to
+* 记忆： 🌊 流向出口。
+
+175. amenazar（动词）｜威胁；有危险
+* 核心： 表示可能造成伤害。
+* 例：
+    * amenazar a alguien = 威胁某人
+    * amenaza de lluvia = 下雨风险
+* 词源： 来自拉丁 minacia。
+* 英语： threaten
+* 记忆： ⚠️ 危险靠近。
+
+176. acostar（动词，常用 acostarse）｜使躺下；上床
+* 核心：
+    * acostarse = 睡觉，上床
+* 例： Me acuesto a las once. = 我十一点睡。
+* 词源： 拉丁 costa（侧面、肋骨）。
+* 英语： lie down / go to bed
+* 记忆： 🛏️ 躺下。
+
+177. arder（动词）｜燃烧；发热
+* 核心： 着火或非常热。
+* 例：
+    * El fuego arde. = 火在燃烧。
+    * arder de pasión = 充满激情。
+* 词源： 拉丁 ardere。
+* 英语： burn
+* 记忆： 🔥 火。
+
+178. solicitar（动词）｜申请；请求
+* 核心： 正式提出要求。
+* 例：
+    * solicitar un empleo = 申请工作
+    * solicitar ayuda = 请求帮助
+* 词源： 拉丁 sollicitare（激励、请求）。
+* 英语： request / apply for
+* 记忆： 📝 正式申请。
+
+179. penetrar（动词）｜进入；穿透
+* 核心： 从外部进入内部。
+* 例：
+    * penetrar en un lugar = 进入某地
+    * la luz penetra = 光穿透
+* 词源： 拉丁 penetrare。
+* 英语： penetrate / enter
+* 记忆： ➡️ 进入里面。
+
+180. precipitar（动词）｜使突然发生；加速；沉淀
+* 核心：
+    * 快速推动
+    * 化学沉淀
+* 例：
+    * precipitar una decisión = 仓促决定
+    * precipitarse = 冲下去
+* 词源： 拉丁 praecipitare（推下悬崖）。
+* 英语： precipitate / rush
+* 记忆： ⬇️ 快速下降。
+
+181. clavar（动词）｜钉入；刺入；准确做到
+* 核心：
+    * 钉子进入
+    * 做得非常准确
+* 例：
+    * clavar un clavo = 钉钉子
+    * clavar la respuesta = 答得精准
+* 词源： 拉丁 clavus（钉子）。
+* 英语： nail / hit exactly
+* 记忆： 🔨 钉进去。
+
+182. atreverse（动词）｜敢于
+* 核心： 有勇气做困难事情。
+* 例： atreverse a hablar = 敢说话。
+* 词源： 与 atrever 同源。
+* 英语： dare
+* 记忆： 💪 鼓起勇气。
+
+183. rogar（动词）｜请求；恳求
+* 核心： 比 pedir 更强烈、更正式。
+* 例：
+    * rogar ayuda = 恳求帮助
+    * te ruego que vengas = 请你来
+* 词源： 拉丁 rogare（请求）。
+* 英语： beg / request
+* 记忆： 🙏 恳求。
+
+184. ensayar（动词）｜练习；试验
+* 核心：
+    * 排练
+    * 尝试
+* 例：
+    * ensayar una obra = 排练作品
+    * ensayar un método = 测试方法
+* 词源： 拉丁 exagium（检验）。
+* 英语： rehearse / test
+* 记忆： 🎭 先试。
+
+185. bautizar（动词）｜给……洗礼；命名
+* 核心：
+    * 宗教洗礼
+    * 给东西取名
+* 例： bautizar un barco = 给船命名。
+* 词源： 希腊 baptizein（浸入水中）。
+* 英语： baptize / name
+* 记忆： 💧 命名仪式。
+
+186. alentar（动词）｜鼓励；激励；促进
+* 核心： 给别人力量。
+* 例： alentar a alguien = 鼓励某人。
+* 词源： 拉丁 halitus（气息）。
+* 英语： encourage
+* 记忆： 💨 给力量。
+
+187. madrugar（动词）｜早起
+* 核心： 很早起床。
+* 例： Mañana tengo que madrugar. = 明天我要早起。
+* 词源： madre（早晨）相关。
+* 英语： get up early
+* 记忆： 🌄 清晨起来。
+
+188. soplar（动词）｜吹；吹气
+* 核心： 空气流动。
+* 例：
+    * soplar una vela = 吹蜡烛
+    * soplar el viento = 风吹
+* 词源： 拉丁 sufflare。
+* 英语： blow
+* 记忆： 💨 吹。
+
+189. regir（动词）｜统治；支配；适用
+* 核心： 控制规则或制度。
+* 例：
+    * La ley rige. = 法律有效。
+    * regir un país = 治理国家。
+* 词源： 拉丁 regere（统治）。
+* 英语： rule / govern
+* 记忆： 👑 管理。
+
+190. rozar（动词）｜擦过；接触
+* 核心： 轻微碰到。
+* 例：
+    * rozar la pared = 擦到墙
+    * rozar el límite = 接近极限
+* 词源： 来自拉丁 ruptiare。
+* 英语： brush against / touch
+* 记忆： 👋 轻轻碰。
+
+继续第九轮（191/250+）：
+
+191. remitir（动词）｜寄送；转交；减轻
+* 核心：
+    * 把东西送到某处
+    * 症状减弱
+* 例：
+    * remitir un documento = 寄送文件
+    * El dolor remitió. = 疼痛减轻了。
+* 词源： 拉丁 remittere（送回、放松）。
+* 英语： send / remit / subside
+* 记忆： 📩 送过去。
+
+192. velar（动词）｜守护；守夜；关注
+* 核心： 保持警惕保护某人。
+* 例：
+    * velar por la seguridad = 保障安全
+    * velar un muerto = 守灵
+* 词源： 拉丁 vigilare（保持清醒）。
+* 英语： watch over / guard
+* 记忆： 👁️ 守着。
+
+193. perjudicar（动词）｜损害；伤害
+* 核心： 造成不利影响。
+* 例：
+    * perjudicar la salud = 损害健康
+    * perjudicar a alguien = 伤害某人
+* 词源： 拉丁 praeiudicare（预先判断）。
+* 英语： harm / damage
+* 记忆： ⚠️ 带来坏影响。
+
+194. acertar（动词）｜猜对；做对；命中
+* 核心： 得到正确结果。
+* 例：
+    * acertar la respuesta = 答对
+    * acertar con la solución = 找到正确方案
+* 词源： a- + cierto（正确）。
+* 英语： get right / hit
+* 记忆： 🎯 命中。
+
+195. demorar（动词）｜延迟；花费时间
+* 核心： 让事情变慢。
+* 例：
+    * demorar una decisión = 延迟决定
+    * demorarse mucho = 花很久
+* 词源： 拉丁 demorari。
+* 英语： delay / take time
+* 记忆： ⏳ 拖延。
+
+196. aplazar（动词）｜延期；推迟
+* 核心： 把事情放到以后。
+* 例：
+    * aplazar una reunión = 推迟会议
+    * aplazar un examen = 延期考试
+* 词源： a- + plazo（期限）。
+* 英语： postpone
+* 记忆： 📅 往后放。
+
+197. presumir（动词）｜自认为；炫耀；推测
+* 核心：
+    * 认为某事是真的
+    * 夸耀自己
+* 例：
+    * presumir de rico = 炫耀有钱
+    * se presume inocente = 被推定无罪
+* 词源： 拉丁 praesumere（预先取）。
+* 英语： presume / show off
+* 记忆： 😎 自信展示。
+
+198. disimular（动词）｜掩饰；假装没看见
+* 核心： 隐藏真实感觉或事实。
+* 例：
+    * disimular una emoción = 掩饰情绪
+    * hacer como si nada = 装作没事
+* 词源： 拉丁 dissimulare。
+* 英语： conceal / pretend
+* 记忆： 🎭 藏起来。
+
+199. subrayar（动词）｜划线强调
+* 核心： 重点标记。
+* 例： subrayar una palabra = 给单词画线。
+* 词源： sub-（下面）+ raya（线）。
+* 英语： underline / emphasize
+* 记忆： ✏️ 画重点。
+
+200. volcar（动词）｜翻倒；倾倒；投入
+* 核心：
+    * 翻车
+    * 倾倒东西
+    * 全心投入
+* 例：
+    * volcar un vaso = 打翻杯子
+    * volcarse en un proyecto = 全身心投入项目
+* 词源： 拉丁 volvere（转动）。
+* 英语： overturn / devote oneself
+* 记忆： 🔄 翻过去。
+
+201. pretender（动词）｜企图；打算；声称
+* 核心： 有目标地想做某事。
+* 例：
+    * pretender ganar = 想赢
+    * pretender ser experto = 声称是专家
+* 词源： 拉丁 praetendere（伸向前）。
+* 英语： intend / claim
+* 记忆： 🎯 目标。
+
+202. arrebatar（动词）｜夺走；抢走；使激动
+* 核心：
+    * 强行拿走
+    * 强烈情绪影响
+* 例：
+    * arrebatar un objeto = 抢走物品
+    * la emoción le arrebató = 情绪控制了他
+* 词源： re- + batir（击打）。
+* 英语： snatch / seize
+* 记忆： ⚡ 突然夺取。
+
+203. odiar（动词）｜憎恨
+* 核心： 强烈不喜欢。
+* 例： odiar la mentira = 憎恨谎言。
+* 词源： 拉丁 odi。
+* 英语： hate
+* 记忆： 😡 强烈讨厌。
+
+204. insinuar（动词）｜暗示；含蓄表达
+* 核心： 不直接说。
+* 例： insinuar una idea = 暗示一个想法。
+* 词源： 拉丁 insinuare（进入内心）。
+* 英语： imply / hint
+* 记忆： 💬 话里有话。
+
+205. fallecer（动词）｜去世
+* 核心： 正式表达死亡。
+* 例： El escritor falleció ayer. = 作家昨天去世。
+* 词源： 拉丁 fallere（失败、失去）。
+* 英语： pass away / die
+* 记忆： ⚰️ 正式说法。
+
+206. asentar（动词）｜放稳；建立；确认
+* 核心：
+    * 固定位置
+    * 记录
+    * 使稳定
+* 例：
+    * asentar una base = 建立基础
+    * asentar datos = 登记数据
+* 词源： a- + sentar（坐）。
+* 英语： establish / settle
+* 记忆： 📌 稳下来。
+
+207. estrechar（动词）｜缩小；握紧；加强
+* 核心：
+    * 变窄
+    * 加深关系
+* 例：
+    * estrechar la mano = 握手
+    * estrechar relaciones = 加强关系
+* 词源： estrecho（窄）。
+* 英语： narrow / strengthen
+* 记忆： 🤝 拉近。
+
+208. derrumbar（动词）｜倒塌；摧毁；使崩溃
+* 核心：
+    * 建筑倒塌
+    * 心理崩溃
+* 例：
+    * derrumbar un edificio = 推倒建筑
+    * derrumbarse emocionalmente = 情绪崩溃
+* 词源： de- + rumbo（方向）。
+* 英语： collapse / demolish
+* 记忆： 🏚️ 倒下。
+
+209. oscilar（动词）｜摆动；波动
+* 核心： 在两个状态之间变化。
+* 例：
+    * oscilar entre dos opciones = 在两个选择间摇摆
+    * los precios oscilan = 价格波动
+* 词源： 拉丁 oscillare。
+* 英语： oscillate / fluctuate
+* 记忆： ↔️ 来回。
+
+210. recobrar（动词）｜恢复；重新获得
+* 核心： 失去后重新得到。
+* 例：
+    * recobrar la salud = 恢复健康
+    * recobrar la confianza = 重获信任
+* 词源： re- + cobrar（收回）。
+* 英语： recover / regain
+* 记忆： 🔄 拿回来。
+
+继续第十轮（211/250+）：
+
+211. morder（动词）｜咬
+* 核心： 用牙齿咬。
+* 例：
+    * morder una manzana = 咬苹果
+    * un perro muerde = 狗咬人
+* 词源： 拉丁 mordere。
+* 英语： bite
+* 记忆： 🦷 咬。
+
+212. aguardar（动词）｜等待；期待
+* 核心： 比 esperar 更正式。
+* 例：
+    * aguardar una respuesta = 等待回复
+* 词源： a- + guardar（保存、守候）。
+* 英语： wait for
+* 记忆： ⏳ 等着。
+
+213. parir（动词）｜生育；生产
+* 核心： 分娩。
+* 例：
+    * parir un hijo = 生孩子
+    * dar a luz（更常用）= 分娩
+* 词源： 拉丁 parere。
+* 英语： give birth
+* 记忆： 👶 生下来。
+
+214. sobrepasar（动词）｜超过；超越
+* 核心： 超过某个界限。
+* 例：
+    * sobrepasar un límite = 超过限制
+    * sobrepasar expectativas = 超出预期
+* 词源： sobre-（超过）+ pasar（通过）。
+* 英语： exceed / surpass
+* 记忆： 🚀 超过。
+
+215. apostar（动词）｜下注；支持；押注
+* 核心：
+    * 赌博下注
+    * 表示支持某方向
+* 例：
+    * apostar dinero = 下注
+    * apostar por la tecnología = 看好科技
+* 词源： 拉丁 apponere（放置）。
+* 英语： bet
+* 记忆： 🎲 押上。
+
+216. deslizar（动词）｜滑动；滑落；透露
+* 核心：
+    * 平滑移动
+    * 不经意表达
+* 例：
+    * deslizar una mano = 滑动手
+    * deslizar una idea = 暗示一个想法
+* 词源： des- + ligar（连接）。
+* 英语： slide / slip
+* 记忆： 🛝 滑过去。
+
+217. estirar（动词）｜拉伸；伸长
+* 核心： 使长度增加。
+* 例：
+    * estirar los brazos = 伸胳膊
+    * estirar una cuerda = 拉绳子
+* 词源： 拉丁 strictare。
+* 英语： stretch
+* 记忆： 🙆 拉开。
+
+218. fomentar（动词）｜促进；鼓励
+* 核心： 让某事发展。
+* 例：
+    * fomentar la educación = 促进教育
+    * fomentar hábitos saludables = 培养健康习惯
+* 词源： 拉丁 fomentum（温暖、支持）。
+* 英语： promote / encourage
+* 记忆： 🌱 促进成长。
+
+219. prescindir（动词）｜不需要；舍弃
+* 核心： 没有某物也可以。
+* 常用： prescindir de algo
+* 例： Puedo prescindir del coche. = 我可以不用车。
+* 词源： 拉丁 praescindere（切除）。
+* 英语： do without / dispense with
+* 记忆： ✂️ 去掉。
+
+220. resaltar（动词）｜突出；强调
+* 核心： 使某物明显。
+* 例：
+    * resaltar una idea = 强调观点
+    * el color resalta = 颜色突出
+* 词源： re- + saltar（跳起）。
+* 英语： highlight / stand out
+* 记忆： ✨ 跳出来。
+
+221. derribar（动词）｜推倒；击倒
+* 核心： 使某物倒下。
+* 例：
+    * derribar un árbol = 砍倒树
+    * derribar a un rival = 击败对手
+* 词源： de- + riba（高处）。
+* 英语： knock down / bring down
+* 记忆： 🏚️ 打倒。
+
+222. filtrar（动词）｜过滤；泄露
+* 核心：
+    * 通过过滤器
+    * 信息泄露
+* 例：
+    * filtrar agua = 过滤水
+    * filtrar información = 泄露信息
+* 词源： 来自法语 filtre。
+* 英语： filter / leak
+* 记忆： 🧪 通过筛选。
+
+223. apelar（动词）｜上诉；呼吁；诉诸
+* 核心：
+    * 法律上申请复审
+    * 请求帮助
+* 例：
+    * apelar una sentencia = 上诉判决
+    * apelar al público = 呼吁公众
+* 词源： 拉丁 appellare。
+* 英语： appeal
+* 记忆： 📢 请求回应。
+
+224. coser（动词）｜缝
+* 核心： 用针线连接。
+* 例： coser una camisa = 缝衬衫。
+* 词源： 拉丁 consuere。
+* 英语： sew
+* 记忆： 🧵 缝起来。
+
+225. albergar（动词）｜容纳；怀有
+* 核心：
+    * 提供住宿
+    * 心中拥有想法
+* 例：
+    * albergar turistas = 接待游客
+    * albergar esperanza = 怀有希望
+* 词源： 日耳曼语 haribergon（提供住所）。
+* 英语： house / harbor
+* 记忆： 🏠 容纳。
+
+226. acontecer（动词）｜发生
+* 核心： 正式表达“发生”。
+* 例： Lo que aconteció ayer... = 昨天发生的事情……
+* 词源： a- + contecer（发生）。
+* 英语： happen
+* 记忆： 📅 发生。
+
+227. camuflar（动词）｜伪装；掩盖
+* 核心： 隐藏真实外观。
+* 例：
+    * camuflarse en el bosque = 在森林中伪装
+* 词源： 来自法语 camoufler。
+* 英语： camouflage
+* 记忆： 🦎 隐藏。
+
+228. sobresalir（动词）｜突出；胜过
+* 核心：
+    * 从表面突出
+    * 表现优秀
+* 例：
+    * sobresalir entre otros = 脱颖而出
+* 词源： sobre-（超过）+ salir（出来）。
+* 英语： stand out / excel
+* 记忆： ⭐ 冒出来。
+
+229. alegar（动词）｜声称；提出理由
+* 核心： 在正式场合说明理由。
+* 例：
+    * alegar inocencia = 声称无罪
+    * alegar razones = 提出理由
+* 词源： 拉丁 allegare。
+* 英语： allege / argue
+* 记忆： ⚖️ 提出依据。
+
+230. estrenar（动词）｜首次使用；首映
+* 核心：
+    * 第一次穿/用
+    * 新作品上映
+* 例：
+    * estrenar ropa = 穿新衣
+    * estrenar una película = 首映电影
+* 词源： 拉丁 strena（礼物）。
+* 英语： debut / use for the first time
+* 记忆： 🎁 第一次。
+
+231. incitar（动词）｜刺激；煽动；鼓励
+* 核心： 促使某人行动。
+* 例：
+    * incitar a la violencia = 煽动暴力
+    * incitar a estudiar = 鼓励学习
+* 词源： 拉丁 incitare。
+* 英语： incite / encourage
+* 记忆： 🔥 推动行动。
+
+232. encarnar（动词）｜体现；化身
+* 核心： 抽象概念变成具体代表。
+* 例：
+    * encarnar un personaje = 饰演角色
+    * encarnar la libertad = 代表自由
+* 词源： en- + carne（肉）。
+* 英语： embody
+* 记忆： 👤 具体化。
+
+继续第十一轮（233/250+，收尾轮）：
+
+233. ratificar（动词）｜确认；批准
+* 核心： 正式确认之前的决定。
+* 例： ratificar un acuerdo = 批准协议。
+* 词源： 拉丁 ratus（确定的）+ facere（做）。
+* 英语： ratify / confirm
+* 记忆： ✅ 再确认一次。
+
+234. encadenar（动词）｜连接；束缚；连续发生
+* 核心：
+    * 用链连接
+    * 事情连续发生
+* 例：
+    * encadenar acontecimientos = 一连串事件
+    * encadenar a alguien = 锁住某人
+* 词源： en- + cadena（链）。
+* 英语： chain / link
+* 记忆： ⛓️ 连起来。
+
+235. paralizar（动词）｜使瘫痪；停止
+* 核心： 让行动停止。
+* 例：
+    * paralizar el tráfico = 使交通瘫痪
+    * quedarse paralizado = 吓呆
+* 词源： 希腊 paralysis。
+* 英语： paralyze / stop
+* 记忆： 🛑 动不了。
+
+236. disipar（动词）｜驱散；消散
+* 核心：
+    * 消除疑虑
+    * 气体散开
+* 例：
+    * disipar dudas = 消除疑问
+    * disiparse la niebla = 雾散去
+* 词源： 拉丁 dispergere。
+* 英语： dispel / dissipate
+* 记忆： 🌫️ 散开。
+
+237. reprochar（动词）｜责备；责怪
+* 核心： 因错误批评别人。
+* 例： reprochar algo a alguien = 责怪某人某事。
+* 词源： re- + proche（接近，指责）。
+* 英语： reproach / blame
+* 记忆： 😠 指责。
+
+238. dotar（动词）｜赋予；提供
+* 核心： 给某物某种能力或资源。
+* 例：
+    * dotar de recursos = 提供资源
+    * dotar a alguien de talento = 赋予才能
+* 词源： 拉丁 dotare（赠予）。
+* 英语： provide / endow
+* 记忆： 🎁 赋予。
+
+239. soler（动词，特殊）｜通常；往往
+* 核心： 表示习惯性动作。
+* 用法： soler + 动词原形
+* 例： Suelo leer antes de dormir.= 我通常睡前读书。
+* 词源： 拉丁 solere（习惯）。
+* 英语： usually / tend to
+* 记忆： 🔁 经常。
+
+240. reventar（动词）｜爆裂；累垮；搞坏
+* 核心：
+    * 爆炸
+    * 极度疲惫
+* 例：
+    * reventar un globo = 弄爆气球
+    * Estoy reventado. = 我累死了。
+* 词源： 拉丁 reventare。
+* 英语： burst / exhaust
+* 记忆： 💥 爆掉。
+
+241. despojar（动词）｜剥夺；夺走
+* 核心： 强行拿走拥有的东西。
+* 例：
+    * despojar a alguien de sus derechos= 剥夺某人的权利。
+* 词源： 拉丁 despoliare。
+* 英语： strip / deprive
+* 记忆： 🚫 拿走。
+
+242. hervir（动词）｜沸腾；煮
+* 核心：
+    * 水沸腾
+    * 煮东西
+* 例：
+    * hervir agua = 烧水
+    * la sangre hierve = 热血沸腾
+* 词源： 拉丁 fervere。
+* 英语： boil
+* 记忆： ♨️ 开水。
+
+243. trepar（动词）｜攀爬
+* 核心： 向上爬。
+* 例：
+    * trepar un árbol = 爬树
+    * trepar una montaña = 爬山
+* 词源： 可能来自拉丁 trepidare。
+* 英语： climb
+* 记忆： 🧗 往上爬。
+
+244. arrasar（动词）｜摧毁；横扫；大获成功
+* 核心：
+    * 完全破坏
+    * 取得巨大成功
+* 例：
+    * arrasar una ciudad = 摧毁城市
+    * la película arrasó = 电影大获成功
+* 词源： 可能来自 ras（平整）。
+* 英语： devastate / sweep
+* 记忆： 🌪️ 全部扫过。
+
+245. replicar（动词）｜复制；回应
+* 核心：
+    * 重复制造
+    * 回答反驳
+* 例：
+    * replicar un experimento = 重复制实验
+    * replicar una pregunta = 回应问题
+* 词源： 拉丁 replicare（折回）。
+* 英语： replicate / reply
+* 记忆： 🔄 再一次。
+
+246. concurrir（动词）｜参加；同时发生
+* 核心：
+    * 出席活动
+    * 多因素同时出现
+* 例：
+    * concurrir a un concurso = 参加比赛
+    * concurren varias causas = 多种原因同时存在
+* 词源： 拉丁 concurrere（一起跑）。
+* 英语： attend / coincide
+* 记忆： 👥 一起出现。
+
+247. retrasar（动词）｜推迟；延误
+* 核心： 使时间变晚。
+* 例：
+    * retrasar un vuelo = 延误航班
+    * retrasarse = 迟到
+* 词源： re- + atrás（后面）。
+* 英语： delay
+* 记忆： ⏰ 往后。
+
+248. palpar（动词）｜触摸；摸索
+* 核心： 用手感觉。
+* 例：
+    * palpar una herida = 检查伤口
+* 词源： 拉丁 palpare。
+* 英语： feel / palpate
+* 记忆： ✋ 摸。
+
+249. torcer（动词）｜扭曲；拧；转弯
+* 核心：
+    * 改变方向
+    * 扭伤
+* 例：
+    * torcer el brazo = 扭胳膊
+    * torcer a la derecha = 向右转
+* 词源： 拉丁 torquere。
+* 英语： twist / turn
+* 记忆： 🔄 扭。
+
+250. topar（动词）｜碰到；遇到；撞上
+* 核心： 偶然接触。
+* 例：
+    * toparse con alguien = 偶遇某人
+    * topar con un problema = 遇到问题
+* 词源： 拟声词相关。
+* 英语： encounter / bump into
+* 记忆： 🚶 撞见。
+
+251. colar（动词）｜过滤；偷偷进入；塞入
+* 核心：
+    * 过滤液体
+    * 混进去
+* 例：
+    * colar café = 过滤咖啡
+    * colarse en una fiesta = 混进派对
+* 词源： 拉丁 colare。
+* 英语： strain / sneak in
+* 记忆： 🧺 通过筛子。
+
+252. ostentar（动词）｜拥有；炫耀（正式）
+* 核心：
+    * 持有职位
+    * 展示财富
+* 例：
+    * ostentar un cargo = 担任职位
+    * ostentar riqueza = 炫耀财富
+* 词源： 拉丁 ostentare（展示）。
+* 英语： hold / display
+* 记忆： 👑 展示。
+
+253. prevalecer（动词）｜占优势；持续存在
+* 核心： 最终胜出或保持。
+* 例：
+    * prevalecer la justicia = 正义占优势
+* 词源： 拉丁 praevalere。
+* 英语： prevail
+* 记忆： 🏆 胜过。
+
+254. contagiar（动词）｜传染；感染
+* 核心：
+    * 疾病传播
+    * 情绪影响
+* 例：
+    * contagiar una enfermedad = 传播疾病
+    * contagiar alegría = 传递快乐
+* 词源： 拉丁 contagium。
+* 英语： infect / spread
+* 记忆： 🦠 传过去。
+
+255. ceñir（动词）｜围绕；束紧；限制
+* 核心：
+    * 环绕身体
+    * 限制范围
+* 例：
+    * ceñirse a las reglas = 遵守规则
+* 词源： 拉丁 cingere。
+* 英语： tighten / stick to
+* 记忆： 🔗 绑住。
+
+256. constatar（动词）｜证实；确认
+* 核心： 通过事实确认。
+* 例： constatar un hecho = 证实事实。
+* 词源： con- + stare（站立）。
+* 英语： verify / confirm
+* 记忆： 🔍 查实。
+
+257. vacilar（动词）｜犹豫；摇摆；开玩笑（拉美）
+* 核心：
+    * 不确定
+    * 逗弄
+* 例：
+    * vacilar antes de decidir = 犹豫
+* 词源： 拉丁 vacillare。
+* 英语： hesitate / joke
+* 记忆： ↔️ 摇摆。
+
+258. liquidar（动词）｜清算；结束；打折出售
+* 核心：
+    * 结算
+    * 清除
+    * 清仓
+* 例：
+    * liquidar una deuda = 清偿债务
+    * liquidación = 清仓促销
+* 词源： 拉丁 liquidus（液体、清楚）。
+* 英语： liquidate / clear out
+* 记忆： 💰 清掉。
+
+259. devorar（动词）｜吞食；吞噬
+* 核心： 快速大量吃。
+* 例： devorar un libro = 狼吞虎咽地读书。
+* 词源： 拉丁 devorare。
+* 英语： devour
+* 记忆： 🐺 狼吞。
+
+260. aferrar（动词）｜抓牢；坚持
+* 核心：
+    * 紧紧抓住
+    * 坚持观点
+* 例：
+    * aferrarse a una idea = 固守想法
+* 词源： a- + hierro（铁）。
+* 英语： cling / hold on
+* 记忆： 🔩 抓铁一样牢。
+
+261. apresurar（动词）｜加快；催促
+* 核心： 让速度提高。
+* 例： apresurar el paso = 加快脚步。
+* 词源： a- + prisa（急）。
+* 英语： hurry / speed up
+* 记忆： 🏃 快一点。
+
+262. latir（动词）｜跳动；搏动
+* 核心： 心脏等有规律运动。
+* 例： el corazón late = 心脏跳动。
+* 词源： 拉丁 battuere 相关。
+* 英语： beat / throb
+* 记忆： ❤️ 心跳。
+
+263. acariciar（动词）｜抚摸；轻触
+* 核心： 温柔触摸。
+* 例： acariciar un gato = 抚摸猫。
+* 词源： 与 cara（脸）相关。
+* 英语： caress / stroke
+* 记忆： 🐱 温柔摸。
+
+264. espantar（动词）｜吓跑；使害怕
+* 核心： 使某人离开或害怕。
+* 例： espantar un pájaro = 吓走鸟。
+* 词源： 拉丁 expaventare。
+* 英语： scare away
+* 记忆： 🐦 吓走。
+
+265. atener（动词，常见 atenerse a）｜遵守；依据
+* 核心： 按照规则行动。
+* 例： atenerse a la ley = 遵守法律。
+* 词源： a- + tener（保持）。
+* 英语： abide by
+* 记忆： 📏 按规则。
+
+266. chupar（动词）｜吸；舔
+* 核心： 用嘴吸取。
+* 例： chupar un caramelo = 吮糖。
+* 词源： 拟声词。
+* 英语： suck
+* 记忆： 🍭 吸。
+
+267. condicionar（动词）｜限制；影响；使取决于
+* 核心： 形成条件。
+* 例： El dinero condiciona la decisión.钱影响决定。
+* 词源： condición（条件）。
+* 英语： condition / influence
+* 记忆： ⚙️ 受到条件影响。
+
+268. indagar（动词）｜调查；探究
+* 核心： 深入寻找信息。
+* 例： indagar la verdad = 调查真相。
+* 词源： 拉丁 indagare。
+* 英语： investigate
+* 记忆： 🔎 深挖。
+
+269. rascar（动词）｜抓；挠；刮
+* 核心： 用力摩擦表面。
+* 例： rascarse la cabeza = 挠头。
+* 词源： 日耳曼语来源。
+* 英语： scratch
+* 记忆： ✋ 挠。
+
+270. enredar（动词）｜缠绕；弄乱；卷入
+* 核心： 进入复杂状态。
+* 例：
+    * enredar cables = 缠绕电线
+    * enredarse en un problema = 陷入问题
+* 词源： en- + red（网）。
+* 英语： tangle / involve
+* 记忆： 🕸️ 进入网里。
+
+271. conferir（动词）｜授予；赋予；比较
+* 核心： 正式给予某种权利。
+* 例： conferir un título = 授予学位。
+* 词源： 拉丁 conferre。
+* 英语： confer / grant
+* 记忆： 🎓 授予。
+
+272. despejar（动词）｜清除；解决；放晴
+* 核心：
+    * 清理空间
+    * 解答问题
+    * 云散
+* 例：
+    * despejar una duda = 消除疑问
+    * el cielo despeja = 天放晴
+* 词源： des- + pejo（障碍）。
+* 英语： clear / solve
+* 记忆： 🌤️ 清开。
+
+273. resucitar（动词）｜复活；恢复
+* 核心：
+    * 死而复生
+    * 重新出现
+* 词源： 拉丁 resuscitare。
+* 英语： resurrect / revive
+* 记忆： 🌱 再生。
+
+274. sudar（动词）｜出汗
+* 核心： 身体排汗。
+* 例： sudar mucho = 出很多汗。
+* 词源： 拉丁 sudare。
+* 英语： sweat
+* 记忆： 💦 出汗。
+
+275. perturbar（动词）｜扰乱；使不安
+* 核心： 打破平静。
+* 例： perturbar la paz = 扰乱和平。
+* 词源： 拉丁 perturbare。
+* 英语： disturb
+* 记忆： 🌪️ 搅乱。
+
+276. deteriorar（动词）｜恶化；损坏
+* 核心： 质量下降。
+* 例： deteriorar la salud = 损害健康。
+* 词源： 拉丁 deterior（更坏）。
+* 英语： deteriorate
+* 记忆： 📉 变差。
+
+277. vislumbrar（动词）｜隐约看见；预见
+* 核心： 看见一点点、不清楚。
+* 例： vislumbrar una solución = 看到解决希望。
+* 词源： ver（看）相关。
+* 英语： glimpse / foresee
+* 记忆： 👀 模糊看到。
+
+278. rectificar（动词）｜纠正；修改
+* 核心： 改正错误。
+* 例： rectificar un error = 纠正错误。
+* 词源： recto（正确、直）。
+* 英语： correct
+* 记忆： ✅ 改正。
+
+279. tumbar（动词）｜弄倒；躺下
+* 核心：
+    * 使倒下
+    * 躺着
+* 例：
+    * tumbar un árbol = 放倒树
+    * tumbarse en la cama = 躺床上
+* 词源： 拟声词。
+* 英语： knock down / lie down
+* 记忆： 🛏️ 倒下。
+
+280. aflojar（动词）｜放松；松开
+* 核心： 减少紧张程度。
+* 例：
+    * aflojar un tornillo = 松螺丝
+    * aflojar la tensión = 缓解紧张
+* 词源： flojo（松的）。
+* 英语： loosen
+* 记忆： 🔓 松开。
+
+281. propagar（动词）｜传播；扩散
+* 核心： 让东西传出去。
+* 例：
+    * propagar una noticia = 传播消息
+    * propagar un virus = 传播病毒
+* 词源： 拉丁 propagare（繁殖、扩展）。
+* 英语： spread / propagate
+* 记忆： 📡 扩散。
+
+
+
+
+

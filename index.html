@@ -1593,7 +1593,7 @@ const CATEGORIES = [
   { key: "ds", name: "Dreaming Spanish", icon: "📺", time: "45min", desc: "视频输入" },
   { key: "anki", name: "Anki 词汇", icon: "📝", time: "35min", desc: "背单词 + 复习旧卡" },
   { key: "leer", name: "阅读", icon: "📖", time: "20min", desc: "分级读物 / 真实文章" },
-  { key: "escribir", name: "写作", icon: "✍️", time: "20min", desc: "每日写作造句" },
+  { key: "escribir", name: "语法", icon: "✍️", time: "20min", desc: "冠词+介词练习" },
   { key: "conjugar", name: "变位练习", icon: "🔤", time: "20min", desc: "变位刷题" },
   { key: "hablar", name: "口语输出", icon: "🗣️", time: "30min", desc: "Shadowing + 录音 + 语伴" }
 ];
@@ -2165,6 +2165,28 @@ function dailyReport() {
         report += `  批改：${errCount > 0 ? errCount + "个需改" : "全部正确 🎉"}\n`;
       }
     });
+    report += `\n`;
+  }
+
+  // 冠词练习
+  const articleErrs = loadArticleErrors();
+  if (articleErrs.total > 0) {
+    const acc = articleErrs.correct || 0;
+    const atot = articleErrs.total || 0;
+    const awrong = Object.keys(articleErrs.wrong || {}).filter(i => (articleErrs.wrong[i] || 0) > 0).length;
+    report += `## 📝 今日冠词练习 (${atot}题 · ✅${acc} · ❌${atot - acc})\n`;
+    report += `  累计待巩固 ${awrong} 道\n`;
+    report += `\n`;
+  }
+
+  // 介词练习
+  const prepErrs = loadPrepErrors();
+  if (prepErrs.total > 0) {
+    const pacc = prepErrs.correct || 0;
+    const ptot = prepErrs.total || 0;
+    const pwrong = Object.keys(prepErrs.wrong || {}).filter(i => (prepErrs.wrong[i] || 0) > 0).length;
+    report += `## 🔗 今日介词练习 (${ptot}题 · ✅${pacc} · ❌${ptot - pacc})\n`;
+    report += `  累计待巩固 ${pwrong} 道\n`;
     report += `\n`;
   }
 
@@ -3301,7 +3323,7 @@ const ARTICLE_QUESTIONS = [
   { s: "Tengo __ hambre y __ sed.", a: "0", l: 5, r: "固定表达零冠词" },
   { s: "__ amigos son importantes.", a: "los", l: 5, r: "泛指类别定冠词" },
   { s: "Es __ ingeniera civil.", a: "0", l: 5, r: "职业零冠词" },
-  { s: "Voy __ escuela a las ocho.", a: "a", l: 5, r: "escuela 前不用 el（习惯，零冠词但保留 a）" },
+  { s: "Voy a __ escuela a las ocho.", a: "la", l: 5, r: "escuela 是阴性，a la escuela（去学校）" },
   { s: "Me duele __ corazón cuando corro.", a: "el", l: 5, r: "身体部位用定冠词" },
   { s: "Habla __ italiano perfectamente.", a: "0", l: 5, r: "语言零冠词" },
   { s: "El final __ mundo está cerca.", a: "del", l: 5, r: "de+el→del" },
@@ -3547,7 +3569,7 @@ const PREP_QUESTIONS = [
   { v: "confiar", m: "信任", p: "en", e: "confiar en（信任）—— en 表'信任的对象'" },
   { v: "insistir", m: "坚持", p: "en", e: "insistir en（坚持）—— en 表'坚持的事'" },
   { v: "empeñarse", m: "执意", p: "en", e: "empeñarse en（执意）—— en 表'执意做的事'" },
-  { v: "esforzarse", m: "努力", p: "en", e: "esforzarse en/por（努力）—— en/por 都可，表'努力的方向'" },
+  { v: "esforzarse", m: "努力（做）", p: "en", e: "esforzarse en + 原形（努力做某事）—— en 后接原形" },
   { v: "consistir", m: "在于", p: "en", e: "consistir en（在于）—— en 表'本质所在'" },
   { v: "quedar", m: "约定", p: "en", e: "quedar en（约定）—— en 表'约定的内容'" },
   { v: "tardar", m: "花时间", p: "en", e: "tardar en（花时间）—— en 后接原形，表'耗时做的事'" },
@@ -3571,7 +3593,7 @@ const PREP_QUESTIONS = [
 
   // por 家族
   { v: "preocuparse", m: "担心", p: "por", e: "preocuparse por（担心）—— por 表'担心的对象'" },
-  { v: "esforzarse", m: "努力", p: "por", e: "esforzarse por（努力）—— por 表'努力的目标'" },
+  { v: "esforzarse", m: "努力（为）", p: "por", e: "esforzarse por + 名词/原形（为…而努力）—— por 表'奋斗的目标'" },
   { v: "interesarse", m: "对…感兴趣", p: "por", e: "interesarse por（对…感兴趣）—— por 表'感兴趣的对象'" },
   { v: "preguntar", m: "打听、问起", p: "por", e: "preguntar por（打听）—— por 表'打听的对象'" },
   { v: "luchar", m: "为…奋斗", p: "por", e: "luchar por（为…奋斗）—— por 表'奋斗的目标'" },
