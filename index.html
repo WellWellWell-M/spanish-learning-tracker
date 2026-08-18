@@ -3322,34 +3322,78 @@ function saveArticleErrors(data) {
   catch (e) {}
 }
 
-let articleState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [] };
+let articleState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], levelFilter: 0 };
+
+// 掌握判定：连续做对 3 次才从错题队列移除
+const ARTICLE_MASTER_AT = 3;
 
 function articleInit() {
-  // 打乱题目顺序（每次练习重新洗牌）
-  articleState.order = ARTICLE_QUESTIONS.map((_, i) => i);
-  for (let i = articleState.order.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [articleState.order[i], articleState.order[j]] = [articleState.order[j], articleState.order[i]];
-  }
   articleState.index = 0;
   articleState.answered = false;
+  articleState.order = articleBuildOrder();
+}
+
+// 构建出题顺序：错题优先 + 档位筛选
+function articleBuildOrder() {
+  const errs = loadArticleErrors();
+  const lf = articleState.levelFilter || 0;
+
+  // 先按档位筛出候选题目索引
+  let candidates = ARTICLE_QUESTIONS.map((_, i) => i);
+  if (lf > 0) {
+    candidates = candidates.filter(i => ARTICLE_QUESTIONS[i].l === lf);
+  }
+
+  // 错题优先：还没掌握（连续正确<3次）的排前面
+  const wrongIdx = candidates.filter(i => (errs.wrong[i] || 0) > 0);
+  const freshIdx = candidates.filter(i => !(errs.wrong[i] || 0));
+
+  // 错题内部：错得多的排前面，其余随机
+  wrongIdx.sort((a, b) => (errs.wrong[b] || 0) - (errs.wrong[a] || 0));
+  // 新题随机洗牌
+  for (let i = freshIdx.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [freshIdx[i], freshIdx[j]] = [freshIdx[j], freshIdx[i]];
+  }
+
+  return [...wrongIdx, ...freshIdx];
 }
 
 function renderArticle() {
   const container = document.getElementById("articleContainer");
   if (!articleState.order || articleState.order.length === 0) articleInit();
 
+  // 档位筛选栏
+  const errs = loadArticleErrors();
+  const levels = [
+    { id: 0, label: "全部" },
+    { id: 1, label: "合音 al/del" },
+    { id: 2, label: "零冠词" },
+    { id: 3, label: "定冠词必用" },
+    { id: 4, label: "泛指类别vs部分" },
+    { id: 5, label: "混合" },
+  ];
+
+  let levelBar = `<div class="tense-selector" style="margin-bottom:12px;">`;
+  levelBar += `<span style="font-size:0.7rem;color:var(--text-secondary);margin-right:4px;">档位</span>`;
+  levels.forEach(lv => {
+    const active = articleState.levelFilter === lv.id;
+    levelBar += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="articleSetLevel(${lv.id})" style="font-size:0.72rem;padding:2px 8px;">${lv.label}</button>`;
+  });
+  levelBar += `</div>`;
+
   if (articleState.index >= articleState.order.length) {
     // 一轮完成
-    const errs = loadArticleErrors();
+    const wrongLeft = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
     container.innerHTML = `
+      ${levelBar}
       <div class="quiz-score-bar">
         <span>🎉 本轮完成！</span>
-        <span>✅ 正确 ${errs.correct} / 累计 ${errs.total}</span>
+        <span>✅ 正确率 ${errs.total > 0 ? Math.round(errs.correct / errs.total * 100) : 0}%</span>
       </div>
       <div class="quiz-prompt">
-        <div class="verb-word">本轮 ${ARTICLE_QUESTIONS.length} 题全部完成</div>
-        <div class="quiz-person">错题会自动记录，下次优先复习</div>
+        <div class="verb-word">本轮 ${articleState.order.length} 题全部完成</div>
+        <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固（连续做对 3 次才算掌握）</div>
       </div>
       <div class="btn-row" style="margin-top:16px;">
         <button class="btn primary" onclick="articleInit();renderArticle();">🔁 再练一轮</button>
@@ -3358,16 +3402,14 @@ function renderArticle() {
   }
 
   const q = ARTICLE_QUESTIONS[articleState.order[articleState.index]];
-  const errs = loadArticleErrors();
-  const wrongCount = Object.keys(errs.wrong).length;
+  const wrongCount = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
 
-  // 题目展示：把 __ 换成下划线框
   const display = q.s.replace("__", "____");
 
-  let html = "";
+  let html = levelBar;
   html += `<div class="quiz-score-bar">
     <span>📝 第 ${articleState.index + 1} / ${articleState.order.length} 题</span>
-    <span>❌ 累计错题 ${wrongCount} 种</span>
+    <span>❌ 待巩固 ${wrongCount} 题</span>
   </div>`;
 
   html += `<div class="quiz-prompt">
@@ -3401,6 +3443,12 @@ function renderArticle() {
   if (!articleState.answered) document.getElementById("articleInput").focus();
 }
 
+function articleSetLevel(level) {
+  articleState.levelFilter = level;
+  articleInit();
+  renderArticle();
+}
+
 function articleCheck() {
   if (articleState.answered) return;
   const input = document.getElementById("articleInput");
@@ -3415,12 +3463,17 @@ function articleCheck() {
 
   const errs = loadArticleErrors();
   errs.total = (errs.total || 0) + 1;
+  const qi = articleState.order[articleState.index];
+
   if (isCorrect) {
     errs.correct = (errs.correct || 0) + 1;
+    // 连续做对计数，达到 3 次才从错题队列移除
+    if (errs.wrong[qi] && errs.wrong[qi] > 0) {
+      errs.wrong[qi]--;
+      if (errs.wrong[qi] <= 0) delete errs.wrong[qi];
+    }
   } else {
-    // 记录错题（按句子索引）
-    const qi = articleState.order[articleState.index];
-    errs.wrong[qi] = (errs.wrong[qi] || 0) + 1;
+    errs.wrong[qi] = ARTICLE_MASTER_AT; // 重置为需连续做对3次
   }
   saveArticleErrors(errs);
 
