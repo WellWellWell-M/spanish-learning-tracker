@@ -1049,6 +1049,7 @@
         <button class="btn" data-view="week" onclick="switchView('week')">📋 本周任务</button>
         <button class="btn" data-view="progress" onclick="switchView('progress')">📊 总览</button>
         <button class="btn" data-view="conjugation" onclick="switchView('conjugation')">🔤 变位练习</button>
+        <button class="btn" data-view="article" onclick="switchView('article')">📝 冠词练习</button>
         <button class="btn" data-view="journal" onclick="switchView('journal')">📓 学习笔记</button>
         <button class="btn" data-view="summary" onclick="switchView('summary')">📊 学习汇总</button>
         <button class="btn" data-view="vocab" onclick="switchView('vocab')">📝 遗忘词练</button>
@@ -1082,6 +1083,10 @@
 
       <div id="viewConjugation" style="display:none;">
         <div class="quiz-container" id="quizContainer"></div>
+      </div>
+
+      <div id="viewArticle" style="display:none;">
+        <div class="quiz-container" id="articleContainer"></div>
       </div>
 
       <div id="viewJournal" style="display:none;">
@@ -1996,6 +2001,7 @@ function renderAll() {
   renderTaskDetail();
   renderProgress();
   renderConjugation();
+  renderArticle();
   renderJournal();
   renderSummary();
   renderVocab();
@@ -2012,6 +2018,7 @@ function updateView() {
   document.getElementById("viewWeek").style.display = currentView === "week" ? "block" : "none";
   document.getElementById("viewProgress").style.display = currentView === "progress" ? "block" : "none";
   document.getElementById("viewConjugation").style.display = currentView === "conjugation" ? "block" : "none";
+  document.getElementById("viewArticle").style.display = currentView === "article" ? "block" : "none";
   document.getElementById("viewJournal").style.display = currentView === "journal" ? "block" : "none";
   document.getElementById("viewSummary").style.display = currentView === "summary" ? "block" : "none";
   document.getElementById("viewVocab").style.display = currentView === "vocab" ? "block" : "none";
@@ -3186,6 +3193,248 @@ function getFilteredVerbPool() {
   return pool;
 }
 
+// ========== 冠词练习 ==========
+// 题库：句子挖空，answer 是正确冠词（"0" 表示零冠词，什么都不填）
+// level: 1合音 2零冠词 3定冠词必用 4泛指类别vs部分 5混合
+const ARTICLE_QUESTIONS = [
+  // === 1. 合音 al / del ===
+  { s: "Voy __ cine los sábados.", a: "al", l: 1, r: "a + el → al" },
+  { s: "El libro __ profesor está en la mesa.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Vamos __ parque después de comer.", a: "al", l: 1, r: "a + el → al" },
+  { s: "La casa __ vecino es grande.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Vuelvo __ colegio a las cinco.", a: "al", l: 1, r: "a + el → al" },
+  { s: "El final __ partido fue emocionante.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Voy __ médico mañana.", a: "al", l: 1, r: "a + el → al（去看医生）" },
+  { s: "Es la puerta __ edificio.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Entro __ aula con cuidado.", a: "al", l: 1, r: "a + el → al（但 aula 例外，实际是 al aula 用 el）" },
+  { s: "La tapa __ libro se rompió.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Voy __ aeropuerto en taxi.", a: "al", l: 1, r: "a + el → al" },
+  { s: "El sonido __ mar me relaja.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Vuelve __ trabajo por la noche.", a: "al", l: 1, r: "a + el → al" },
+  { s: "La foto __ equipo está en la pared.", a: "del", l: 1, r: "de + el → del" },
+  { s: "Voy __ gimnasio tres veces por semana.", a: "al", l: 1, r: "a + el → al" },
+
+  // === 2. 零冠词（职业/国籍/语言/固定表达）===
+  { s: "Mi hermana es __ médico.", a: "0", l: 2, r: "职业前零冠词：Es médico（不是 un médico）" },
+  { s: "Hablo __ español muy bien.", a: "0", l: 2, r: "语言名（hablar 后）零冠词" },
+  { s: "Soy __ chino.", a: "0", l: 2, r: "国籍前零冠词" },
+  { s: "Tengo __ hambre.", a: "0", l: 2, r: "固定表达 tener hambre 零冠词" },
+  { s: "Es __ profesora de historia.", a: "0", l: 2, r: "职业前零冠词" },
+  { s: "Estudio __ inglés por la mañana.", a: "0", l: 2, r: "语言名零冠词" },
+  { s: "Tengo __ frío.", a: "0", l: 2, r: "固定表达 tener frío 零冠词" },
+  { s: "Es __ ingeniero famoso.", a: "0", l: 2, r: "职业前零冠词" },
+  { s: "Habla __ francés y __ alemán.", a: "0", l: 2, r: "语言名零冠词" },
+  { s: "Tengo __ sed.", a: "0", l: 2, r: "固定表达 tener sed 零冠词" },
+  { s: "Somos __ estudiantes.", a: "0", l: 2, r: "身份零冠词" },
+  { s: "Es __ enfermera en el hospital.", a: "0", l: 2, r: "职业前零冠词" },
+  { s: "Bebo __ agua todos los días.", a: "0", l: 2, r: "不可数名词泛指零冠词" },
+  { s: "Tengo __ sueño.", a: "0", l: 2, r: "固定表达 tener sueño 零冠词" },
+  { s: "Es __ abogado muy conocido.", a: "0", l: 2, r: "职业前零冠词" },
+  { s: "Estoy __ cansado.", a: "0", l: 2, r: "estar + 形容词零冠词" },
+  { s: "Me gustan __ perros.", a: "0", l: 2, r: "泛指复数（不确定数量）零冠词" },
+  { s: "Necesito __ ayuda.", a: "0", l: 2, r: "不可数名词泛指零冠词" },
+  { s: "Es __ jefa del departamento.", a: "0", l: 2, r: "职业/头衔零冠词" },
+  { s: "Tengo __ prisa.", a: "0", l: 2, r: "固定表达 tener prisa 零冠词" },
+  { s: "Soy __ de China.", a: "0", l: 2, r: "国籍零冠词" },
+  { s: "Hablamos __ español en casa.", a: "0", l: 2, r: "语言名零冠词" },
+  { s: "Es __ científico importante.", a: "0", l: 2, r: "职业前零冠词" },
+  { s: "Compro __ fruta en el mercado.", a: "0", l: 2, r: "不可数名词泛指零冠词" },
+  { s: "Tengo __ miedo de la oscuridad.", a: "0", l: 2, r: "固定表达 tener miedo 零冠词" },
+
+  // === 3. 定冠词必用（星期/时间/身体部位/类别结论）===
+  { s: "__ lunes voy al gimnasio.", a: "el", l: 3, r: "星期前用定冠词" },
+  { s: "Me duele __ cabeza.", a: "la", l: 3, r: "身体部位用定冠词（不是 mi cabeza）" },
+  { s: "Son __ tres de la tarde.", a: "las", l: 3, r: "具体时间点用定冠词" },
+  { s: "__ perros son fieles.", a: "los", l: 3, r: "泛指整个类别（谈性质）用定冠词" },
+  { s: "Me lavo __ manos antes de comer.", a: "las", l: 3, r: "身体部位用定冠词" },
+  { s: "Toco __ piano desde niño.", a: "el", l: 3, r: "乐器前用定冠词" },
+  { s: "__ martes tengo clase.", a: "el", l: 3, r: "星期前用定冠词" },
+  { s: "Me duele __ espalda.", a: "la", l: 3, r: "身体部位用定冠词" },
+  { s: "__ gatos son independientes.", a: "los", l: 3, r: "泛指整个类别用定冠词" },
+  { s: "Salimos a __ ocho.", a: "las", l: 3, r: "具体时间点用定冠词" },
+  { s: "Me cepillo __ dientes dos veces al día.", a: "los", l: 3, r: "身体部位用定冠词" },
+  { s: "Toca __ guitarra muy bien.", a: "la", l: 3, r: "乐器前用定冠词" },
+  { s: "__ viernes por la noche salimos.", a: "el", l: 3, r: "星期前用定冠词" },
+  { s: "Me duele __ estómago.", a: "el", l: 3, r: "身体部位用定冠词" },
+  { s: "__ niños necesitan dormir mucho.", a: "los", l: 3, r: "泛指整个类别用定冠词" },
+  { s: "La clase es a __ diez.", a: "las", l: 3, r: "具体时间点用定冠词" },
+  { s: "Me rompí __ pierna jugando al fútbol.", a: "la", l: 3, r: "身体部位用定冠词" },
+  { s: "__ mujeres viven más que los hombres.", a: "las", l: 3, r: "泛指整个类别用定冠词" },
+  { s: "Toca __ violín en la orquesta.", a: "el", l: 3, r: "乐器前用定冠词" },
+  { s: "__ domingo descansamos.", a: "el", l: 3, r: "星期前用定冠词" },
+  { s: "Me duele __ garganta.", a: "la", l: 3, r: "身体部位用定冠词" },
+  { s: "__ estudiantes deben estudiar.", a: "los", l: 3, r: "泛指整个类别用定冠词" },
+  { s: "Nos vemos a __ seis.", a: "las", l: 3, r: "具体时间点用定冠词" },
+
+  // === 4. 泛指类别 vs 泛指部分 ===
+  { s: "Me gustan __ manzanas.", a: "0", l: 4, r: "泛指部分（喜欢一些苹果）零冠词" },
+  { s: "__ manzanas son saludables.", a: "las", l: 4, r: "泛指整个类别（苹果是健康的）定冠词" },
+  { s: "Compro __ libros cada mes.", a: "0", l: 4, r: "泛指部分（买一些书）零冠词" },
+  { s: "__ libros son caros hoy en día.", a: "los", l: 4, r: "泛指整个类别（书很贵）定冠词" },
+  { s: "Me gusta __ café por la mañana.", a: "0", l: 4, r: "泛指部分（喜欢咖啡）零冠词" },
+  { s: "__ café de Colombia es famoso.", a: "el", l: 4, r: "泛指整个类别/特指哥伦比亚咖啡 定冠词" },
+  { s: "Necesito __ dinero para el viaje.", a: "0", l: 4, r: "泛指部分（需要一些钱）零冠词" },
+  { s: "__ dinero no da la felicidad.", a: "el", l: 4, r: "泛指整个类别（钱这个抽象概念）定冠词" },
+  { s: "Quiero __ vacaciones tranquilas.", a: "0", l: 4, r: "泛指部分零冠词" },
+  { s: "__ vacaciones son necesarias.", a: "las", l: 4, r: "泛指整个类别（假期是必要的）定冠词" },
+  { s: "Me encanta __ música clásica.", a: "0", l: 4, r: "泛指部分（喜欢古典音乐）零冠词" },
+  { s: "__ música relaja el alma.", a: "la", l: 4, r: "泛指整个类别（音乐能放松）定冠词" },
+  { s: "Busco __ trabajo nuevo.", a: "0", l: 4, r: "泛指部分（找一份工作）零冠词" },
+  { s: "__ trabajo dignifica a las personas.", a: "el", l: 4, r: "泛指整个类别（工作使人有尊严）定冠词" },
+  { s: "Tomo __ té sin azúcar.", a: "0", l: 4, r: "泛指部分（喝茶）零冠词" },
+  { s: "__ té verde es antioxidante.", a: "el", l: 4, r: "泛指整个类别（绿茶抗氧化）定冠词" },
+
+  // === 5. 混合综合 ===
+  { s: "Mi padre es __ arquitecto.", a: "0", l: 5, r: "职业零冠词" },
+  { s: "Voy __ supermercado a comprar pan.", a: "al", l: 5, r: "a+el→al" },
+  { s: "__ sábado vamos a la playa.", a: "el", l: 5, r: "星期用定冠词" },
+  { s: "Me duelen __ ojos.", a: "los", l: 5, r: "身体部位用定冠词" },
+  { s: "Estudio __ español y __ chino.", a: "0", l: 5, r: "语言零冠词" },
+  { s: "La casa __ maestro es antigua.", a: "del", l: 5, r: "de+el→del" },
+  { s: "Tengo __ hambre y __ sed.", a: "0", l: 5, r: "固定表达零冠词" },
+  { s: "__ amigos son importantes.", a: "los", l: 5, r: "泛指类别定冠词" },
+  { s: "Es __ ingeniera civil.", a: "0", l: 5, r: "职业零冠词" },
+  { s: "Voy __ escuela a las ocho.", a: "a", l: 5, r: "escuela 前不用 el（习惯，零冠词但保留 a）" },
+  { s: "Me duele __ corazón cuando corro.", a: "el", l: 5, r: "身体部位用定冠词" },
+  { s: "Habla __ italiano perfectamente.", a: "0", l: 5, r: "语言零冠词" },
+  { s: "El final __ mundo está cerca.", a: "del", l: 5, r: "de+el→del" },
+  { s: "Son __ nueve de la noche.", a: "las", l: 5, r: "时间点用定冠词" },
+  { s: "Me gusta __ helado en verano.", a: "0", l: 5, r: "泛指部分（喜欢冰淇淋）零冠词" },
+  { s: "__ helado de vainilla es mi favorito.", a: "el", l: 5, r: "特指香草味 定冠词" },
+  { s: "Es __ dentista excelente.", a: "0", l: 5, r: "职业零冠词" },
+  { s: "Voy __ banco a sacar dinero.", a: "al", l: 5, r: "a+el→al" },
+  { s: "Me lavo __ cara por la mañana.", a: "la", l: 5, r: "身体部位用定冠词" },
+  { s: "Tengo __ ganas de viajar.", a: "0", l: 5, r: "固定表达 tener ganas 零冠词" },
+  { s: "__ domingo voy a misa.", a: "el", l: 5, r: "星期用定冠词" },
+  { s: "Bebo __ leche todas las mañanas.", a: "0", l: 5, r: "不可数泛指零冠词" },
+  { s: "__ leche es buena para los huesos.", a: "la", l: 5, r: "泛指类别定冠词" },
+  { s: "El perro __ niño es muy cariñoso.", a: "del", l: 5, r: "de+el→del" },
+];
+
+const ARTICLE_KEY = "spanish_article_errors";
+
+function loadArticleErrors() {
+  try { const raw = localStorage.getItem(ARTICLE_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0 }; }
+  catch (e) { return { wrong: {}, total: 0, correct: 0 }; }
+}
+function saveArticleErrors(data) {
+  try { localStorage.setItem(ARTICLE_KEY, JSON.stringify(data)); }
+  catch (e) {}
+}
+
+let articleState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [] };
+
+function articleInit() {
+  // 打乱题目顺序（每次练习重新洗牌）
+  articleState.order = ARTICLE_QUESTIONS.map((_, i) => i);
+  for (let i = articleState.order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [articleState.order[i], articleState.order[j]] = [articleState.order[j], articleState.order[i]];
+  }
+  articleState.index = 0;
+  articleState.answered = false;
+}
+
+function renderArticle() {
+  const container = document.getElementById("articleContainer");
+  if (!articleState.order || articleState.order.length === 0) articleInit();
+
+  if (articleState.index >= articleState.order.length) {
+    // 一轮完成
+    const errs = loadArticleErrors();
+    container.innerHTML = `
+      <div class="quiz-score-bar">
+        <span>🎉 本轮完成！</span>
+        <span>✅ 正确 ${errs.correct} / 累计 ${errs.total}</span>
+      </div>
+      <div class="quiz-prompt">
+        <div class="verb-word">本轮 ${ARTICLE_QUESTIONS.length} 题全部完成</div>
+        <div class="quiz-person">错题会自动记录，下次优先复习</div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn primary" onclick="articleInit();renderArticle();">🔁 再练一轮</button>
+      </div>`;
+    return;
+  }
+
+  const q = ARTICLE_QUESTIONS[articleState.order[articleState.index]];
+  const errs = loadArticleErrors();
+  const wrongCount = Object.keys(errs.wrong).length;
+
+  // 题目展示：把 __ 换成下划线框
+  const display = q.s.replace("__", "____");
+
+  let html = "";
+  html += `<div class="quiz-score-bar">
+    <span>📝 第 ${articleState.index + 1} / ${articleState.order.length} 题</span>
+    <span>❌ 累计错题 ${wrongCount} 种</span>
+  </div>`;
+
+  html += `<div class="quiz-prompt">
+    <div class="verb-word" style="font-size:1.3rem;">${display}</div>
+    <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">填入正确的冠词（零冠词填 0）</div>
+  </div>`;
+
+  html += `<div class="quiz-input-row">
+    <input type="text" id="articleInput" placeholder="el / la / un / una / 0 ..." autocomplete="off"
+      ${articleState.answered ? "disabled" : ""}
+      onkeydown="if(event.key==='Enter'){event.preventDefault();${articleState.answered ? "articleNext()" : "articleCheck()"};}">
+    ${articleState.answered
+      ? `<button class="quiz-next-btn" onclick="articleNext()">下一题 →</button>`
+      : `<button class="quiz-submit" onclick="articleCheck()">检查</button>`}
+  </div>`;
+
+  if (articleState.answered) {
+    if (articleState.lastCorrect) {
+      html += `<div class="quiz-feedback show correct-ans">
+        ✅ 正确！<span class="correct-form">${articleState.lastAnswer === "0" ? "（零冠词）" : articleState.lastAnswer}</span>
+      </div>`;
+    } else {
+      html += `<div class="quiz-feedback show wrong-ans">
+        ❌ 你填的是「<strong>${articleState.lastAnswer}</strong>」，正确答案是「<strong>${q.a === "0" ? "0（零冠词）" : q.a}</strong>」
+        <div class="explanation">${q.r}</div>
+      </div>`;
+    }
+  }
+
+  container.innerHTML = html;
+  if (!articleState.answered) document.getElementById("articleInput").focus();
+}
+
+function articleCheck() {
+  if (articleState.answered) return;
+  const input = document.getElementById("articleInput");
+  const userAnswer = input.value.trim().toLowerCase();
+  const q = ARTICLE_QUESTIONS[articleState.order[articleState.index]];
+  const correct = q.a.toLowerCase();
+
+  const isCorrect = userAnswer === correct;
+  articleState.answered = true;
+  articleState.lastCorrect = isCorrect;
+  articleState.lastAnswer = userAnswer;
+
+  const errs = loadArticleErrors();
+  errs.total = (errs.total || 0) + 1;
+  if (isCorrect) {
+    errs.correct = (errs.correct || 0) + 1;
+  } else {
+    // 记录错题（按句子索引）
+    const qi = articleState.order[articleState.index];
+    errs.wrong[qi] = (errs.wrong[qi] || 0) + 1;
+  }
+  saveArticleErrors(errs);
+
+  renderArticle();
+}
+
+function articleNext() {
+  articleState.index++;
+  articleState.answered = false;
+  articleState.lastCorrect = false;
+  articleState.lastAnswer = "";
+  renderArticle();
+}
+
 // ========== 学习笔记（多条目版）==========
 const JOURNAL_KEY = "spanish_journal_v2";
 const TAG_LABELS = { ganho: "🌟 收获", xinde: "💡 心得", jiucuo: "🔧 纠错", qita: "📌 其他" };
@@ -3981,7 +4230,8 @@ const ALL_DATA_KEYS = [
   "spanish_journal_v2",
   "spanish_summaries",
   "spanish_conj_log",
-  "spanish_vocab_practice"
+  "spanish_vocab_practice",
+  "spanish_article_errors"
 ];
 
 function exportAllData() {
@@ -4060,6 +4310,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "j") switchView("journal");
   if (e.key === "s") switchView("summary");
   if (e.key === "v") switchView("vocab");
+  if (e.key === "g") switchView("article");
 });
 
 // ========== 初始化 ==========
