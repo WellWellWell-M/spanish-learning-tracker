@@ -3922,6 +3922,13 @@ const VERB_ID_QUESTIONS = [
   { type: "gustar", zh: "我超喜欢足球", hint: "encantar", answer: "Me encanta el fútbol", r: "encantar 是 gustar 式，人 me" },
   { type: "gustar", zh: "我很难理解", hint: "costar", answer: "Me cuesta entender", r: "costar 是 gustar 式，人 me；o→ue 变位 cuesta" },
   { type: "gustar", zh: "我想念你", hint: "extrañar", answer: "Te extraño", r: "extrañar 是普通及物动词（我=主语，你=宾语 Te extraño），不是 gustar 式" },
+  { type: "gustar", zh: "我喜欢猫", hint: "gustar", answer: "Me gustan los gatos", r: "gustar 式：主语 los gatos（复数）→ gustan，人 me" },
+  { type: "gustar", zh: "我们喜欢旅行", hint: "gustar", answer: "Nos gusta viajar", r: "gustar 式：主语是不定式 viajar（永远单数）→ gusta，人 nos" },
+  { type: "gustar", zh: "他缺钱", hint: "faltar", answer: "Le falta dinero", r: "faltar 是 gustar 式：主语 dinero（单数）→ falta，人=他 le" },
+  { type: "gustar", zh: "我剩下两欧元", hint: "quedar", answer: "Me quedan dos euros", r: "quedar 是 gustar 式：主语 dos euros（复数）→ quedan，人 me" },
+  { type: "gustar", zh: "他们对音乐感兴趣", hint: "interesar", answer: "Les interesa la música", r: "interesar 是 gustar 式：主语 la música（单数）→ interesa，人=他们 les" },
+  { type: "gustar", zh: "我爱我妈妈", hint: "amar", answer: "Amo a mi madre", r: "反例！amar 是普通及物动词（我=主语，直接变位 amo），不是 gustar 式，别写 me amo" },
+  { type: "gustar", zh: "我打网球", hint: "jugar", answer: "Juego al tenis", r: "反例！jugar 是普通动词（我=主语 juego），jugar al tenis 固定搭配，不是 gustar 式" },
 ];
 
 
@@ -4071,7 +4078,8 @@ function verbIdCheck() {
   const q = VERB_ID_QUESTIONS[verbIdState.order[verbIdState.index]];
   const correct = q.answer;
 
-  const norm = s => s.toLowerCase().replace(/[íú]/g, m => ({ í: "i", ú: "u" }[m]))
+  const norm = s => s.toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[¿?¡!.,:;'"()]/g, "").replace(/\s+/g, " ").trim();
   const isCorrect = norm(userAnswer) === norm(correct);
   verbIdState.answered = true;
