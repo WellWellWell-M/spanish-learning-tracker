@@ -1077,6 +1077,7 @@
         <button class="btn" data-view="article" onclick="switchView('article')">📝 冠词练习</button>
         <button class="btn" data-view="prep" onclick="switchView('prep')">🔗 介词练习</button>
         <button class="btn" data-view="verbid" onclick="switchView('verbid')">🎭 动词身份</button>
+        <button class="btn" data-view="subj" onclick="switchView('subj')">🔮 虚拟式</button>
         <button class="btn" data-view="journal" onclick="switchView('journal')">📓 学习笔记</button>
         <button class="btn" data-view="summary" onclick="switchView('summary')">📊 学习汇总</button>
         <button class="btn" data-view="vocab" onclick="switchView('vocab')">📝 遗忘词练</button>
@@ -1122,6 +1123,10 @@
 
       <div id="viewVerbId" style="display:none;">
         <div class="quiz-container" id="verbIdContainer"></div>
+      </div>
+
+      <div id="viewSubj" style="display:none;">
+        <div class="quiz-container" id="subjContainer"></div>
       </div>
 
       <div id="viewJournal" style="display:none;">
@@ -2039,6 +2044,7 @@ function renderAll() {
   renderArticle();
   renderPrep();
   renderVerbId();
+  renderSubj();
   renderJournal();
   renderSummary();
   renderVocab();
@@ -2058,6 +2064,7 @@ function updateView() {
   document.getElementById("viewArticle").style.display = currentView === "article" ? "block" : "none";
   document.getElementById("viewPrep").style.display = currentView === "prep" ? "block" : "none";
   document.getElementById("viewVerbId").style.display = currentView === "verbid" ? "block" : "none";
+  document.getElementById("viewSubj").style.display = currentView === "subj" ? "block" : "none";
   document.getElementById("viewJournal").style.display = currentView === "journal" ? "block" : "none";
   document.getElementById("viewSummary").style.display = currentView === "summary" ? "block" : "none";
   document.getElementById("viewVocab").style.display = currentView === "vocab" ? "block" : "none";
@@ -2241,6 +2248,21 @@ function dailyReport() {
       report += `- ${mark} ${e.meaning} [${typeLabel}] → ${e.correct}\n`;
       if (!e.isCorrect) {
         report += `  你写：${e.userAnswer}\n`;
+      }
+    });
+    report += `\n`;
+  }
+
+  // 虚拟式练习
+  const subjLog = getTodaySubjLog(dk);
+  if (subjLog.length > 0) {
+    const sErr = subjLog.filter(e => !e.isCorrect).length;
+    report += `## 🔮 今日虚拟式练习 (${subjLog.length}题 · ✅${subjLog.length - sErr} · ❌${sErr})\n`;
+    subjLog.forEach(e => {
+      const mark = e.isCorrect ? "✅" : "❌";
+      report += `- ${mark} ${e.question} → ${e.correct === "sí" ? "虚拟式" : "陈述式"}\n`;
+      if (!e.isCorrect) {
+        report += `  你答：${e.userAnswer}\n`;
       }
     });
     report += `\n`;
@@ -4091,6 +4113,232 @@ function verbIdNext() {
   renderVerbId();
 }
 
+
+// ========== 虚拟式练习（阶段①：认触发器，判断从句要不要虚拟式）==========
+const SUBJ_QUESTIONS = [
+  // L1 —— 触发器直接判断（由浅）
+  { l: 1, q: "quiero que", a: "sí", e: "【W 愿望】quiero que + 从句表「我希望别人做某事」，主观愿望未实现 → 虚拟式" },
+  { l: 1, q: "espero que", a: "sí", e: "【W 愿望】espero que + 从句，主观期望 → 虚拟式" },
+  { l: 1, q: "me alegra que", a: "sí", e: "【E 情感】me alegra que（我高兴的是…）→ 情感触发虚拟式" },
+  { l: 1, q: "siento que", a: "sí", e: "【E 情感】siento que（我遗憾…）→ 情感触发虚拟式" },
+  { l: 1, q: "es importante que", a: "sí", e: "【I 评价】es importante que（重要的是…）→ 无人称评价触发虚拟式" },
+  { l: 1, q: "es bueno que", a: "sí", e: "【I 评价】es bueno que（…是好事）→ 无人称评价触发虚拟式" },
+  { l: 1, q: "sugiero que", a: "sí", e: "【R 建议】sugiero que（我建议…）→ 建议触发虚拟式" },
+  { l: 1, q: "recomiendo que", a: "sí", e: "【R 建议】recomiendo que（我推荐…）→ 建议触发虚拟式" },
+  { l: 1, q: "no creo que", a: "sí", e: "【D 怀疑】no creo que（我不信…）→ 否定+怀疑触发虚拟式" },
+  { l: 1, q: "dudo que", a: "sí", e: "【D 怀疑】dudo que（我怀疑…）→ 怀疑触发虚拟式" },
+  { l: 1, q: "ojalá (que)", a: "sí", e: "【O 祈愿】ojalá（但愿…）→ 天生祈愿，必用虚拟式" },
+  { l: 1, q: "para que", a: "sí", e: "【连词】para que（为了）→ 表目的，后面必用虚拟式" },
+  { l: 1, q: "antes de que", a: "sí", e: "【连词】antes de que（在…之前）→ 表将来未发生，用虚拟式" },
+  { l: 1, q: "cuando（表将来）", a: "sí", e: "【连词】cuando 表「将来」→ 虚拟式（表习惯/已发生才是陈述式）" },
+  { l: 1, q: "hasta que", a: "sí", e: "【连词】hasta que（直到）→ 表将来未发生，用虚拟式" },
+  { l: 1, q: "a menos que", a: "sí", e: "【连词】a menos que（除非）→ 表假设未发生，用虚拟式" },
+  { l: 1, q: "creo que", a: "no", e: "【确定】creo que（我相信…）→ 肯定+确定事实，陈述式，不用虚拟式" },
+  { l: 1, q: "es verdad que", a: "no", e: "【确定】es verdad que（…是真的）→ 陈述事实，陈述式" },
+  { l: 1, q: "sé que", a: "no", e: "【确定】sé que（我知道…）→ 确定事实，陈述式" },
+
+  // L2 —— 整句判断（入深）
+  { l: 2, q: "Quiero que tú ___ (venir).", a: "sí", e: "【W 愿望】主语不同（我→你）+ 愿望 → que + 虚拟式 vengas" },
+  { l: 2, q: "Creo que él ___ (tener) razón.", a: "no", e: "【确定】creo que + 确定事实 → 陈述式 tiene，不用虚拟式" },
+  { l: 2, q: "Si yo ___ (tener) tiempo, voy.", a: "no", e: "【si 规则】si 真实条件 → 陈述式 tengo（si 假设才用过去虚拟式，阶段②学）" },
+  { l: 2, q: "Te llamo para que me ___ (ayudar).", a: "sí", e: "【连词】para que（为了）+ 目的从句 → 虚拟式 ayudes" },
+  { l: 2, q: "Espero que tú ___ (estar) bien.", a: "sí", e: "【W 愿望】espero que + 期望 → 虚拟式 estés" },
+  { l: 2, q: "Quiero ___ (ir) al cine.", a: "no", e: "【主语一致】同一主语（我→我）→ 不定式 ir，不用 que + 虚拟式" },
+  { l: 2, q: "No creo que ___ (ser) verdad.", a: "sí", e: "【D 怀疑】no creo que + 怀疑 → 虚拟式 sea" },
+  { l: 2, q: "Me alegra que ___ (estar) aquí.", a: "sí", e: "【E 情感】me alegra que + 情感 → 虚拟式 estés" },
+  { l: 2, q: "Es importante que ___ (descansar).", a: "sí", e: "【I 评价】es importante que + 评价 → 虚拟式 descanses" },
+  { l: 2, q: "Cuando ___ (llegar) a casa, cenaré.", a: "sí", e: "【连词】cuando 表将来 → 虚拟式 llegue（表习惯才是陈述式 llego）" },
+  { l: 2, q: "Sé que ___ (ser) tarde.", a: "no", e: "【确定】sé que + 确定事实 → 陈述式 es" },
+  { l: 2, q: "Sugiero que ___ (hablar) con él.", a: "sí", e: "【R 建议】sugiero que + 建议 → 虚拟式 hables" },
+  { l: 2, q: "Ojalá ___ (llover) mañana.", a: "sí", e: "【O 祈愿】ojalá + 祈愿 → 虚拟式 llueva" },
+];
+
+const SUBJ_KEY = "spanish_subj_errors";
+
+function loadSubjErrors() {
+  try { const raw = localStorage.getItem(SUBJ_KEY); return raw ? JSON.parse(raw) : { wrong: {}, total: 0, correct: 0, log: {} }; }
+  catch (e) { return { wrong: {}, total: 0, correct: 0, log: {} }; }
+}
+function saveSubjErrors(data) {
+  try { localStorage.setItem(SUBJ_KEY, JSON.stringify(data)); }
+  catch (e) {}
+}
+function getTodaySubjLog(dk) {
+  const data = loadSubjErrors();
+  return (data.log || {})[dk || todayKey()] || [];
+}
+function saveSubjLog(entry) {
+  const data = loadSubjErrors();
+  if (!data.log) data.log = {};
+  const dk = todayKey();
+  if (!data.log[dk]) data.log[dk] = [];
+  data.log[dk].push(entry);
+  saveSubjErrors(data);
+}
+
+let subjState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], levelFilter: "" };
+const SUBJ_MASTER_AT = 3;
+
+function subjInit() {
+  subjState.index = 0;
+  subjState.answered = false;
+  subjState.order = subjBuildOrder();
+}
+
+function subjBuildOrder() {
+  const errs = loadSubjErrors();
+  const lf = subjState.levelFilter || "";
+
+  let candidates = SUBJ_QUESTIONS.map((_, i) => i);
+  if (lf) {
+    candidates = candidates.filter(i => String(SUBJ_QUESTIONS[i].l) === lf);
+  }
+
+  const wrongIdx = candidates.filter(i => (errs.wrong[i] || 0) > 0);
+  const freshIdx = candidates.filter(i => !(errs.wrong[i] || 0));
+  wrongIdx.sort((a, b) => (errs.wrong[b] || 0) - (errs.wrong[a] || 0));
+  // 由浅入深：非错题按 level 排序（触发器在前，整句在后），同 level 随机
+  freshIdx.sort((a, b) => SUBJ_QUESTIONS[a].l - SUBJ_QUESTIONS[b].l);
+  for (let i = freshIdx.length - 1; i > 0; i--) {
+    if (SUBJ_QUESTIONS[freshIdx[i]].l === SUBJ_QUESTIONS[freshIdx[i - 1]].l) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [freshIdx[i], freshIdx[j]] = [freshIdx[j], freshIdx[i]];
+    }
+  }
+  return [...wrongIdx, ...freshIdx];
+}
+
+function renderSubj() {
+  const container = document.getElementById("subjContainer");
+  if (!subjState.order || subjState.order.length === 0) subjInit();
+
+  const errs = loadSubjErrors();
+  const levels = [
+    { id: "", label: "全部" },
+    { id: "1", label: "触发器" },
+    { id: "2", label: "整句" },
+  ];
+
+  let bar = `<div class="tense-selector" style="margin-bottom:12px;">`;
+  bar += `<span style="font-size:0.7rem;color:var(--text-secondary);margin-right:4px;">题型</span>`;
+  levels.forEach(lv => {
+    const active = subjState.levelFilter === lv.id;
+    bar += `<button class="tense-btn ${active ? "active-tense" : ""}" onclick="subjSetFilter('${lv.id}')" style="font-size:0.72rem;padding:2px 8px;">${lv.label === "" ? "全部" : lv.label}</button>`;
+  });
+  bar += `</div>`;
+
+  if (subjState.index >= subjState.order.length) {
+    const wrongLeft = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+    container.innerHTML = `
+      ${bar}
+      <div class="quiz-score-bar">
+        <span>🎉 本轮完成！</span>
+        <span>✅ 正确率 ${errs.total > 0 ? Math.round(errs.correct / errs.total * 100) : 0}%</span>
+      </div>
+      <div class="quiz-prompt">
+        <div class="verb-word">本轮 ${subjState.order.length} 题全部完成</div>
+        <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固</div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn primary" onclick="subjInit();renderSubj();">🔁 再练一轮</button>
+      </div>`;
+    return;
+  }
+
+  const q = SUBJ_QUESTIONS[subjState.order[subjState.index]];
+  const wrongCount = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+
+  let html = bar;
+  html += `<div class="quiz-score-bar">
+    <span>📝 第 ${subjState.index + 1} / ${subjState.order.length} 题</span>
+    <span>❌ 待巩固 ${wrongCount} 题</span>
+  </div>`;
+
+  html += `<div class="quiz-prompt">
+    <div class="verb-word" style="font-size:1.3rem;">${q.q}</div>
+    <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">从句用虚拟式吗？</div>
+  </div>`;
+
+  html += `<div class="quiz-input-row">
+    <input type="text" id="subjInput" placeholder="填 sí / no" autocomplete="off"
+      ${subjState.answered ? "disabled" : ""}
+      onkeydown="if(event.key==='Enter'){event.preventDefault();${subjState.answered ? "subjNext()" : "subjCheck()"};}">
+    ${subjState.answered
+      ? `<button class="quiz-next-btn" onclick="subjNext()">下一题 →</button>`
+      : `<button class="quiz-submit" onclick="subjCheck()">检查</button>`}
+  </div>`;
+
+  if (subjState.answered) {
+    if (subjState.lastCorrect) {
+      html += `<div class="quiz-feedback show correct-ans">
+        ✅ 正确！<span class="correct-form">${q.a === "sí" ? "用虚拟式" : "不用虚拟式"}</span>
+        <div class="explanation">${q.e}</div>
+      </div>`;
+    } else {
+      html += `<div class="quiz-feedback show wrong-ans">
+        ❌ 你答「${subjState.lastAnswer}」，正确是「${q.a === "sí" ? "用虚拟式" : "不用虚拟式"}」
+        <div class="explanation">${q.e}</div>
+      </div>`;
+    }
+  }
+
+  container.innerHTML = html;
+  if (!subjState.answered) document.getElementById("subjInput").focus();
+}
+
+function subjSetFilter(level) {
+  subjState.levelFilter = level;
+  subjInit();
+  renderSubj();
+}
+
+function subjCheck() {
+  if (subjState.answered) return;
+  const input = document.getElementById("subjInput");
+  const userAnswer = input.value.trim().toLowerCase();
+  const q = SUBJ_QUESTIONS[subjState.order[subjState.index]];
+  const correct = q.a;
+
+  const norm = s => s.replace(/í/g, "i").trim();
+  const isCorrect = norm(userAnswer) === norm(correct) || norm(userAnswer) === (correct === "sí" ? "si" : "no");
+  subjState.answered = true;
+  subjState.lastCorrect = isCorrect;
+  subjState.lastAnswer = userAnswer;
+
+  const errs = loadSubjErrors();
+  errs.total = (errs.total || 0) + 1;
+  const qi = subjState.order[subjState.index];
+
+  if (isCorrect) {
+    errs.correct = (errs.correct || 0) + 1;
+    if (errs.wrong[qi] && errs.wrong[qi] > 0) {
+      errs.wrong[qi]--;
+      if (errs.wrong[qi] <= 0) delete errs.wrong[qi];
+    }
+  } else {
+    errs.wrong[qi] = SUBJ_MASTER_AT;
+  }
+  saveSubjErrors(errs);
+
+  saveSubjLog({
+    question: q.q,
+    correct: correct,
+    userAnswer: subjState.lastAnswer,
+    isCorrect: isCorrect
+  });
+
+  renderSubj();
+}
+
+function subjNext() {
+  subjState.index++;
+  subjState.answered = false;
+  subjState.lastCorrect = false;
+  subjState.lastAnswer = "";
+  renderSubj();
+}
+
+
 // ========== 学习笔记（多条目版）==========
 const JOURNAL_KEY = "spanish_journal_v2";
 const TAG_LABELS = { ganho: "🌟 收获", xinde: "💡 心得", jiucuo: "🔧 纠错", qita: "📌 其他" };
@@ -4971,6 +5219,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "g") switchView("article");
   if (e.key === "k") switchView("prep");
   if (e.key === "m") switchView("verbid");
+  if (e.key === "x") switchView("subj");
 });
 
 // ========== 初始化 ==========
