@@ -2260,7 +2260,8 @@ function dailyReport() {
     report += `## 🔮 今日虚拟式练习 (${subjLog.length}题 · ✅${subjLog.length - sErr} · ❌${sErr})\n`;
     subjLog.forEach(e => {
       const mark = e.isCorrect ? "✅" : "❌";
-      report += `- ${mark} ${e.question} → ${e.correct === "sí" ? "虚拟式" : "陈述式"}\n`;
+      const correctLabel = (e.correct === "sí") ? "虚拟式" : (e.correct === "no" ? "陈述式" : e.correct);
+      report += `- ${mark} ${e.question} → ${correctLabel}\n`;
       if (!e.isCorrect) {
         report += `  你答：${e.userAnswer}\n`;
       }
@@ -4159,6 +4160,44 @@ const SUBJ_QUESTIONS = [
   { l: 2, q: "Sé que ___ (ser) tarde.", a: "no", e: "【确定】sé que + 确定事实 → 陈述式 es" },
   { l: 2, q: "Sugiero que ___ (hablar) con él.", a: "sí", e: "【R 建议】sugiero que + 建议 → 虚拟式 hables" },
   { l: 2, q: "Ojalá ___ (llover) mañana.", a: "sí", e: "【O 祈愿】ojalá + 祈愿 → 虚拟式 llueva" },
+
+  // === 阶段②：选式 + 变位（主句时态决定现在/过去虚拟式）===
+  { l: 3, q: "Quiero que tú ___ (hablar).", verb: "hablar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (hablar).", verb: "hablar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (comer).", verb: "comer", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (comer).", verb: "comer", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que ellos ___ (vivir).", verb: "vivir", p: 6, tense: "presente_subj" },
+  { l: 3, q: "Quería que ellos ___ (vivir).", verb: "vivir", p: 6, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (llegar).", verb: "llegar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (llegar).", verb: "llegar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (venir).", verb: "venir", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (venir).", verb: "venir", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (tener).", verb: "tener", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (tener).", verb: "tener", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (hacer).", verb: "hacer", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (hacer).", verb: "hacer", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que ellos ___ (poder).", verb: "poder", p: 6, tense: "presente_subj" },
+  { l: 3, q: "Quería que ellos ___ (poder).", verb: "poder", p: 6, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (ser).", verb: "ser", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (ser).", verb: "ser", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (ir).", verb: "ir", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (ir).", verb: "ir", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que ellos ___ (estar).", verb: "estar", p: 6, tense: "presente_subj" },
+  { l: 3, q: "Quería que ellos ___ (estar).", verb: "estar", p: 6, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (querer).", verb: "querer", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (querer).", verb: "querer", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (decir).", verb: "decir", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (decir).", verb: "decir", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (saber).", verb: "saber", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (saber).", verb: "saber", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (poner).", verb: "poner", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (poner).", verb: "poner", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que ellos ___ (pedir).", verb: "pedir", p: 6, tense: "presente_subj" },
+  { l: 3, q: "Quería que ellos ___ (pedir).", verb: "pedir", p: 6, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (dormir).", verb: "dormir", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (dormir).", verb: "dormir", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que él ___ (pensar).", verb: "pensar", p: 3, tense: "presente_subj" },
+  { l: 3, q: "Quería que él ___ (pensar).", verb: "pensar", p: 3, tense: "imperfecto_subj" },
 ];
 
 const SUBJ_KEY = "spanish_subj_errors";
@@ -4223,8 +4262,9 @@ function renderSubj() {
   const errs = loadSubjErrors();
   const levels = [
     { id: "", label: "全部" },
-    { id: "1", label: "触发器" },
-    { id: "2", label: "整句" },
+    { id: "1", label: "阶段①触发器" },
+    { id: "2", label: "阶段①整句" },
+    { id: "3", label: "阶段②变位" },
   ];
 
   let bar = `<div class="tense-selector" style="margin-bottom:12px;">`;
@@ -4255,6 +4295,7 @@ function renderSubj() {
 
   const q = SUBJ_QUESTIONS[subjState.order[subjState.index]];
   const wrongCount = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
+  const isL3 = q.l === 3;
 
   let html = bar;
   html += `<div class="quiz-score-bar">
@@ -4264,11 +4305,11 @@ function renderSubj() {
 
   html += `<div class="quiz-prompt">
     <div class="verb-word" style="font-size:1.3rem;">${q.q}</div>
-    <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">从句用虚拟式吗？</div>
+    <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">${isL3 ? "填入正确的虚拟式变位" : "从句用虚拟式吗？"}</div>
   </div>`;
 
   html += `<div class="quiz-input-row">
-    <input type="text" id="subjInput" placeholder="填 sí / no" autocomplete="off"
+    <input type="text" id="subjInput" placeholder="${isL3 ? "填变位形式" : "填 sí / no"}" autocomplete="off"
       ${subjState.answered ? "disabled" : ""}
       onkeydown="if(event.key==='Enter'){event.preventDefault();${subjState.answered ? "subjNext()" : "subjCheck()"};}">
     ${subjState.answered
@@ -4277,21 +4318,43 @@ function renderSubj() {
   </div>`;
 
   if (subjState.answered) {
+    const correctForm = isL3 ? subjCorrectForm(q) : (q.a === "sí" ? "用虚拟式" : "不用虚拟式");
+    const expl = isL3 ? subjL3Explanation(q) : q.e;
     if (subjState.lastCorrect) {
       html += `<div class="quiz-feedback show correct-ans">
-        ✅ 正确！<span class="correct-form">${q.a === "sí" ? "用虚拟式" : "不用虚拟式"}</span>
-        <div class="explanation">${q.e}</div>
+        ✅ 正确！<span class="correct-form">${correctForm}</span>
+        <div class="explanation">${expl}</div>
       </div>`;
     } else {
       html += `<div class="quiz-feedback show wrong-ans">
-        ❌ 你答「${subjState.lastAnswer}」，正确是「${q.a === "sí" ? "用虚拟式" : "不用虚拟式"}」
-        <div class="explanation">${q.e}</div>
+        ❌ 你答「${subjState.lastAnswer}」，正确是「${correctForm}」
+        <div class="explanation">${expl}</div>
       </div>`;
     }
   }
 
   container.innerHTML = html;
   if (!subjState.answered) document.getElementById("subjInput").focus();
+}
+
+function findVerbDB(inf) {
+  return VERB_DB.find(v => v.verb === inf) || null;
+}
+
+function subjCorrectForm(q) {
+  if (q.l !== 3) return q.a;
+  const vb = findVerbDB(q.verb);
+  if (!vb) return "?";
+  const r = conjugate(vb, q.p, q.tense);
+  return r && r.form ? r.form : "?";
+}
+
+function subjL3Explanation(q) {
+  const form = subjCorrectForm(q);
+  const now = q.tense === "presente_subj";
+  const mainClause = q.q.split(" que ")[0].replace(/\s+/g, " ").trim();
+  const pastWord = /Quería|Querían|Esperaba|Era|Le pedí|Les pedí/i.test(mainClause);
+  return `主句「${mainClause}」是${pastWord ? "过去时" : "现在时"} → 从句用${now ? "现在虚拟式" : "过去虚拟式(-ra)"}：${form}`;
 }
 
 function subjSetFilter(level) {
@@ -4305,9 +4368,12 @@ function subjCheck() {
   const input = document.getElementById("subjInput");
   const userAnswer = input.value.trim().toLowerCase();
   const q = SUBJ_QUESTIONS[subjState.order[subjState.index]];
-  const correct = q.a;
+  const isL3 = q.l === 3;
+  const correct = isL3 ? subjCorrectForm(q) : q.a;
 
-  const norm = s => s.replace(/í/g, "i").trim();
+  const norm = s => s.toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[¿?¡!.,:;'"()]/g, "").replace(/\s+/g, " ").trim();
   const isCorrect = norm(userAnswer) === norm(correct) || norm(userAnswer) === (correct === "sí" ? "si" : "no");
   subjState.answered = true;
   subjState.lastCorrect = isCorrect;
