@@ -3447,10 +3447,28 @@ let articleState = { index: 0, answered: false, lastCorrect: false, lastAnswer: 
 // 掌握判定：连续做对 3 次才从错题队列移除
 const ARTICLE_MASTER_AT = 3;
 
-function articleInit() {
+function articleInit(force) {
+  // 刷新后恢复上次进度（同一档位下），避免每次从头做
+  if (!force) {
+    const errs = loadArticleErrors();
+    const p = errs.prog;
+    if (p && Array.isArray(p.order) && p.order.length > 0 && p.filter === articleState.levelFilter) {
+      articleState.order = p.order;
+      articleState.index = Math.min(p.index || 0, p.order.length - 1);
+      articleState.answered = false;
+      return;
+    }
+  }
   articleState.index = 0;
   articleState.answered = false;
   articleState.order = articleBuildOrder();
+  saveArticleProgress();
+}
+
+function saveArticleProgress() {
+  const errs = loadArticleErrors();
+  errs.prog = { order: articleState.order, index: articleState.index, filter: articleState.levelFilter };
+  saveArticleErrors(errs);
 }
 
 // 构建出题顺序：错题优先 + 档位筛选
@@ -3516,7 +3534,7 @@ function renderArticle() {
         <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固（连续做对 3 次才算掌握）</div>
       </div>
       <div class="btn-row" style="margin-top:16px;">
-        <button class="btn primary" onclick="articleInit();renderArticle();">🔁 再练一轮</button>
+        <button class="btn primary" onclick="articleInit(true);renderArticle();">🔁 再练一轮</button>
       </div>`;
     return;
   }
@@ -3566,7 +3584,7 @@ function renderArticle() {
 
 function articleSetLevel(level) {
   articleState.levelFilter = level;
-  articleInit();
+  articleInit(true);
   renderArticle();
 }
 
@@ -3614,6 +3632,7 @@ function articleNext() {
   articleState.answered = false;
   articleState.lastCorrect = false;
   articleState.lastAnswer = "";
+  saveArticleProgress();
   renderArticle();
 }
 
@@ -3728,10 +3747,27 @@ function savePrepLog(entry) {
 let prepState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], prepFilter: "" };
 const PREP_MASTER_AT = 3;
 
-function prepInit() {
+function prepInit(force) {
+  if (!force) {
+    const errs = loadPrepErrors();
+    const p = errs.prog;
+    if (p && Array.isArray(p.order) && p.order.length > 0 && p.filter === prepState.prepFilter) {
+      prepState.order = p.order;
+      prepState.index = Math.min(p.index || 0, p.order.length - 1);
+      prepState.answered = false;
+      return;
+    }
+  }
   prepState.index = 0;
   prepState.answered = false;
   prepState.order = prepBuildOrder();
+  savePrepProgress();
+}
+
+function savePrepProgress() {
+  const errs = loadPrepErrors();
+  errs.prog = { order: prepState.order, index: prepState.index, filter: prepState.prepFilter };
+  savePrepErrors(errs);
 }
 
 function prepBuildOrder() {
@@ -3788,7 +3824,7 @@ function renderPrep() {
         <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固</div>
       </div>
       <div class="btn-row" style="margin-top:16px;">
-        <button class="btn primary" onclick="prepInit();renderPrep();">🔁 再练一轮</button>
+        <button class="btn primary" onclick="prepInit(true);renderPrep();">🔁 再练一轮</button>
       </div>`;
     return;
   }
@@ -3836,7 +3872,7 @@ function renderPrep() {
 
 function prepSetFilter(prep) {
   prepState.prepFilter = prep;
-  prepInit();
+  prepInit(true);
   renderPrep();
 }
 
@@ -3884,6 +3920,7 @@ function prepNext() {
   prepState.answered = false;
   prepState.lastCorrect = false;
   prepState.lastAnswer = "";
+  savePrepProgress();
   renderPrep();
 }
 
@@ -3893,18 +3930,33 @@ function prepNext() {
 
 const VERB_ID_QUESTIONS = [
   // === 代动词 / 普通动词（中文→整句，考要不要 se + 变位）===
-  { type: "pronominal", zh: "我抱怨", hint: "quejarse", answer: "Me quejo", r: "quejarse 是代动词：我=me，quejarse→me quejo（se 随人称变成 me）" },
-  { type: "pronominal", zh: "他醒来", hint: "despertarse", answer: "Se despierta", r: "despertarse 代动词，他=se；e→ie 变位 despierta" },
-  { type: "pronominal", zh: "我们坐下", hint: "sentarse", answer: "Nos sentamos", r: "sentarse 代动词，我们=nos；e→ie 变位" },
-  { type: "pronominal", zh: "我离开", hint: "irse", answer: "Me voy", r: "irse 代动词（ir=去，irse=离开），我=me，voy 不规则" },
-  { type: "pronominal", zh: "她结婚", hint: "casarse", answer: "Se casa", r: "casarse 代动词，她=se" },
-  { type: "pronominal", zh: "我后悔", hint: "arrepentirse", answer: "Me arrepiento", r: "arrepentirse 代动词，我=me；e→ie 变位" },
-  { type: "pronominal", zh: "他害怕", hint: "asustarse", answer: "Se asusta", r: "asustarse 代动词，他=se" },
-  { type: "pronominal", zh: "我习惯", hint: "acostumbrarse", answer: "Me acostumbro", r: "acostumbrarse 代动词，我=me" },
-  { type: "pronominal", zh: "她爱上", hint: "enamorarse", answer: "Se enamora", r: "enamorarse 代动词，她=se" },
-  { type: "pronominal", zh: "你上床睡觉", hint: "acostarse", answer: "Te acuestas", r: "acostarse 代动词，你=te；o→ue 变位 acuestas" },
-  { type: "pronominal", zh: "我意识到", hint: "darse cuenta", answer: "Me doy cuenta", r: "darse cuenta 固定代动词，我=me，doy 是 dar 的不规则 yo" },
-  { type: "pronominal", zh: "我们记得", hint: "acordarse", answer: "Nos acordamos", r: "acordarse de 代动词，我们=nos" },
+  // 提示词给裸词根，要不要 se 由你判断；解释带【功能标签】告诉你哪类、怎么记
+  // 【反身】se=自己 【自发】自己发生 【换词】记两对 【纯代动词】整词背
+  { type: "pronominal", zh: "我抱怨", hint: "quejarse", answer: "Me quejo", r: "【纯代动词】只有 quejarse，没有 quejar。整词记，se 随人称变 → me quejo" },
+  { type: "pronominal", zh: "他醒来", hint: "despertar", answer: "Se despierta", r: "【自发】despertar(叫醒)→despertarse(自己醒)，能推不用背；e→ie 变位 despierta" },
+  { type: "pronominal", zh: "我们坐下", hint: "sentar", answer: "Nos sentamos", r: "【自发】sentar(使坐)→sentarse(自己坐)，能推；e→ie 变位" },
+  { type: "pronominal", zh: "我离开", hint: "ir", answer: "Me voy", r: "【换词】ir(去)→irse(离开)，记两对；我=me，voy 不规则" },
+  { type: "pronominal", zh: "她结婚", hint: "casar", answer: "Se casa", r: "【换词】casar(主持婚礼)→casarse(结婚)，记两对；她=se" },
+  { type: "pronominal", zh: "我后悔", hint: "arrepentirse", answer: "Me arrepiento", r: "【纯代动词】只有 arrepentirse，没有 arrepentir。整词记，se 随人称变；e→ie 变位" },
+  { type: "pronominal", zh: "他害怕", hint: "asustar", answer: "Se asusta", r: "【自发】asustar(吓)→asustarse(自己害怕)，情绪自己冒，能推；他=se" },
+  { type: "pronominal", zh: "我习惯", hint: "acostumbrar", answer: "Me acostumbro", r: "【自发】acostumbrar(使习惯)→acostumbrarse(自己习惯)，能推；我=me" },
+  { type: "pronominal", zh: "她爱上", hint: "enamorar", answer: "Se enamora", r: "【自发】enamorar(使爱上)→enamorarse(自己爱上)，情绪自己冒，能推；她=se" },
+  { type: "pronominal", zh: "你上床睡觉", hint: "acostar", answer: "Te acuestas", r: "【自发】acostar(使躺下)→acostarse(自己上床)，能推；你=te；o→ue 变位" },
+  { type: "pronominal", zh: "我意识到", hint: "darse cuenta", answer: "Me doy cuenta", r: "【纯代动词】固定搭配只有 darse cuenta。整词记；我=me doy cuenta（doy 是 dar 不规则 yo）" },
+  { type: "pronominal", zh: "我们记得", hint: "acordar", answer: "Nos acordamos", r: "【换词】acordar(同意)→acordarse de(记得)，记两对；我们=nos" },
+  { type: "pronominal", zh: "我留下来", hint: "quedar", answer: "Me quedo", r: "【换词】quedar(位于/剩下)→quedarse(留下)，记两对；我=me quedo" },
+  { type: "pronominal", zh: "他变成医生", hint: "hacer", answer: "Se hace médico", r: "【换词】hacer(做)→hacerse(成为，经努力)，记两对；他=se hace" },
+  { type: "pronominal", zh: "我穿上外套", hint: "poner", answer: "Me pongo el abrigo", r: "【换词】poner(放)→ponerse(穿上/变得)，记两对；我=me pongo（poner 不规则 yo）" },
+  { type: "pronominal", zh: "他变老", hint: "volver", answer: "Se vuelve viejo", r: "【换词】volver(回来)→volverse(变成，逐渐)，记两对；o→ue 变位 vuelve" },
+  { type: "pronominal", zh: "我敢于", hint: "atreverse", answer: "Me atrevo", r: "【纯代动词】atreverse 几乎不用裸词根 atrever。整词记，se 随人称变 → me atrevo" },
+  { type: "pronominal", zh: "我努力", hint: "esforzarse", answer: "Me esfuerzo", r: "【纯代动词】esforzarse 几乎不用裸词根 esforzar。整词记；o→ue 变位 esfuerzo" },
+  { type: "pronominal", zh: "我得知消息", hint: "enterar", answer: "Me entero de la noticia", r: "【自发】enterar(告知)→enterarse de(自己得知)，能推；我=me entero" },
+  // === 陷阱：同一个词根，带不带 se 意思完全不同 ===
+  { type: "pronominal", zh: "我叫安娜", hint: "llamar", answer: "Me llamo Ana", r: "【换词】llamar(打电话)→llamarse(名叫)，记两对；我=me llamo" },
+  { type: "pronominal", zh: "我打电话给他", hint: "llamar", answer: "Lo llamo", r: "【陷阱】这里'打电话'用不带 se 的 llamar（Lo llamo），带 se 的 llamarse 才是'名叫'，别混" },
+  // === 反身（se=自己，能推不用背）===
+  { type: "pronominal", zh: "我洗澡", hint: "bañar", answer: "Me baño", r: "【反身】bañar(给别人洗)→bañarse(洗自己)，se=自己，能推；我=me baño" },
+  { type: "pronominal", zh: "我穿衣服", hint: "vestir", answer: "Me visto", r: "【反身】vestir(给别人穿)→vestirse(给自己穿)，se=自己，能推；e→i 变位 visto" },
   // === 普通动词干扰（不加 se）===
   { type: "pronominal", zh: "我工作", hint: "trabajar", answer: "Trabajo", r: "trabajar 是普通动词，不加 se，直接变位" },
   { type: "pronominal", zh: "他学习", hint: "estudiar", answer: "Estudia", r: "estudiar 普通动词，不加 se" },
@@ -3959,10 +4011,27 @@ function saveVerbIdLog(entry) {
 let verbIdState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], typeFilter: "" };
 const VERB_ID_MASTER_AT = 3;
 
-function verbIdInit() {
+function verbIdInit(force) {
+  if (!force) {
+    const errs = loadVerbIdErrors();
+    const p = errs.prog;
+    if (p && Array.isArray(p.order) && p.order.length > 0 && p.filter === verbIdState.typeFilter) {
+      verbIdState.order = p.order;
+      verbIdState.index = Math.min(p.index || 0, p.order.length - 1);
+      verbIdState.answered = false;
+      return;
+    }
+  }
   verbIdState.index = 0;
   verbIdState.answered = false;
   verbIdState.order = verbIdBuildOrder();
+  saveVerbIdProgress();
+}
+
+function saveVerbIdProgress() {
+  const errs = loadVerbIdErrors();
+  errs.prog = { order: verbIdState.order, index: verbIdState.index, filter: verbIdState.typeFilter };
+  saveVerbIdErrors(errs);
 }
 
 function verbIdBuildOrder() {
@@ -4016,7 +4085,7 @@ function renderVerbId() {
         <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固</div>
       </div>
       <div class="btn-row" style="margin-top:16px;">
-        <button class="btn primary" onclick="verbIdInit();renderVerbId();">🔁 再练一轮</button>
+        <button class="btn primary" onclick="verbIdInit(true);renderVerbId();">🔁 再练一轮</button>
       </div>`;
     return;
   }
@@ -4068,7 +4137,7 @@ function renderVerbId() {
 
 function verbIdSetFilter(type) {
   verbIdState.typeFilter = type;
-  verbIdInit();
+  verbIdInit(true);
   renderVerbId();
 }
 
@@ -4119,6 +4188,7 @@ function verbIdNext() {
   verbIdState.answered = false;
   verbIdState.lastCorrect = false;
   verbIdState.lastAnswer = "";
+  saveVerbIdProgress();
   renderVerbId();
 }
 
@@ -4198,6 +4268,24 @@ const SUBJ_QUESTIONS = [
   { l: 3, q: "Quería que tú ___ (dormir).", verb: "dormir", p: 2, tense: "imperfecto_subj" },
   { l: 3, q: "Quiero que él ___ (pensar).", verb: "pensar", p: 3, tense: "presente_subj" },
   { l: 3, q: "Quería que él ___ (pensar).", verb: "pensar", p: 3, tense: "imperfecto_subj" },
+
+  // === 阶段②·多样触发词（W愿望/R建议/I评价/E情感/D怀疑，考时态配合）===
+  { l: 3, q: "Espero que tú ___ (llegar) a tiempo.", verb: "llegar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Esperaba que tú ___ (llegar) a tiempo.", verb: "llegar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Sugiero que tú ___ (descansar).", verb: "descansar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Sugería que tú ___ (descansar).", verb: "descansar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Te pido que ___ (venir).", verb: "venir", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Te pedía que ___ (venir).", verb: "venir", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Es importante que ___ (estudiar).", verb: "estudiar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Era importante que ___ (estudiar).", verb: "estudiar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Me alegra que ___ (estar) aquí.", verb: "estar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Me alegraba que ___ (estar) aquí.", verb: "estar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "No creo que ___ (ser) verdad.", verb: "ser", p: 3, tense: "presente_subj" },
+  { l: 3, q: "No creía que ___ (ser) verdad.", verb: "ser", p: 3, tense: "imperfecto_subj" },
+  { l: 3, q: "Recomiendo que ___ (ver) esa película.", verb: "ver", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Recomendaba que ___ (ver) esa película.", verb: "ver", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "imperfecto_subj" },
 ];
 
 const SUBJ_KEY = "spanish_subj_errors";
@@ -4226,10 +4314,27 @@ function saveSubjLog(entry) {
 let subjState = { index: 0, answered: false, lastCorrect: false, lastAnswer: "", order: [], levelFilter: "" };
 const SUBJ_MASTER_AT = 3;
 
-function subjInit() {
+function subjInit(force) {
+  if (!force) {
+    const errs = loadSubjErrors();
+    const p = errs.prog;
+    if (p && Array.isArray(p.order) && p.order.length > 0 && p.filter === subjState.levelFilter) {
+      subjState.order = p.order;
+      subjState.index = Math.min(p.index || 0, p.order.length - 1);
+      subjState.answered = false;
+      return;
+    }
+  }
   subjState.index = 0;
   subjState.answered = false;
   subjState.order = subjBuildOrder();
+  saveSubjProgress();
+}
+
+function saveSubjProgress() {
+  const errs = loadSubjErrors();
+  errs.prog = { order: subjState.order, index: subjState.index, filter: subjState.levelFilter };
+  saveSubjErrors(errs);
 }
 
 function subjBuildOrder() {
@@ -4288,7 +4393,7 @@ function renderSubj() {
         <div class="quiz-person">还有 ${wrongLeft} 道错题待巩固</div>
       </div>
       <div class="btn-row" style="margin-top:16px;">
-        <button class="btn primary" onclick="subjInit();renderSubj();">🔁 再练一轮</button>
+        <button class="btn primary" onclick="subjInit(true);renderSubj();">🔁 再练一轮</button>
       </div>`;
     return;
   }
@@ -4353,13 +4458,43 @@ function subjL3Explanation(q) {
   const form = subjCorrectForm(q);
   const now = q.tense === "presente_subj";
   const mainClause = q.q.split(" que ")[0].replace(/\s+/g, " ").trim();
-  const pastWord = /Quería|Querían|Esperaba|Era|Le pedí|Les pedí/i.test(mainClause);
-  return `主句「${mainClause}」是${pastWord ? "过去时" : "现在时"} → 从句用${now ? "现在虚拟式" : "过去虚拟式(-ra)"}：${form}`;
+  const verb = q.verb;
+  const p = q.p;
+
+  // 词干推导提示
+  let stemHint = "";
+  const special = {
+    ser: ["soy→se-", "fue→fu-"],
+    ir: ["voy→vay-", "fue→fu-"],
+    estar: ["estoy→est-", "estuv-"],
+    dar: ["doy→d-", "di→dier-"],
+    haber: ["he→hay-", "hub-"],
+    saber: ["sé→sep-", "sup-"],
+    hacer: ["hago→hag-", "hic-"],
+    poner: ["pongo→pong-", "pus-"],
+    tener: ["tengo→teng-", "tuv-"],
+    venir: ["vengo→veng-", "vin-"],
+    decir: ["digo→dig-", "dij-"],
+    poder: ["puedo→pued-", "pud-"],
+    querer: ["quiero→quier-", "quis-"],
+    salir: ["salgo→salg-", "sal-"],
+    traer: ["traigo→traig-", "traj-"],
+    ver: ["veo→ve-", "v-"],
+    oír: ["oigo→oig-", "oy-"],
+  };
+  if (special[verb]) {
+    stemHint = `（词干：${special[verb][now ? 0 : 1]}）`;
+  } else {
+    // 规则动词：现在虚拟式用 yo 现在时词干，过去虚拟式用不定式词干
+    stemHint = `（规则：${now ? "现在虚拟式=yo现在时词干" : "过去虚拟式=不定式词干"}+词尾）`;
+  }
+
+  return `主句「${mainClause}」${now ? "现在时→现在虚拟式" : "过去时→过去虚拟式(-ra)"} ${stemHint} → ${form}`;
 }
 
 function subjSetFilter(level) {
   subjState.levelFilter = level;
-  subjInit();
+  subjInit(true);
   renderSubj();
 }
 
@@ -4409,6 +4544,7 @@ function subjNext() {
   subjState.answered = false;
   subjState.lastCorrect = false;
   subjState.lastAnswer = "";
+  saveSubjProgress();
   renderSubj();
 }
 
