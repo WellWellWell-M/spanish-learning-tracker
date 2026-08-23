@@ -4039,7 +4039,9 @@ function verbIdBuildOrder() {
   const tf = verbIdState.typeFilter || "";
 
   let candidates = VERB_ID_QUESTIONS.map((_, i) => i);
-  if (tf) {
+  if (tf === "wrong") {
+    candidates = candidates.filter(i => (errs.wrong[i] || 0) > 0);
+  } else if (tf) {
     candidates = candidates.filter(i => VERB_ID_QUESTIONS[i].type === tf);
   }
 
@@ -4062,6 +4064,7 @@ function renderVerbId() {
     { id: "", label: "全部" },
     { id: "pronominal", label: "代动词" },
     { id: "gustar", label: "gustar式" },
+    { id: "wrong", label: "只看错题" },
   ];
 
   let bar = `<div class="tense-selector" style="margin-bottom:12px;">`;
@@ -4276,16 +4279,16 @@ const SUBJ_QUESTIONS = [
   { l: 3, q: "Sugería que tú ___ (descansar).", verb: "descansar", p: 2, tense: "imperfecto_subj" },
   { l: 3, q: "Te pido que ___ (venir).", verb: "venir", p: 2, tense: "presente_subj" },
   { l: 3, q: "Te pedía que ___ (venir).", verb: "venir", p: 2, tense: "imperfecto_subj" },
-  { l: 3, q: "Es importante que ___ (estudiar).", verb: "estudiar", p: 2, tense: "presente_subj" },
-  { l: 3, q: "Era importante que ___ (estudiar).", verb: "estudiar", p: 2, tense: "imperfecto_subj" },
-  { l: 3, q: "Me alegra que ___ (estar) aquí.", verb: "estar", p: 2, tense: "presente_subj" },
-  { l: 3, q: "Me alegraba que ___ (estar) aquí.", verb: "estar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Es importante que tú ___ (estudiar).", verb: "estudiar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Era importante que tú ___ (estudiar).", verb: "estudiar", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Me alegra que tú ___ (estar) aquí.", verb: "estar", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Me alegraba que tú ___ (estar) aquí.", verb: "estar", p: 2, tense: "imperfecto_subj" },
   { l: 3, q: "No creo que ___ (ser) verdad.", verb: "ser", p: 3, tense: "presente_subj" },
   { l: 3, q: "No creía que ___ (ser) verdad.", verb: "ser", p: 3, tense: "imperfecto_subj" },
-  { l: 3, q: "Recomiendo que ___ (ver) esa película.", verb: "ver", p: 2, tense: "presente_subj" },
-  { l: 3, q: "Recomendaba que ___ (ver) esa película.", verb: "ver", p: 2, tense: "imperfecto_subj" },
-  { l: 3, q: "Quiero que ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "presente_subj" },
-  { l: 3, q: "Quería que ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Recomiendo que tú ___ (ver) esa película.", verb: "ver", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Recomendaba que tú ___ (ver) esa película.", verb: "ver", p: 2, tense: "imperfecto_subj" },
+  { l: 3, q: "Quiero que tú ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "presente_subj" },
+  { l: 3, q: "Quería que tú ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "imperfecto_subj" },
 ];
 
 const SUBJ_KEY = "spanish_subj_errors";
