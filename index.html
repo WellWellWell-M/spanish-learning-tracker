@@ -3688,7 +3688,6 @@ const PREP_QUESTIONS = [
   { v: "confiar", m: "信任", p: "en", e: "🖼 en=待在里面（把信任放进去）：confiar en 信任" },
   { v: "insistir", m: "坚持", p: "en", e: "🖼 en=钻进去（咬住不放）：insistir en 坚持" },
   { v: "empeñarse", m: "执意", p: "en", e: "🖼 en=钻进去（一头扎进去）：empeñarse en 执意" },
-  { v: "esforzarse", m: "努力（做）", p: "en", e: "🖼 en+原形（投入去做）：esforzarse en + 原形 = 努力做" },
   { v: "consistir", m: "在于", p: "en", e: "🖼 en=在里面（本质就在那里面）：consistir en 在于" },
   { v: "quedar", m: "约定", p: "en", e: "🖼 en=在里面（约定落在一个点上）：quedar en 约定" },
   { v: "tardar", m: "花时间", p: "en", e: "🖼 en+原形（耗时泡在里面）：tardar en + 原形 = 花时间做" },
@@ -3712,7 +3711,7 @@ const PREP_QUESTIONS = [
 
   // por 家族 —— 画面：为了 / 因为
   { v: "preocuparse", m: "担心", p: "por", e: "🖼 por=为了/因为（为那个揪心）：preocuparse por 担心" },
-  { v: "esforzarse", m: "努力（为）", p: "por", e: "🖼 por=为了（为了目标拼）：esforzarse por 为…努力" },
+  { v: "esforzarse", m: "努力（为）", p: "por", e: "🖼 por=为了（为了目标拼）：esforzarse por/en 都行，答 por 或 en 都对" },
   { v: "interesarse", m: "对…感兴趣", p: "por", e: "🖼 por=为了/因为（因那个感兴趣）：interesarse por 对…感兴趣" },
   { v: "preguntar", m: "打听、问起", p: "por", e: "🖼 por=为了/因为（为那人打听）：preguntar por 打听" },
   { v: "luchar", m: "为…奋斗", p: "por", e: "🖼 por=为了（为那个奋斗）：luchar por 为…奋斗" },
@@ -4289,6 +4288,23 @@ const SUBJ_QUESTIONS = [
   { l: 3, q: "Recomendaba que tú ___ (ver) esa película.", verb: "ver", p: 2, tense: "imperfecto_subj" },
   { l: 3, q: "Quiero que tú ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "presente_subj" },
   { l: 3, q: "Quería que tú ___ (escribir) una carta.", verb: "escribir", p: 2, tense: "imperfecto_subj" },
+
+  // === 阶段③：中文→西语整句（全自主：主语一致/选式/变位/连词）===
+  { l: 4, q: "我想去", hint: "ir", a: "Quiero ir", e: "【主语一致】我→我去，同主语 → 不定式，不用 que + 虚拟式" },
+  { l: 4, q: "我希望你来", hint: "venir", a: "Quiero que vengas", e: "【W 愿望】我→你，不同主语 → que + 现在虚拟式 vengas" },
+  { l: 4, q: "他希望你来", hint: "venir", a: "Quiere que vengas", e: "【W 愿望】他→你，不同主语 → que + 现在虚拟式 vengas" },
+  { l: 4, q: "我建议你休息", hint: "descansar", a: "Sugiero que descanses", e: "【R 建议】sugiero que → 现在虚拟式 descanses" },
+  { l: 4, q: "我高兴你在这里", hint: "estar", a: "Me alegra que estés aquí", e: "【E 情感】me alegra que → 现在虚拟式 estés" },
+  { l: 4, q: "重要的是你学习", hint: "estudiar", a: "Es importante que estudies", e: "【I 评价】es importante que → 现在虚拟式 estudies" },
+  { l: 4, q: "我不相信那是真的", hint: "ser", a: "No creo que sea verdad", e: "【D 怀疑】no creo que → 现在虚拟式 sea" },
+  { l: 4, q: "但愿明天下雨", hint: "llover", a: "Ojalá llueva mañana", e: "【O 祈愿】ojalá → 虚拟式 llueva" },
+  { l: 4, q: "我当时希望你来", hint: "venir", a: "Quería que vinieras", e: "【时态配合】主句 Quería 过去 → 过去虚拟式(-ra) vinieras" },
+  { l: 4, q: "我到了就吃晚饭", hint: "llegar", a: "Cuando llegue, cenaré", e: "【连词】cuando 表将来 → 虚拟式 llegue（表习惯才是陈述式）" },
+  { l: 4, q: "我给你解释，好让你明白", hint: "entender", a: "Te explico para que entiendas", e: "【连词】para que 表目的 → 虚拟式 entiendas" },
+  { l: 4, q: "除非你来，我不去", hint: "venir", a: "No voy a menos que vengas", e: "【连词】a menos que → 虚拟式 vengas" },
+  { l: 4, q: "如果我有时间，我就去", hint: "tener", a: "Si tengo tiempo, voy", e: "【si 陷阱】si 真实条件 → 陈述式 tengo，不用虚拟式" },
+  { l: 4, q: "我希望他早点回来", hint: "volver", a: "Espero que vuelva pronto", e: "【W 愿望】espero que → 现在虚拟式 vuelva（volver o→ue）" },
+  { l: 4, q: "他建议我们早点出发", hint: "salir", a: "Sugiere que salgamos temprano", e: "【R 建议】sugiere que → 现在虚拟式 salgamos（我们 nosotros）" },
 ];
 
 const SUBJ_KEY = "spanish_subj_errors";
@@ -4373,6 +4389,7 @@ function renderSubj() {
     { id: "1", label: "阶段①触发器" },
     { id: "2", label: "阶段①整句" },
     { id: "3", label: "阶段②变位" },
+    { id: "4", label: "阶段③翻译" },
   ];
 
   let bar = `<div class="tense-selector" style="margin-bottom:12px;">`;
@@ -4404,6 +4421,7 @@ function renderSubj() {
   const q = SUBJ_QUESTIONS[subjState.order[subjState.index]];
   const wrongCount = Object.keys(errs.wrong).filter(i => (errs.wrong[i] || 0) > 0).length;
   const isL3 = q.l === 3;
+  const isL4 = q.l === 4;
 
   let html = bar;
   html += `<div class="quiz-score-bar">
@@ -4411,13 +4429,21 @@ function renderSubj() {
     <span>❌ 待巩固 ${wrongCount} 题</span>
   </div>`;
 
-  html += `<div class="quiz-prompt">
-    <div class="verb-word" style="font-size:1.3rem;">${q.q}</div>
-    <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">${isL3 ? "填入正确的虚拟式变位" : "从句用虚拟式吗？"}</div>
-  </div>`;
+  if (isL4) {
+    html += `<div class="quiz-prompt">
+      <div class="verb-word" style="font-size:1.4rem;">${q.q}</div>
+      <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">提示动词：${q.hint}</div>
+      <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">翻译成完整的西语句子</div>
+    </div>`;
+  } else {
+    html += `<div class="quiz-prompt">
+      <div class="verb-word" style="font-size:1.3rem;">${q.q}</div>
+      <div class="quiz-person" style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">${isL3 ? "填入正确的虚拟式变位" : "从句用虚拟式吗？"}</div>
+    </div>`;
+  }
 
   html += `<div class="quiz-input-row">
-    <input type="text" id="subjInput" placeholder="${isL3 ? "填变位形式" : "填 sí / no"}" autocomplete="off"
+    <input type="text" id="subjInput" placeholder="${isL4 ? "翻译成西语整句" : (isL3 ? "填变位形式" : "填 sí / no")}" autocomplete="off"
       ${subjState.answered ? "disabled" : ""}
       onkeydown="if(event.key==='Enter'){event.preventDefault();${subjState.answered ? "subjNext()" : "subjCheck()"};}">
     ${subjState.answered
@@ -4426,8 +4452,17 @@ function renderSubj() {
   </div>`;
 
   if (subjState.answered) {
-    const correctForm = isL3 ? subjCorrectForm(q) : (q.a === "sí" ? "用虚拟式" : "不用虚拟式");
-    const expl = isL3 ? subjL3Explanation(q) : q.e;
+    let correctForm, expl;
+    if (isL3) {
+      correctForm = subjCorrectForm(q);
+      expl = subjL3Explanation(q);
+    } else if (isL4) {
+      correctForm = q.a;
+      expl = q.e;
+    } else {
+      correctForm = q.a === "sí" ? "用虚拟式" : "不用虚拟式";
+      expl = q.e;
+    }
     if (subjState.lastCorrect) {
       html += `<div class="quiz-feedback show correct-ans">
         ✅ 正确！<span class="correct-form">${correctForm}</span>
@@ -4435,7 +4470,7 @@ function renderSubj() {
       </div>`;
     } else {
       html += `<div class="quiz-feedback show wrong-ans">
-        ❌ 你答「${subjState.lastAnswer}」，正确是「${correctForm}」
+        ❌ 你写「${subjState.lastAnswer}」，正确是「${correctForm}」
         <div class="explanation">${expl}</div>
       </div>`;
     }
@@ -4507,6 +4542,7 @@ function subjCheck() {
   const userAnswer = input.value.trim().toLowerCase();
   const q = SUBJ_QUESTIONS[subjState.order[subjState.index]];
   const isL3 = q.l === 3;
+  const isL4 = q.l === 4;
   const correct = isL3 ? subjCorrectForm(q) : q.a;
 
   const norm = s => s.toLowerCase()
