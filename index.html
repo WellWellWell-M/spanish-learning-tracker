@@ -1705,7 +1705,7 @@ function getWeekInfo(date) {
   if (diffDays < 0) return { week: 0, dayOfWeek: 0, inRange: false };
   const weekNum = Math.floor(diffDays / 7) + 1;
   if (weekNum > 24) return { week: 25, dayOfWeek: diffDays % 7, inRange: false };
-  return { week: weekNum, dayOfWeek: diffDays % 7, inRange: weekNum >= 1 && weekNum <= 16 };
+  return { week: weekNum, dayOfWeek: diffDays % 7, inRange: weekNum >= 1 && weekNum <= 24 };
 }
 
 function getWeekDates(weekNum) {
