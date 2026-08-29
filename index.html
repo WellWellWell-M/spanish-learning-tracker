@@ -3961,7 +3961,7 @@ const VERB_ID_QUESTIONS = [
   { type: "pronominal", zh: "我得知消息", hint: "enterar", answer: "Me entero de la noticia", r: "【自发】enterar(告知)→enterarse de(自己得知)，能推；我=me entero" },
   // === 陷阱：同一个词根，带不带 se 意思完全不同 ===
   { type: "pronominal", zh: "我叫安娜", hint: "llamar", answer: "Me llamo Ana", r: "【换词】llamar(打电话)→llamarse(名叫)，记两对；我=me llamo" },
-  { type: "pronominal", zh: "我打电话给他", hint: "llamar", answer: "Lo llamo", r: "【陷阱】这里'打电话'用不带 se 的 llamar（Lo llamo），带 se 的 llamarse 才是'名叫'，别混" },
+  { type: "pronominal", zh: "我打电话给他", hint: "llamar", answer: "Lo llamo", alts: ["Le llamo"], r: "【陷阱】这里'打电话'用不带 se 的 llamar（Lo llamo），带 se 的 llamarse 才是'名叫'，别混。注：西班牙 leísmo 也接受 Le llamo" },
   // === 反身（se=自己，能推不用背）===
   { type: "pronominal", zh: "我洗澡", hint: "bañar", answer: "Me baño", r: "【反身】bañar(给别人洗)→bañarse(洗自己)，se=自己，能推；我=me baño" },
   { type: "pronominal", zh: "我穿衣服", hint: "vestir", answer: "Me visto", r: "【反身】vestir(给别人穿)→vestirse(给自己穿)，se=自己，能推；e→i 变位 visto" },
@@ -4162,7 +4162,10 @@ function verbIdCheck() {
   const norm = s => s.toLowerCase()
     .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[¿?¡!.,:;'"()]/g, "").replace(/\s+/g, " ").trim();
-  const isCorrect = norm(userAnswer) === norm(correct);
+  let isCorrect = norm(userAnswer) === norm(correct);
+  if (!isCorrect && Array.isArray(q.alts)) {
+    isCorrect = q.alts.some(alt => norm(userAnswer) === norm(alt));
+  }
   verbIdState.answered = true;
   verbIdState.lastCorrect = isCorrect;
   verbIdState.lastAnswer = userAnswer;
@@ -4300,20 +4303,20 @@ const SUBJ_QUESTIONS = [
 
   // === 阶段③：中文→西语整句（全自主：主语一致/选式/变位/连词）===
   { l: 4, q: "我想去", hint: "ir", a: "Quiero ir", e: "【主语一致】我→我去，同主语 → 不定式，不用 que + 虚拟式" },
-  { l: 4, q: "我希望你来", hint: "venir", a: "Quiero que vengas", e: "【W 愿望】我→你，不同主语 → que + 现在虚拟式 vengas" },
-  { l: 4, q: "他希望你来", hint: "venir", a: "Quiere que vengas", e: "【W 愿望】他→你，不同主语 → que + 现在虚拟式 vengas" },
+  { l: 4, q: "我希望你来", hint: "venir", a: "Quiero que vengas", alts: ["Espero que vengas"], e: "【W 愿望】我→你，不同主语 → que + 现在虚拟式 vengas（quiero/espero 都行）" },
+  { l: 4, q: "他希望你来", hint: "venir", a: "Quiere que vengas", alts: ["Espera que vengas"], e: "【W 愿望】他→你，不同主语 → que + 现在虚拟式 vengas" },
   { l: 4, q: "我建议你休息", hint: "descansar", a: "Sugiero que descanses", e: "【R 建议】sugiero que → 现在虚拟式 descanses" },
-  { l: 4, q: "我高兴你在这里", hint: "estar", a: "Me alegra que estés aquí", e: "【E 情感】me alegra que → 现在虚拟式 estés" },
+  { l: 4, q: "我高兴你在这里", hint: "estar", a: "Me alegra que estés aquí", alts: ["Me alegro de que estés aquí"], e: "【E 情感】me alegra/me alegro de que → 现在虚拟式 estés" },
   { l: 4, q: "重要的是你学习", hint: "estudiar", a: "Es importante que estudies", e: "【I 评价】es importante que → 现在虚拟式 estudies" },
   { l: 4, q: "我不相信那是真的", hint: "ser", a: "No creo que sea verdad", e: "【D 怀疑】no creo que → 现在虚拟式 sea" },
   { l: 4, q: "但愿明天下雨", hint: "llover", a: "Ojalá llueva mañana", e: "【O 祈愿】ojalá → 虚拟式 llueva" },
   { l: 4, q: "我当时希望你来", hint: "venir", a: "Quería que vinieras", e: "【时态配合】主句 Quería 过去 → 过去虚拟式(-ra) vinieras" },
-  { l: 4, q: "我到了就吃晚饭", hint: "llegar", a: "Cuando llegue, cenaré", e: "【连词】cuando 表将来 → 虚拟式 llegue（表习惯才是陈述式）" },
+  { l: 4, q: "我到了就吃晚饭", hint: "llegar", a: "Cuando llegue, cenaré", alts: ["Cenaré cuando llegue"], e: "【连词】cuando 表将来 → 虚拟式 llegue（表习惯才是陈述式）；词序前后都行" },
   { l: 4, q: "我给你解释，好让你明白", hint: "entender", a: "Te explico para que entiendas", e: "【连词】para que 表目的 → 虚拟式 entiendas" },
   { l: 4, q: "除非你来，我不去", hint: "venir", a: "No voy a menos que vengas", e: "【连词】a menos que → 虚拟式 vengas" },
   { l: 4, q: "如果我有时间，我就去", hint: "tener", a: "Si tengo tiempo, voy", e: "【si 陷阱】si 真实条件 → 陈述式 tengo，不用虚拟式" },
-  { l: 4, q: "我希望他早点回来", hint: "volver", a: "Espero que vuelva pronto", e: "【W 愿望】espero que → 现在虚拟式 vuelva（volver o→ue）" },
-  { l: 4, q: "他建议我们早点出发", hint: "salir", a: "Sugiere que salgamos temprano", e: "【R 建议】sugiere que → 现在虚拟式 salgamos（我们 nosotros）" },
+  { l: 4, q: "我希望他早点回来", hint: "volver", a: "Espero que vuelva pronto", alts: ["Quiero que vuelva pronto", "Espero que regrese pronto"], e: "【W 愿望】espero que → 现在虚拟式 vuelva（volver o→ue）；pronto/temprano 都行" },
+  { l: 4, q: "他建议我们早点出发", hint: "salir", a: "Sugiere que salgamos temprano", alts: ["Sugiere que salgamos pronto"], e: "【R 建议】sugiere que → 现在虚拟式 salgamos（我们 nosotros）；pronto/temprano 都行" },
 ];
 
 const SUBJ_KEY = "spanish_subj_errors";
@@ -4557,7 +4560,11 @@ function subjCheck() {
   const norm = s => s.toLowerCase()
     .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[¿?¡!.,:;'"()]/g, "").replace(/\s+/g, " ").trim();
-  const isCorrect = norm(userAnswer) === norm(correct) || norm(userAnswer) === (correct === "sí" ? "si" : "no");
+  let isCorrect = norm(userAnswer) === norm(correct) || norm(userAnswer) === (correct === "sí" ? "si" : "no");
+  // 阶段③翻译题：允许多种同义正确说法
+  if (!isCorrect && isL4 && Array.isArray(q.alts)) {
+    isCorrect = q.alts.some(alt => norm(userAnswer) === norm(alt));
+  }
   subjState.answered = true;
   subjState.lastCorrect = isCorrect;
   subjState.lastAnswer = userAnswer;
